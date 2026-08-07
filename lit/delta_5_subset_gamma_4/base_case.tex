@@ -1,0 +1,913 @@
+\documentclass[11pt]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[a4paper,left=25mm,right=25mm,top=23mm,bottom=25mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\microtypesetup{expansion=false}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Ext}{\operatorname{Ext}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\gm}{\gamma}
+\newcommand{\dlt}{\delta}
+\newcommand{\aug}{\varpi}
+
+\title[The fifth dimension subring]{The fifth dimension subring:\
+the class-three base case}
+\author{}
+\date{August 2026}
+
+\begin{document}
+
+\begin{abstract}
+We prove the reduced statement underlying
+$\delta _5(L)\subseteq\gamma _4(L)$.  Let $L$ be a finite Lie ring
+whose additive group is a $2$-group, assume $\gamma _4(L)=0$, and assume
+$C=\gamma _3(L)$ is cyclic.  We prove $\delta _5(L)=0$.  The proof is
+separated into two independent assertions.  The normal-form theorem
+extracts from a PBW witness a class in the first derived symmetric
+square of the additive extension
+$0\to\gamma _2(L)/C\to L/C\to L/\gamma _2(L)\to0$.  The vanishing
+theorem says that the resulting character vanishes on every class
+coming from the middle term.  We include the complete class-three PBW
+ledger and all steps of the functorial vanishing argument.
+\end{abstract}
+
+\maketitle
+
+\section{Statement and notation}
+
+For a Lie ring $L$, write $U(L)$ for its universal enveloping algebra,
+$\aug(L)$ for the augmentation ideal of $U(L)$, and
+\[
+ \dlt_r(L)=L\cap\aug(L)^r,
+ \qquad
+ \gm_1(L)=L,
+ \qquad
+ \gm_{r+1}(L)=[L,\gm_r(L)].
+\]
+The intersection defining $\dlt_r(L)$ is taken through the canonical
+map $L\to U(L)$.
+
+We use two published facts from~\cite[Theorem~4.5 and
+Proposition~4.2]{BP}.  First,
+$\dlt_3(L)=\gm_3(L)$ for every Lie ring.  Second, if
+$F\twoheadrightarrow L=F/\mathcal R$ is a free presentation,
+$\mathfrak r=U(F)\mathcal R U(F)$, and $f\in F$ maps to $a\in L$, then
+\begin{equation}\label{eq:free-criterion}
+ a\in\dlt_r(L)
+ \quad\Longleftrightarrow\quad
+ f\in \aug(F)^r+\mathfrak r.
+\end{equation}
+
+We first prove the precise reduced statement.
+
+\begin{theorem}[reduced base case]\label{thm:reduced}
+Let $L$ be a finite Lie ring whose additive group is a $2$-group.
+Assume
+\[
+                 \gm_4(L)=0,
+ \qquad
+ C:=\gm_3(L)=\langle z\rangle\cong\Z/q,
+ \qquad q=2^s.
+\]
+Then $\dlt_5(L)=0$.
+\end{theorem}
+
+The hypothesis $L''=0$ need not be added: $L''=[\gm_2(L),\gm_2(L)]
+\subseteq\gm_4(L)=0$.  Put
+\[
+ H=L/C,
+ \qquad V=L/\gm_2(L),
+ \qquad W=\gm_2(L)/C.
+\]
+The underlying additive groups form an exact sequence
+\begin{equation}\label{eq:extension}
+             0\longrightarrow W\longrightarrow H
+             \xrightarrow{p}V\longrightarrow0.
+\end{equation}
+Since $[L,\gm_2(L)]=C$ and $[C,L]=0$, the bracket induces a bilinear
+map
+\begin{equation}\label{eq:g}
+ g:V\otimes W\longrightarrow C,
+ \qquad g(\bar x,\bar w)=[x,w].
+\end{equation}
+It is independent of both choices of lifts: changing $x$ by an
+element of $\gm_2(L)$ changes the bracket by an element of
+$[\gm_2(L),\gm_2(L)]\subseteq\gm_4(L)$, while changing $w$ by an
+element of $C$ changes it by an element of $[L,C]=\gm_4(L)$.
+
+We identify $C$ with the subgroup $\frac1q\Z/\Z$ of $\Q/\Z$ by
+$z\mapsto1/q+\Z$.  The proof of Theorem~\ref{thm:reduced} will be the
+composition of the following two statements.
+
+\begin{theorem}[normal form, informal version]\label{thm:nf-informal}
+There is a character
+$\eta:L_1\Sym^2(V)\to\Q/\Z$ such that, whenever
+$\zeta z\in\dlt_5(L)$, there is
+$\xi\in L_1\Sym^2(H)$ satisfying
+\[
+ \frac{\zeta}{q}+\Z
+   =\eta\bigl(L_1\Sym^2(p)(\xi)\bigr).
+\]
+\end{theorem}
+
+\begin{theorem}[vanishing, informal version]\label{thm:van-informal}
+For the same character,
+\[
+                     \eta\circ L_1\Sym^2(p)=0.
+\]
+\end{theorem}
+
+We construct $\eta$ first, then prove the two theorems in
+Sections~\ref{sec:normal} and~\ref{sec:vanishing}.
+
+\section{The quadratic character}
+
+\subsection{The two quadratic complexes}
+
+Let $T=(T_1\xrightarrow{t}T_0)$ be a two-term free resolution of a
+finite abelian group $K$.  Thus $t$ is injective and
+$\operatorname{coker}t=K$.  The derived symmetric and exterior squares
+are computed by
+\begin{align}
+ K_S(T)&=\left[
+ \Lambda^2T_1\xrightarrow{\kappa_2}
+ T_1\otimes T_0\xrightarrow{\kappa_1}\Sym^2T_0
+ \right],                                                   \label{eq:KS}\\
+ K_\Lambda(T)&=\left[
+ \Gamma^2T_1\xrightarrow{\lambda_2}
+ T_1\otimes T_0\xrightarrow{\lambda_1}\Lambda^2T_0
+ \right],                                                   \label{eq:KL}
+\end{align}
+in homological degrees $2,1,0$.  The differentials used below are
+\begin{align*}
+ \kappa_2(a\wedge a')&=a\otimes ta'-a'\otimes ta,
+ &\kappa_1(a\otimes x)&=ta\,x,\\
+ \lambda_2(\gamma_2(a))&=a\otimes ta,
+ &\lambda_2(aa')&=a\otimes ta'+a'\otimes ta,\\
+ \lambda_1(a\otimes x)&=ta\wedge x.
+\end{align*}
+Here $\Gamma^2$ denotes the divided square.  Standard Koszul
+theory~\cite{Kock} gives
+\[
+ H_iK_S(T)=L_i\Sym^2(K),
+ \qquad H_iK_\Lambda(T)=L_i\Lambda^2(K).
+\]
+
+Because $K$ is finite, $t\otimes\Q$ is an isomorphism.  Hence
+$K_S(T)\otimes\Q$ is acyclic in positive degrees and all positive
+homology of $K_S(T)$ is finite.  The universal coefficient sequence
+therefore gives, naturally in $K$,
+\begin{equation}\label{eq:UCT}
+ H^2\Hom(K_S(T),\Z)
+ \cong\Ext^1(L_1\Sym^2(K),\Z)
+ \cong\Hom(L_1\Sym^2(K),\Q/\Z).
+\end{equation}
+Indeed $\Hom(H_2K_S(T),\Z)=0$, and
+$\Ext^1(A,\Z)\cong\Hom(A,\Q/\Z)$ for finite $A$.
+
+\subsection{A compatible presentation of the extension}
+
+Choose free resolutions
+\[
+ P_1\xrightarrow dP_0\longrightarrow V,
+ \qquad
+ Q_1\xrightarrow eQ_0\longrightarrow W.
+\]
+Lift $P_0\to V$ to a map $P_0\to H$.  Its composite with $d$ takes
+values in $W$; lift that map through $Q_0\to W$ to
+$\widetilde b:P_1\to Q_0$.  A compatible free resolution of $H$ is
+\begin{equation}\label{eq:R}
+ R_1=P_1\oplus Q_1\xrightarrow{\partial}R_0=P_0\oplus Q_0,
+ \qquad
+ \partial(a,s)=(da,es-\widetilde b(a)).
+\end{equation}
+Indeed, the map $R_0\to H$ induced by the two chosen lifts has kernel
+$\im\partial$, and $\partial$ is injective because $d$ and $e$ are.
+Projection $R_\bullet\to P_\bullet$ resolves $p:H\to V$.  If bars
+denote passage from $P_0$ to $V$ and from $Q_0$ to $W$, define
+\begin{equation}\label{eq:phi}
+ \varphi:P_1\otimes P_0\longrightarrow C,
+ \qquad
+ \varphi(a,x)=g(\bar x,\overline{\widetilde b(a)}).
+\end{equation}
+Since $\overline{da'}=0$ in $V$,
+\[
+ \varphi\kappa_2(a\wedge a')
+   =\varphi(a,da')-\varphi(a',da)=0.
+\]
+Thus $\varphi$ is a degree-one cocycle of $\Hom(K_S(P),C)$.
+
+\subsection{The exterior lift}
+
+The following elementary use of bracket antisymmetry is the only point
+at which the exterior-square complex enters.
+
+\begin{lemma}[exterior-compatible lift]\label{lem:exterior}
+The cocycle $\varphi$ has an integral lift
+$\widehat\varphi:P_1\otimes P_0\to\Z$ such that
+\begin{equation}\label{eq:exterior}
+ \widehat\varphi(a,da')+\widehat\varphi(a',da)=0
+ \qquad(a,a'\in P_1).
+\end{equation}
+Equivalently, $\widehat\varphi$ annihilates
+$\im\lambda_2$ in~\eqref{eq:KL}.
+\end{lemma}
+
+\begin{proof}
+Choose Smith bases
+\[
+ P_0=\bigoplus_i\Z x_i,
+ \qquad P_1=\bigoplus_i\Z a_i,
+ \qquad da_i=d_ix_i,
+ \qquad d_i\mid d_j\quad(i<j).
+\]
+Lift the image of $x_i$ to $X_i\in L$.  In $H=L/C$, the element
+$\overline{\widetilde b(a_i)}\in W$ is $d_iX_i$ modulo $C$.
+Consequently
+\begin{equation}\label{eq:phiij}
+ \varphi_{ij}:=\varphi(a_i,x_j)
+   =[X_j,d_iX_i]=d_i[X_j,X_i]\in C.
+\end{equation}
+For $i<j$ choose an integer $r_{ij}$ representing $\varphi_{ij}$ under
+$C=\frac1q\Z/\Z$; thus
+$r_{ij}/q+\Z=\varphi_{ij}$.  Define
+\begin{equation}\label{eq:hatphi}
+ \widehat\varphi(a_i,x_j)=r_{ij},
+ \qquad
+ \widehat\varphi(a_j,x_i)=-\frac{d_j}{d_i}r_{ij},
+ \qquad
+ \widehat\varphi(a_i,x_i)=0.
+\end{equation}
+The second integer in~\eqref{eq:hatphi} really lifts
+$\varphi_{ji}$: by~\eqref{eq:phiij} and antisymmetry,
+\[
+ \varphi_{ji}=d_j[X_i,X_j]
+   =-\frac{d_j}{d_i}\,d_i[X_j,X_i]
+   =-\frac{d_j}{d_i}\varphi_{ij}.
+\]
+Moreover,
+\[
+ d_j\widehat\varphi(a_i,x_j)
+ +d_i\widehat\varphi(a_j,x_i)=0,
+ \]
+and the diagonal equality is immediate.  Bilinearity gives
+\eqref{eq:exterior} for all $a,a'$.
+\end{proof}
+
+In particular, the exterior-square Bockstein of $[\varphi]$ is zero:
+the chosen integral lift is already a cocycle on $K_\Lambda(P)$.
+Since $\varphi(a,da')=0$ in $C$, the integer
+$\widehat\varphi(a,da')$ is divisible by $q$.  Hence
+\begin{equation}\label{eq:h}
+ h(a\wedge a')=\frac{\widehat\varphi(a,da')}{q}
+\end{equation}
+defines an integral degree-two cochain on $K_S(P)$.  Let
+\begin{equation}\label{eq:eta}
+ \eta\in\Hom(L_1\Sym^2(V),\Q/\Z)
+\end{equation}
+($\eta_2$ in the general tower notation) be the character
+corresponding through~\eqref{eq:UCT} to the class
+$[h]$ (every degree-two cochain is a cocycle because the complex ends
+in degree two).  We fix this lift and this character for the rest of
+the proof.
+
+For later use, let
+$\beta_S:H^1\Hom(K_S(P),C)\to H^2\Hom(K_S(P),\Z)$ be the Bockstein for
+$0\to\Z\xrightarrow q\Z\to C\to0$.  It is represented by
+\[
+ \frac{\widehat\varphi(a,da')-
+       \widehat\varphi(a',da)}q
+ =2h(a\wedge a')
+\]
+because of~\eqref{eq:exterior}.  Thus
+\begin{equation}\label{eq:twice}
+                         \beta_S[\varphi]=2\eta.
+\end{equation}
+The character $\eta$, rather than the generally insufficient class
+$2\eta$, is what the PBW normal form detects.  Thus $\eta$ is the
+specific half of the symmetric Bockstein selected by the vanishing of
+the exterior Bockstein.
+
+\begin{lemma}[Smith evaluation]\label{lem:evaluation}
+For $i<j$ put
+\[
+ c_{ij}=\frac{d_j}{d_i}a_i\otimes x_j-a_j\otimes x_i
+       \in\ker\kappa_1^P.
+\]
+The $c_{ij}$ form a basis of $\ker\kappa_1^P$, and
+$\kappa_2(a_i\wedge a_j)=d_i c_{ij}$.  Therefore, if
+$c_u=\sum_{i<j}u_{ij}c_{ij}$, then
+\begin{equation}\label{eq:evaluation}
+ \eta([c_u])=\frac1q\sum_{i<j}u_{ij}\frac{d_j}{d_i}
+                  \widehat\varphi(a_i,x_j)+\Z.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The description of $\ker\kappa_1^P$ follows by comparing the
+coefficients of $x_i^2$ and $x_ix_j$ in $\Sym^2P_0$.  The displayed
+boundary formula is immediate.  Under the universal-coefficient
+identification~\eqref{eq:UCT}, the value of the class represented by
+$h$ on $[c_{ij}]$ is
+\[
+ \frac{h(a_i\wedge a_j)}{d_i}+\Z
+ =\frac{d_j\widehat\varphi(a_i,x_j)}{qd_i}+\Z.
+\]
+Linearity gives~\eqref{eq:evaluation}.
+\end{proof}
+
+\section{The normal-form theorem}\label{sec:normal}
+
+This section contains the only enveloping-algebra calculation.  We
+spell it out because merely writing the four summands of
+$K_S(R)_1$ does not prove that an arbitrary dimension witness supplies
+all four of them.
+
+Choose bases
+\[
+ P_0=\bigoplus_i\Z x_i,\quad P_1=\bigoplus_i\Z a_i,
+ \quad da_i=d_ix_i,
+\]
+as in Lemma~\ref{lem:exterior}, and Smith bases
+\[
+ Q_0=\bigoplus_k\Z y_k,\quad Q_1=\bigoplus_k\Z b_k,
+ \quad eb_k=e_ky_k,
+\]
+with $e_k\mid e_l$ for $k<l$.  Write
+\begin{equation}\label{eq:Bmatrix}
+       \widetilde b(a_i)=B_i:=\sum_k b_{ik}y_k,
+ \qquad D=\operatorname{diag}(d_i),\quad
+ E=\operatorname{diag}(e_k),\quad B=(b_{ik}).
+\end{equation}
+
+\subsection{The adapted free presentation}
+
+Choose lifts $X_i\in L$ of the images of $x_i$.  They generate $L$:
+if $L_0$ is the subring they generate, then $L=L_0+\gm_2(L)$, whence
+$\gm_2(L)\subseteq L_0+\gm_3(L)$.  Substituting this last inclusion
+once more into $\gm_3(L)=[L,\gm_2(L)]$ gives
+$\gm_3(L)\subseteq L_0+\gm_4(L)=L_0$.  Thus $L=L_0$.
+Let $F$ be the free Lie ring on symbols $X_i$, mapping onto $L$, and
+let $\mathcal R$ be its kernel.  Write
+$F=\bigoplus_{r\geq1}F_r$ by bracket length.  Since $\gm_4(L)=0$,
+$F_{\geq4}\subseteq\mathcal R$.
+
+Smith reduction of $F_2\to W$ and $F_3\to C$ supplies bases
+\[
+ F_2=\langle Y_1,\ldots,Y_n,\widetilde Y_1,\ldots\rangle,
+ \qquad
+ F_3=\langle Z,\widetilde Z_1,\ldots\rangle,
+\]
+where $Y_k$ maps to the element represented by $y_k$, $Z$ maps to
+$z$, and the tilded elements map to zero in $W$ and $C$, respectively.
+For suitable integers $c_i,m_k,\widetilde c_l$, the kernel contains
+\begin{align}
+ R_i&=d_iX_i-\mathcal B_i-c_iZ,
+       &\mathcal B_i&=\sum_kb_{ik}Y_k,                    \label{eq:Ri}\\
+ S_k&=e_kY_k-m_kZ,
+ &\widetilde R_l&=\widetilde Y_l-\widetilde c_lZ,        \label{eq:Sk}\\
+ T&=qZ,
+ &\widetilde T_l&=\widetilde Z_l.                        \label{eq:Tk}
+\end{align}
+Together with a basis of $F_4$, these elements generate
+$\mathcal R$ modulo $F_{\geq5}$.  Indeed, for a relation, its
+degree-one component lies in the kernel of $F_1\to V$ and is removed
+by the $R_i$.  Its new degree-two component lies in the kernel of
+$F_2\to W$ and is removed by the $S_k,\widetilde R_l$; its new
+degree-three component lies in the kernel of $F_3\to C$ and is
+removed by $T,\widetilde T_l$.  A basis of $F_4$ removes the last
+component.  If the original relation has no component below degree
+$r$, the earlier steps are empty, so only relations of least degree at
+least $r$ are used.
+
+Write
+\begin{equation}\label{eq:Gamma}
+ [X_j,Y_k]=g_{jk}Z+\sum_l h_{jkl}\widetilde Z_l,
+ \qquad
+ \Gamma_{ij}=\sum_kb_{ik}g_{jk}.
+\end{equation}
+In $C$ this says
+\begin{equation}\label{eq:Gamma-phi}
+ \Gamma_{ij}/q+\Z=[X_j,d_iX_i]
+   =\varphi(a_i,x_j)
+   =\widehat\varphi(a_i,x_j)/q+\Z.
+\end{equation}
+
+\subsection{PBW extraction}
+
+For a strictly upper-triangular integer matrix $u=(u_{ij})$, set
+\begin{equation}\label{eq:ubar}
+ \overline u=u-Du^{\mathsf T}D^{-1},\qquad
+ \overline u_{ij}=
+ \begin{cases}
+  u_{ij},&i<j,\\
+  -(d_i/d_j)u_{ji},&i>j,\\
+  0,&i=j.
+ \end{cases}
+\end{equation}
+
+\begin{lemma}[PBW coefficient lemma]\label{lem:PBW}
+If $\zeta z\in\dlt_5(L)$, there are integer matrices
+$u=(u_{ij})_{i<j}$ and $v,v'=(v_{ik}),(v'_{ik})$ such that
+\begin{align}
+ \overline uB+Dv+v'E&=0,                                 \label{eq:PBW-B}\\
+ \zeta&\equiv
+  \sum_{i<j}u_{ij}\frac{d_j}{d_i}\Gamma_{ij}\pmod q,    \label{eq:PBW-Z}\\
+ (v^{\mathsf T}B+B^{\mathsf T}v)_{kl}
+  &\equiv0\pmod{\gcd(e_k,e_l)}\quad(k<l),               \label{eq:PBW-C1}\\
+ (v^{\mathsf T}B)_{kk}&\equiv0\pmod{e_k}.               \label{eq:PBW-C2}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Choose $f\in\gm_3(F)$ mapping to $\zeta z$.  By
+\eqref{eq:free-criterion}, there is
+$\theta\in\mathfrak r:=U(F)\mathcal R U(F)$ such that
+$\theta-f\in\aug(F)^5$.
+
+Give $F_r$ weight $r$ and order homogeneous bases by
+\[
+ X<Y<\widetilde Y<Z<\widetilde Z<F_4<\cdots.
+\]
+The PBW theorem implies that the ordered products of total weight
+below five form a $\Z$-basis modulo $\aug(F)^5$; here freeness of
+$F$ identifies total bracket weight with augmentation degree
+\cite[Ch.~I, \S2.7]{Bou}.
+The preceding triangular description of $\mathcal R$ shows that,
+modulo $\aug(F)^5$, every summand of $\theta$ is a product
+$a\sigma b$, where $\sigma$ is one of
+$R_i,S_k,\widetilde R_l,T,\widetilde T_l$ or a basis element of
+$F_4$, and the possible total weights of $a,b$ are respectively
+\[
+ 0,1,2,3;\qquad 0,1,2;\qquad 0,1;\qquad 0.
+\]
+This list is exhaustive because these relations have least weights
+$1,2,3,4$.
+
+The two identities
+\begin{equation}\label{eq:collection-identities}
+ h\sigma=\sigma h+[h,\sigma],
+ \qquad h'h=hh'-[h,h']\quad(h<h')
+\end{equation}
+put every such product in PBW order.  The first correction is again a
+relation, of at least the sum of the two weights; either correction has
+one fewer external factor.  Induction on the number of factors and
+then on inversions proves termination without leaving the preceding
+list.
+
+Compare the collected expression with the Lie element $f$.
+In weight one, independence of the $X_i$ forces every scalar
+$R_i$-coefficient to be zero.  In weight two, the diagonal $X_i^2$
+coefficient vanishes.  For $i<j$, the only leading packets at
+$X_iX_j$ are $R_iX_j$ and $X_iR_j$; if their coefficients are $A,C$,
+then $d_iA+d_jC=0$.  Since $d_i\mid d_j$, all the remaining
+weight-two packets are therefore
+\begin{equation}\label{eq:Theta2}
+ \sum_{i<j}u_{ij}
+ \left(\frac{d_j}{d_i}R_iX_j-X_iR_j\right).
+\end{equation}
+Scalar $S_k$- and $\widetilde R_l$-terms also vanish, because their
+leading $e_kY_k$ and $\widetilde Y_l$ terms are independent.
+
+At weight three, retain from the collected expression the packets
+$R_iY_k$ and $X_iS_k$, with coefficients $v_{ik}$ and $v'_{ik}$.
+The other canonical packets are
+$R_i\widetilde Y_l$, $X_i\widetilde R_l$, $T$,
+$\widetilde T_l$, and the three ordered placements of one $R_i$ with
+two $X$-factors.  Their leading terms show that they have no named
+$X_iY_k$ coefficient; only $T=qZ$ can have a named one-factor
+$Z$ coefficient at this weight.
+Put
+\begin{equation}\label{eq:Theta}
+ \Theta=\sum_{i<j}u_{ij}
+   \left(\frac{d_j}{d_i}R_iX_j-X_iR_j\right)
+   +\sum_{i,k}v_{ik}R_iY_k
+   +\sum_{i,k}v'_{ik}X_iS_k.
+\end{equation}
+Expanding
+\eqref{eq:Ri}--\eqref{eq:Sk} and using
+$Y_kX_j=X_jY_k-[X_j,Y_k]$ gives
+\begin{align}
+ [X_iY_k]\Theta&=(\overline uB+Dv+v'E)_{ik},              \label{eq:coeff-XY}\\
+ [Z]\Theta&=\sum_{i<j}u_{ij}\frac{d_j}{d_i}\Gamma_{ij}, \label{eq:coeff-Z}\\
+ [Y_kY_l]\Theta
+   &=-(v^{\mathsf T}B+B^{\mathsf T}v)_{kl} &&(k<l),      \label{eq:coeff-YY}\\
+ [Y_k^2]\Theta&=-(v^{\mathsf T}B)_{kk}.                  \label{eq:coeff-Y2}
+\end{align}
+Here $[M]\Theta$ denotes the coefficient of the PBW monomial $M$.
+For example, the $i,j$ packet in~\eqref{eq:Theta2} contains
+$-(d_j/d_i)\mathcal B_iX_j+X_i\mathcal B_j$; its first term contributes
+$-(d_j/d_i)b_{ik}$ at $X_jY_k$ and
+$(d_j/d_i)\Gamma_{ij}$ at $Z$.  This verifies both the sign and the
+indices in~\eqref{eq:coeff-XY}--\eqref{eq:coeff-Z}.  The last two
+lines come from $-\sum v_{ik}\mathcal B_iY_k$.
+
+For completeness, all other packets of total weight four have the
+following leading shapes.  A letter $Y$ or $Z$ may be named or
+supplementary.
+\[
+\begin{array}{c|c|c|c}
+ \text{relation}&\text{external factors}&\text{leading shape}
+      &\text{named }Y_kY_l\\ \hline
+ R_i&XXX&XXXX&0\\
+ R_i&X,Y&XXY&0\\
+ R_i&Z&XZ&0\\
+ S_k,\widetilde R_l&XX&XXY&0\\
+ \widetilde R_l&Y&\widetilde Y_lY&0\\
+ T,\widetilde T_l&X&XZ&0\\
+ F_4&1&F_4&0.
+\end{array}
+\]
+The omitted row is $S_k$ with one named $Y$-factor:
+for $k<l$ its two placements contribute respectively
+$e_kY_kY_l$ and $e_lY_kY_l$, and on the diagonal they contribute
+$e_kY_k^2$.  The table is closed under both operations in
+\eqref{eq:collection-identities}: a correction either replaces two
+$X$'s by one $Y$, replaces $X,Y$ by one $Z$, or raises the least
+weight of the relation.  Thus it also accounts for every correction
+created during collection.
+
+No omitted packet has an $X_iY_k$ coefficient.  Its $Z$ coefficient
+is a multiple of $q$ (or is supplementary), and its named
+$Y_kY_l$ coefficient lies in
+$e_k\Z+e_l\Z=\gcd(e_k,e_l)\Z$; on the diagonal it lies in
+$e_k\Z$.  The Lie element $f$ has no multi-factor PBW coefficient,
+and its $Z$-coefficient is $\zeta$ modulo $q$.  Comparing
+\eqref{eq:coeff-XY}--\eqref{eq:coeff-Y2} with
+$\theta-f\in\aug(F)^5$ proves
+\eqref{eq:PBW-B}--\eqref{eq:PBW-C2}.
+\end{proof}
+
+We now translate the coefficient lemma into the promised functorial
+normal form.  Decompose
+\[
+ K_S(R)_1=(P_1\otimes P_0)\oplus(P_1\otimes Q_0)
+ \oplus(Q_1\otimes P_0)\oplus(Q_1\otimes Q_0),
+\]
+let $\tau$ interchange factors, and let $\mu$ be symmetric
+multiplication in $\Sym^2Q_0$.
+
+\begin{lemma}[cycle extracted from PBW]\label{lem:PBW-cycle}
+For the matrices supplied by Lemma~\ref{lem:PBW}, set
+\[
+ c=c_u,\qquad
+ \nu=\sum_{i,k}v_{ik}a_i\otimes y_k,\qquad
+ \nu'=\sum_{i,k}v'_{ik}b_k\otimes x_i.
+\]
+There is $w\in Q_1\otimes Q_0$ such that
+$\chi=c+\nu+\nu'+w$ is a cycle in $K_S(R)$, and
+\begin{equation}\label{eq:Zledger}
+ \zeta\equiv
+ \sum_{i<j}u_{ij}\frac{d_j}{d_i}
+       \widehat\varphi(a_i,x_j)\pmod q.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Equation~\eqref{eq:PBW-B} is exactly
+\[
+ -\tau(\widetilde b\otimes1)c+(d\otimes1)\nu
+       +\tau(e\otimes1)\nu'=0.
+\]
+Equations~\eqref{eq:PBW-C1}--\eqref{eq:PBW-C2} say exactly that
+$\mu(\widetilde b\otimes1)\nu$ is zero in
+\[
+ \Sym^2(W)=\operatorname{coker}
+   (\kappa_1^Q:Q_1\otimes Q_0\to\Sym^2Q_0),
+\]
+because the orders of $y_ky_l$ and $y_k^2$ there are
+$\gcd(e_k,e_l)$ and $e_k$.  Hence $w$ may be chosen so that
+\[
+ -\mu(\widetilde b\otimes1)\nu+\kappa_1^Q(w)=0.
+\]
+Direct substitution in~\eqref{eq:R} gives
+\[
+ \kappa_1^R(\chi)=
+ \kappa_1^P(c)\ \oplus\
+ \bigl[-\tau(\widetilde b\otimes1)c+(d\otimes1)\nu
+          +\tau(e\otimes1)\nu'\bigr]\ \oplus\
+ \bigl[-\mu(\widetilde b\otimes1)\nu+\kappa_1^Q(w)\bigr].
+\]
+All three components vanish, so $\chi$ is a cycle.
+Finally,~\eqref{eq:Zledger} follows from
+\eqref{eq:PBW-Z} and~\eqref{eq:Gamma-phi}.
+\end{proof}
+
+\begin{theorem}[normal form]\label{thm:normal}
+If $\zeta z\in\dlt_5(L)$, there is
+$\xi\in L_1\Sym^2(H)$ such that
+\begin{equation}\label{eq:normal}
+ \frac{\zeta}{q}+\Z
+ =\eta\bigl(L_1\Sym^2(p)(\xi)\bigr).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Take the cycle $\chi$ from Lemma~\ref{lem:PBW-cycle} and put
+$\xi=[\chi]\in H_1K_S(R)=L_1\Sym^2(H)$.  Projection
+$R_\bullet\to P_\bullet$ sends $\chi$ to $c_u$, hence
+\[
+ L_1\Sym^2(p)(\xi)=[c_u].
+\]
+Now divide~\eqref{eq:Zledger} by $q$ and apply
+Lemma~\ref{lem:evaluation}.
+\end{proof}
+
+The normal form is a necessary consequence of membership in
+$\dlt_5(L)$; no converse is asserted.
+
+\section{The vanishing theorem}\label{sec:vanishing}
+
+The proof in this section uses only the additive extension
+\eqref{eq:extension}, the pairing~\eqref{eq:g}, and the exterior lift
+of Lemma~\ref{lem:exterior}.  It is independent of PBW collection.
+
+Put
+\[
+ A=\Hom(W,C),
+ \qquad A^\vee=\Hom(A,C).
+\]
+Evaluation gives a natural isomorphism
+\begin{equation}\label{eq:bidual}
+                         W/qW\xrightarrow{\sim}A^\vee.
+\end{equation}
+For $W=\Z/e$, the class of $1$ evaluates the generator of
+$\Hom(W,C)$ onto an element of order $\gcd(e,q)$; thus the evaluation
+map is an isomorphism between two cyclic groups of that order.  The
+general case follows by decomposing $W$ into cyclic summands.
+Define
+\begin{equation}\label{eq:rho-b}
+ \rho:P_0\to A,
+ \quad \rho(x)(w)=g(\bar x,w),
+ \qquad
+ b:P_1\to A^\vee,
+ \quad b(a)=\overline{\widetilde b(a)}\pmod{qW}.
+\end{equation}
+Then $\rho d=0$ and
+\begin{equation}\label{eq:factorphi}
+                         \varphi(a,x)=b(a)(\rho x).
+\end{equation}
+
+\begin{lemma}[polarisation]\label{lem:polarisation}
+If $G_0$ is a finite abelian group and
+$\Omega:G_0\times G_0\to\Q/\Z$ is alternating, there is a bilinear
+$H:G_0\times G_0\to\Q/\Z$ such that $H^{\mathsf T}-H=\Omega$.
+\end{lemma}
+
+\begin{proof}
+Choose cyclic generators $e_1,\ldots,e_r$ of $G_0$.  For $i<j$, set
+$H(e_j,e_i)=\Omega(e_i,e_j)$ and $H(e_i,e_j)=H(e_i,e_i)=0$.
+The orders of both generators annihilate each assigned value, so $H$
+is well defined and bilinear.  On every pair of generators,
+$H^{\mathsf T}-H=\Omega$.
+\end{proof}
+
+\begin{proposition}[quadratic certificate]\label{prop:certificate}
+There exist a homomorphism $\alpha:P_0\to A$, a symmetric bilinear form
+\[
+ \lambda:A^\vee\times A^\vee\longrightarrow C,
+\]
+and a cocycle
+\[
+ \psi(a,x)=b(a)(\alpha x)
+     \in\Hom(P_1\otimes P_0,C)
+\]
+such that
+\begin{equation}\label{eq:certificate}
+              \alpha d=\lambda_*b,
+ \qquad
+              \beta_S[\psi]=\eta.
+\end{equation}
+Here $(\lambda_*\chi)(\chi')=\lambda(\chi,\chi')$ and
+$A\cong\Hom(A^\vee,C)$ by evaluation.
+\end{proposition}
+
+\begin{proof}
+Form the pushout
+\begin{equation}\label{eq:E}
+ \mathcal E=
+ \frac{A^\vee\oplus P_0}
+      {\langle(b(a),-da):a\in P_1\rangle}.
+\end{equation}
+Since $d$ is injective, the evident maps give an exact sequence
+$0\to A^\vee\to\mathcal E\to V\to0$: if $[\chi,0]=0$, then
+$(\chi,0)=(b(a),-da)$ for some $a$, hence $a=0$ and $\chi=0$; after
+quotienting by $A^\vee$, the cokernel is $P_0/dP_1=V$.  Write
+$i(\chi)=[\chi,0]$ and $j(x)=[0,x]$; the defining relation says
+\begin{equation}\label{eq:jdib}
+                         j(da)=i(b(a)).
+\end{equation}
+
+Because $d\otimes\Q$ is an isomorphism, the rule
+\begin{equation}\label{eq:vartheta}
+ \vartheta(da,x)=\frac{\widehat\varphi(a,x)}q
+\end{equation}
+defines a rational bilinear form on $P_0\otimes\Q$.
+Equation~\eqref{eq:exterior} says that $\vartheta$ is alternating.
+Define
+\begin{equation}\label{eq:Omega}
+ \Omega([\chi,x],[\chi',x'])
+ =\chi(\rho x')-\chi'(\rho x)+\vartheta(x,x')+\Z.
+\end{equation}
+This is well defined on $\mathcal E$.  Indeed, in the first variable,
+\begin{align*}
+ \Omega((b(a),-da),(\chi',x'))
+ &=b(a)(\rho x')-\vartheta(da,x')+\Z\\
+ &=\varphi(a,x')-\frac{\widehat\varphi(a,x')}q+\Z=0,
+\end{align*}
+and alternation gives the same conclusion in the second variable.
+The form $\Omega$ is alternating.
+
+Choose $H$ as in Lemma~\ref{lem:polarisation} and define
+\begin{equation}\label{eq:alpha-lambda}
+ \chi(\alpha x)=H(jx,i\chi),
+ \qquad
+ \lambda(\chi,\chi')=H(i\chi',i\chi).
+\end{equation}
+These values lie in $C$, since $i(A^\vee)$ is killed by $q$.  The
+restriction of $\Omega$ to $i(A^\vee)^2$ is zero, so $H$ is symmetric
+there and $\lambda$ is symmetric.  By~\eqref{eq:jdib},
+\[
+ \chi(\alpha da)=H(i b(a),i\chi)
+ =H(i\chi,i b(a))=\lambda(b(a),\chi),
+\]
+which proves $\alpha d=\lambda_*b$.  Symmetry of $\lambda$ also shows
+directly that $\psi$ is a cocycle:
+\[
+ \psi(a,da')-\psi(a',da)
+ =\lambda(b(a'),b(a))-\lambda(b(a),b(a'))=0.
+\]
+
+Choose a rational bilinear lift $P$ of
+$(x,x')\mapsto H(jx,jx')$.  Initially
+$P^{\mathsf T}-P-\vartheta$ is integral and alternating.  Adding an
+integral bilinear form supported in one triangle, we may and do arrange
+\begin{equation}\label{eq:P}
+                         P^{\mathsf T}-P=\vartheta.
+\end{equation}
+Set
+\[
+                  \widehat\psi(a,x)=qP(x,da).
+\]
+This is integer-valued: modulo $\Z$,
+\[
+ P(x,da)=H(jx,jda)=H(jx,ib(a))=b(a)(\alpha x)=\psi(a,x),
+\]
+and $\psi(a,x)$ lies in $C=\frac1q\Z/\Z$.  The same equality shows
+that $\widehat\psi$ is an integral lift of $\psi$.  Finally,
+\begin{align*}
+ \widehat\psi(a,da')-\widehat\psi(a',da)
+ &=q\bigl(P(da',da)-P(da,da')\bigr)\\
+ &=q\vartheta(da,da')
+ =\widehat\varphi(a,da').
+\end{align*}
+After division by $q$, the Bockstein cocycle for $\psi$ is exactly the
+cochain $h$ of~\eqref{eq:h}.  Hence $\beta_S[\psi]=\eta$.
+\end{proof}
+
+\begin{theorem}[vanishing]\label{thm:vanishing}
+For the character~\eqref{eq:eta},
+\begin{equation}\label{eq:vanishing}
+                       \eta\circ L_1\Sym^2(p)=0.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Let $f:K_S(R)\to K_S(P)$ be induced by the projection
+$R_\bullet\to P_\bullet$.  If $y\in Q_0$, write $y_W$ for its image in
+$W$ and $\bar y$ for its image in $W/qW=A^\vee$.  Define a symmetric
+$C$-valued form on $R_0=P_0\oplus Q_0$ by
+\begin{equation}\label{eq:T}
+\begin{split}
+ T((x,y),(x',y'))={}&-\alpha(x)(y'_W)-\alpha(x')(y_W)\\
+                    &-\lambda(\bar y,\bar y').
+\end{split}
+\end{equation}
+For $(a,s)\in R_1$, equations~\eqref{eq:R} and
+\eqref{eq:certificate} give
+\begin{align*}
+ T(\partial(a,s),(x,y))
+ &=-\alpha(da)(y_W)
+   +\alpha(x)(\overline{\widetilde b(a)})
+   +\lambda(b(a),\bar y)\\
+ &=-\lambda(b(a),\bar y)+\psi(a,x)
+   +\lambda(b(a),\bar y)\\
+ &=\psi(a,x).
+\end{align*}
+Thus the pulled-back cocycle $f^*\psi$ is the coboundary of $T$, so
+$f^*[\psi]=0$.  Naturality of the Bockstein and
+Proposition~\ref{prop:certificate} now give
+\[
+ f^*\eta=f^*\beta_S[\psi]
+ =\beta_S(f^*[\psi])=0.
+\]
+Under the natural identification~\eqref{eq:UCT}, $f^*$ is
+precomposition with $L_1\Sym^2(p)$.  This is exactly
+\eqref{eq:vanishing}.
+\end{proof}
+
+\section{Conclusion and the unreduced statement}
+
+\begin{proof}[Proof of Theorem~\ref{thm:reduced}]
+Let $a\in\dlt_5(L)$.  Since the published equality
+$\dlt_3(L)=\gm_3(L)$ gives
+$\dlt_5(L)\subseteq\dlt_3(L)=C$, write $a=\zeta z$.
+The normal-form theorem supplies $\xi\in L_1\Sym^2(H)$ with
+\[
+ \frac\zeta q+\Z
+ =\eta(L_1\Sym^2(p)(\xi)).
+\]
+The right side is zero by Theorem~\ref{thm:vanishing}.  Hence
+$q\mid\zeta$, and therefore $a=\zeta z=0$ in $C$.
+\end{proof}
+
+We finish by recording why this reduced theorem gives the usual
+statement for arbitrary Lie rings.
+
+\begin{corollary}\label{cor:global}
+For every Lie ring $L$,
+\[
+                         \dlt_5(L)\subseteq\gm_4(L).
+\]
+\end{corollary}
+
+\begin{proof}
+Pass to $\bar L=L/\gm_4(L)$.  It is enough, by functoriality of
+dimension subrings, to prove $\dlt_5(\bar L)=0$.  Suppose that
+$0\ne a\in\dlt_5(\bar L)$.  The ring $\bar L$ has class at most three
+and is therefore metabelian.  The published metabelian exponent
+theorem~\cite[Theorem~2.1]{PS} asserts
+$2\dlt_r(K)\subseteq\gm_r(K)$ for every metabelian $K$; applied to
+$\bar L$, it gives $2a=0$, because
+$\gm_5(\bar L)=0$.
+
+The enveloping-algebra functor, being a left adjoint, commutes with
+filtered colimits.  The equality expressing $a$ as an element of the
+fifth augmentation power is finite, so it already holds at some
+finitely generated Lie subring $M\subseteq\bar L$.  Thus
+$0\ne a\in\dlt_5(M)$.  Since $M$ is finitely generated and has class
+at most three, finitely many basic commutators of weights at most three
+generate its additive group.  The structure theorem for finitely
+generated abelian groups shows that, for all sufficiently large $N$,
+the nonzero element $a$ of order two survives in $M/2^NM$; this is a finite
+Lie ring whose additive group is a $2$-group.
+
+In this quotient, the image of $a$ lies in
+$\dlt_5\subseteq\dlt_3=\gm_3$.  Its third lower-central term is a
+finite central abelian $2$-group.
+Decompose that group into cyclic summands and project onto a summand on
+which the image of $a$ is nonzero.  The kernel is a central ideal.
+By functoriality, after quotienting by it, $a$ is still a nonzero
+element of $\dlt_5$,
+$\gm_4=0$, and $\gm_3$ is cyclic.  This contradicts
+Theorem~\ref{thm:reduced}.
+\end{proof}
+
+\begin{remark}
+The finiteness and $2$-primary hypotheses in
+Theorem~\ref{thm:reduced} are therefore not extra assumptions in the
+global theorem: they are consequences of the preceding counterexample
+reduction.  They are stated in the reduced theorem because the Smith
+resolutions, Pontryagin duality~\eqref{eq:bidual}, and the polarisation
+argument use them explicitly.
+\end{remark}
+
+\begin{thebibliography}{9}
+
+\bibitem{BP}
+L.~Bartholdi and I.~B.~S.~Passi,
+\emph{Lie dimension subrings},
+Internat. J. Algebra Comput. \textbf{25} (2015), 1301--1325.
+
+\bibitem{Bou}
+N.~Bourbaki,
+\emph{Lie Groups and Lie Algebras, Chapters 1--3},
+Springer, 1989.
+
+\bibitem{Kock}
+B.~K\"ock,
+\emph{Computing the homology of Koszul complexes},
+Trans. Amer. Math. Soc. \textbf{353} (2001), 3115--3147.
+
+\bibitem{PS}
+I.~B.~S.~Passi and T.~Sicking,
+\emph{Dimension quotients of metabelian Lie rings},
+Internat. J. Algebra Comput. \textbf{27} (2017), 251--258.
+
+\end{thebibliography}
+
+\end{document}

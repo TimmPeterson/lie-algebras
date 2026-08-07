@@ -1,0 +1,19 @@
+name = "lie-rings"
+version = "0.1.0"
+keywords = ["mathematics", "lie-algebras", "pbw"]
+defaultTargets = ["LieRings"]
+
+[leanOptions]
+autoImplicit = false
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.29.0"
+
+[[lean_lib]]
+name = "LieRings"
+

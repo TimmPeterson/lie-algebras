@@ -1,0 +1,5 @@
+import LieRings.DimensionSubring.DegreeFive.AdaptedDynkinReduction
+import Mathlib.Util.AssertNoSorry
+
+#check LieRings.DegreeFive.StandingReductionData.dimensionSubring_five_eq_bot
+#print axioms LieRings.DegreeFive.StandingReductionData.dimensionSubring_five_eq_bot
