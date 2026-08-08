@@ -69,6 +69,8 @@ import LieRings.DimensionSubring.DegreeFive.AdaptedTerminalProjection
 import LieRings.DimensionSubring.DegreeFive.AdaptedPreThetaBridge
 import LieRings.DimensionSubring.DegreeFive.AdaptedWitnessBridge
 import LieRings.DimensionSubring.DegreeFive.AdaptedDynkinReduction
+import LieRings.DimensionSubring.DegreeFive.GlobalReduction
+import LieRings.DimensionSubring.DegreeFive.FiniteWitnessReduction
 import LieRings.UniversalEnveloping.Coproduct
 
 /-!
@@ -91,6 +93,8 @@ equations `(B)`, `(Z)`, `(C1)`, and `(C2)`; the diagonal square equation `(C2)` 
 separately.  `StandingReductionData.terminalPreThetaEquation` now packages the actual terminal
 ledger as that equation with no coordinate premise, and `terminalZeta_eq_zero` connects it to
 the symplectic certificate theorem.  The remaining global interfaces are the semantic
-identification of this terminal `z` projection with the original element's `γ₃` coordinate,
-and the standing reduction from an arbitrary Lie ring to the class-three, cyclic-`γ₃` case.
+identification of this terminal `z` projection with the original element's `γ₃` coordinate.
+The quotient-theoretic standing reduction is formalized in `GlobalReduction`, and
+`FiniteWitnessReduction` proves its finite-support witness property.  Thus its only remaining
+external input is the explicitly parameterized inclusion `2δ₄ ⊆ γ₄`.
 -/
