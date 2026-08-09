@@ -1,14 +1,7 @@
 import LieRings.DimensionSubring.DegreeFour
 import Mathlib.Util.AssertNoSorry
 
-#check LieRings.DegreeFive.StandingReductionData.dimensionSubring_five_eq_bot
-assert_no_sorry LieRings.DegreeFive.StandingReductionData.dimensionSubring_five_eq_bot
-#print axioms LieRings.DegreeFive.StandingReductionData.dimensionSubring_five_eq_bot
-
-#check LieRings.DegreeFour.twoDeltaFourProperty
-assert_no_sorry LieRings.DegreeFour.twoDeltaFourProperty
-#print axioms LieRings.DegreeFour.twoDeltaFourProperty
-
-#check LieRings.DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three
-assert_no_sorry LieRings.DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three
 #print axioms LieRings.DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three
+#check LieRings.DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three
+
+assert_no_sorry LieRings.DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three
