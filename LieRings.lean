@@ -7,6 +7,7 @@ import LieRings.DimensionSubring.DegreeTwo
 import LieRings.DimensionSubring.DegreeThree
 import LieRings.DimensionSubring.FreeLie
 import LieRings.DimensionSubring.DegreeFive
+import LieRings.DimensionSubring.DegreeFour
 import LieRings.PBW.Reduction
 import LieRings.PBW.Abelian
 import LieRings.PBW.FreeModuleStatement
