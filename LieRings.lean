@@ -3,6 +3,7 @@ import LieRings.UniversalEnveloping.Adjoint
 import LieRings.UniversalEnveloping.Quotient
 import LieRings.DimensionSubring.Basic
 import LieRings.DimensionSubring.Centrality
+import LieRings.DimensionSubring.Graded
 import LieRings.DimensionSubring.DegreeTwo
 import LieRings.DimensionSubring.DegreeThree
 import LieRings.DimensionSubring.FreeLie
