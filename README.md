@@ -52,8 +52,14 @@ With conventional positive indexing (`δₙ = dimensionSubring ℤ L n` and
 - `UEA.actionSubmodule_augmentationIdeal_pow_eq_lcs`:
   `A · 𝜔(L)^n = [A,ₙL]` for a Lie submodule `A`.
 
-The degree-five theorem currently exported by the library is the standing-reduction result. A
-`DegreeFive.StandingReductionData L` consists of:
+- `DegreeFour.twoDeltaFourProperty`: Bartholdi--Passi's factor-two theorem
+  `2δ₄(L) ⊆ γ₄(L)` for every Lie ring.
+- `DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three`:
+  `δ₅(L) ⊆ γ₄(L)` for every Lie ring, with no finiteness or torsion hypotheses.
+
+The proof of the unconditional degree-five theorem has two parts. First, the standing-reduction
+calculation proves the result for a reduced counterexample. A `DegreeFive.StandingReductionData L`
+consists of:
 
 1. a finite underlying Lie ring `L`;
 2. a 2-primary additive group (`IsPGroup 2 (Multiplicative L)`);
@@ -62,8 +68,11 @@ The degree-five theorem currently exported by the library is the standing-reduct
    2-power order).
 
 Under exactly these hypotheses,
-`DegreeFive.StandingReductionData.dimensionSubring_five_eq_bot` proves `δ₅(L) = 0`. No unconditional
-general theorem `δ₅(L) ⊆ γ₄(L)` is exported yet.
+`DegreeFive.StandingReductionData.dimensionSubring_five_eq_bot` proves `δ₅(L) = 0`. Second, a
+direct formalization of the Bartholdi--Passi degree-four argument proves
+`2δ₄(L) ⊆ γ₄(L)` and supplies the remaining input to the finite and 2-primary reduction.
+Together these give the unconditional theorem
+`DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three`.
 
 ## Definitions and how to use them
 
@@ -81,16 +90,21 @@ available; the main definitions are located as follows.
 | enveloping-algebra action | `UEA.representation R L M` | `UniversalEnveloping/Adjoint.lean` |
 | ordered PBW map | `PBW.orderedPBWMap R L ι b` | `PBW/FreeModuleStatement.lean` |
 | standing reduction data | `DegreeFive.StandingReductionData L` | `DimensionSubring/DegreeFive/StandingReduction.lean` |
+| factor-two and degree-five theorems | `DegreeFour.twoDeltaFourProperty`, `DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three` | `DimensionSubring/DegreeFour.lean` |
 
 Mathlib numbers the lower central series from zero, so
 `lowerCentralSeries R L 0 = γ₁(L) = L`. For example:
 
 ```lean
-import LieRings.DimensionSubring.DegreeThree
+import LieRings.DimensionSubring.DegreeFour
 
 example (L : Type*) [LieRing L] :
     dimensionSubring ℤ L 3 = lowerCentralSeries ℤ L 2 :=
   dimensionSubring_three_eq_lowerCentralSeries_two L
+
+example (L : Type*) [LieRing L] :
+    dimensionSubring ℤ L 5 ≤ lowerCentralSeries ℤ L 3 :=
+  DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three L
 ```
 
 The directory [`LieRings/Examples`](LieRings/Examples) contains short, compiled examples for
