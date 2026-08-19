@@ -1,0 +1,67 @@
+import LieRings.Metabelian.FreeComponent
+import Mathlib.Order.Hom.PowersetCard
+
+#check OrderEmbedding.ofStrictMono
+#check Set.powersetCard.ofFinEmbEquiv_apply
+#check Set.powersetCard.ofFinEmbEquiv_symm_apply
+#check Equiv.symm_apply_apply
+#check Module.Basis.tensorProduct_apply
+#check Module.Basis.constr_basis
+#check AlternatingMap.map_swap
+#check TensorProduct.neg_tmul
+#check TensorProduct.tmul_neg
+#check Submodule.liftQ
+#check Submodule.mapQ
+#check SymmetricPower.exteriorTwoToTensor_ιMulti
+#check Koszul.AllDegrees.differential_comp_differential
+#check Multiset.cons_inj_left
+#check Multiset.cons_inj_right
+#check Multiset.cons_injective
+#check Module.Basis.coord_apply
+#check Module.Basis.coord_apply_eq
+#check Finsupp.lapply
+#check Finsupp.lhom_ext
+#check Finsupp.linearCombination_single
+#check Multiset.cons_erase
+#check Multiset.cons_erase_of_pos
+#check Multiset.erase_cons_head
+#check Sym.ext
+#check Submodule.Quotient.eq_zero_iff_mem
+#check Submodule.Quotient.eq_iff_sub_mem
+#check Submodule.Quotient.mk_eq_mk
+#check Submodule.mkQ_apply
+#check Submodule.Quotient.mk_eq_zero
+#check Submodule.Quotient.sound
+#check QuotientAddGroup.eq_zero_iff
+#check LinearMap.quotKerEquivRange
+#check LinearEquiv.ofBijective
+#check Module.Basis.mk
+#check Module.Basis.map
+#check Module.Basis.ext
+#check Module.Basis.ext_elem
+#check Module.Basis.inductionOn
+#check Module.Basis.sum_repr
+#check LinearMap.ext_on
+#check LinearMap.ext_of_eq
+#check Finsupp.basisSingleOne
+#check LinearEquiv.ofBijective_apply
+#check LinearEquiv.ofBijective_symm_apply_apply
+#check TensorProduct.ext
+#check TensorProduct.ext'
+#check exteriorPower.ι
+#check exteriorPower.ιMulti
+#check LinearMap.mk₂
+#check LinearMap.llcomp
+#check LinearMap.flip
+#check Pi.single
+#check LinearMap.single
+#check AlternatingMap.curryLeft
+#check AlternatingMap.curryFin0
+#check AlternatingMap.curryFin
+#check AlternatingMap.uncurryFin
+#check MultilinearMap.curryLeft
+#check MultilinearMap.curryFin0
+example (X : Type) [AddCommGroup X] [Module ℤ X] :
+    IsScalarTower ℤ ℤ (⋀[ℤ]^2 X) := by infer_instance
+example (X : Type) [AddCommGroup X] :
+    IsScalarTower ℤ ℤ (⋀[ℤ]^2 X) := by infer_instance

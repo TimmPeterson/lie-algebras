@@ -1,0 +1,3 @@
+import LieRings.DimensionSubring.MetabelianVanishing.TerminalSmithPrimitive
+#check LieRings.MetabelianVanishing.rightSymbol_iota_mul_iota_eq_terminalSmithFactorSymbol
+#check LieRings.MetabelianVanishing.terminalSourcePrimitive_fullRelationFactorChainRows

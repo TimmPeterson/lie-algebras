@@ -1,0 +1,448 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\setlength{\emergencystretch}{3em}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Rel}{\mathcal R}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\ev}{\operatorname{ev}}
+\newcommand{\src}{\operatorname{src}}
+\newcommand{\im}{\operatorname{im}}
+
+\title{Implementation-Readiness Audit of the\
+Exceptional Terminal PBW Lifting Argument}
+\author{}
+\date{August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note is an erratum and implementation audit of the proposed evaluated
+cokernel--Stokes proof of the exceptional terminal lifting lemma.  A second
+check against the exact Lean objects reveals a fatal omission: the external
+boundary of the complete rewrite trace contains its initial root family.
+Its primitive read is the governing PBW primitive, not a certified zero.
+Once that term is restored, the proposed terminal-package vanishing is no
+longer available.
+
+The failure is not merely a matter of exposition.  The current Lean library
+proves, by a short calculation from already verified aggregate identities,
+that the canonical exceptional discrepancy evaluates to the negative of the
+governing element.  Thus proving that discrepancy zero is equivalent to the
+conclusion of Step~7; it cannot serve as an independent local lemma.  The
+calculation was checked by compiling the precise Lean theorem stated in
+Section~5 below.
+
+The evaluated-range formulation and its lifting criterion remain correct,
+but they do not prove range membership.  Consequently the earlier proof is
+withdrawn and should not be implemented.  The end of the note gives the
+correct root-inclusive target and a four-point implementation plan which
+does not hide the missing assertion behind a quotient or a new terminal
+package.
+\end{abstract}
+
+\section{Verdict}
+
+The proposed proof is not implementation-ready and is not a valid proof of
+the exceptional lifting lemma.  Its finite Stokes calculation used the
+identity
+\[
+                         I-F=\partial_{\mathrm{led}}S
+\]
+for a complete labelled rewrite forest, but its claimed external-boundary
+partition omitted the initial family \(I\).  The omission changes the
+conclusion from ``the exceptional obstruction is zero'' to ``the
+exceptional obstruction equals the remaining root obstruction.''  That root
+obstruction is precisely the governing top-layer element which Step~7 must
+annihilate.
+
+There is therefore no safe short implementation of the earlier document.
+In particular, introducing an evaluated cokernel, a free occurrence group,
+or a new terminal-package collector would add infrastructure without
+removing the mathematical obstruction.
+
+\section{The lifting statement and the part which remains correct}
+
+Let \(F=\bigoplus_{s=1}^{n+1}F_s\) be the truncated free metabelian Lie
+ring, let \(\ev:F\to L\) be evaluation, and put
+\(\Rel=\ker(\ev)\).  Set
+\[
+ A=\bigoplus_{s=1}^{n}F_s,
+ \qquad D=\im(\Rel\to A),
+ \qquad K=D\otimes A.
+\]
+The terminal Koszul differential and complete source primitive are additive
+maps
+\[
+ \partial:K\longrightarrow\Sym^2A,
+ \qquad
+ \src:K\longrightarrow F.
+\]
+For the exceptional signed relation-left family write
+\(B_{\mathcal E}\in\Sym^2A\) for its complete factor-two read and
+\(P_{\mathcal E}\in F\) for its complete factor-one PBW read.  The desired
+lemma asks for \(z_{\mathcal E}\in K\) and \(r_{\mathcal E}\in\Rel\) such
+that
+\begin{equation}
+ \partial z_{\mathcal E}=B_{\mathcal E},
+ \qquad
+ \src z_{\mathcal E}=P_{\mathcal E}+r_{\mathcal E}.       \label{eq:target}
+\end{equation}
+
+The simultaneous range formulation is correct.  Define
+\[
+ \Lambda_{\mathrm{ev}}:K\longrightarrow\Sym^2A\oplus L,
+ \qquad
+ \Lambda_{\mathrm{ev}}(z)=(\partial z,\ev(\src z)).
+\]
+
+\begin{lemma}[simultaneous lifting criterion]\label{lem:range}
+For \(b\in\Sym^2A\) and \(p\in F\), the pair
+\((b,\ev p)\) belongs to \(\im\Lambda_{\mathrm{ev}}\) if and only if there
+are \(z\in K\) and \(r\in\Rel\) such that
+\[
+                         \partial z=b,
+ \qquad                  \src z=p+r.
+\]
+\end{lemma}
+
+\begin{proof}
+Membership in the range gives \(z\) with
+\(\partial z=b\) and \(\ev(\src z-p)=0\).  Put
+\(r=\src z-p\).  Then \(r\in\ker(\ev)=\Rel\).  The converse follows by
+applying \(\ev\) to \(\src z=p+r\).
+\end{proof}
+
+This lemma shows that evaluation loses no information in the final
+conclusion.  It does not, however, prove that the exceptional pair belongs
+to the range.  The invalid argument occurred precisely in the attempted
+proof of that membership.
+
+\section{The missing root in the finite Stokes calculation}
+
+Let \(C_0\) be the free abelian group on labelled row occurrences and let
+\(C_1\) be the free abelian group on labelled rewrite cells.  If a cell has
+one input and a signed list of outputs, define its boundary to be input
+minus outputs.  For a finite deterministic rewrite forest with signed root
+family \(I\), terminal frontier \(F\), and signed cell sum \(S\), induction
+on the processing order gives
+\begin{equation}
+                         I-F=\partial_{\mathrm{led}}S.       \label{eq:stokes}
+\end{equation}
+Every internal occurrence cancels, but every root occurrence occurs once
+with positive sign.  Cutting away certified subforests changes the frontier
+and introduces cut edges; it does not remove an unclassified root.
+
+Let
+\[
+ \operatorname{Read}(v)=
+ \left(
+  \Sym^2(\pi)P_2(\operatorname{val}v),
+  \ev P_1(\operatorname{val}v)
+ \right).
+\]
+Literal rewrite identities imply
+\(\operatorname{Read}(\partial_{\mathrm{led}}S)=0\).  Applying the read to
+\eqref{eq:stokes} therefore gives
+\begin{equation}
+                         \operatorname{Read}(I)
+                         =\operatorname{Read}(F),            \label{eq:root-frontier}
+\end{equation}
+not \(\operatorname{Read}(F)=0\).
+
+In the governing trace, the initial word is the relation-ideal witness
+\(\Theta\).  Its terminal factor-two read is zero by the governing weight
+condition, but its factor-one read is not zero:
+\begin{equation}
+ P_1(\Theta)=\widetilde a,
+ \qquad
+ \ev(\widetilde a)=a.                                      \label{eq:root-read}
+\end{equation}
+Thus its simultaneous read is ((0,a)).  It cannot be placed among the
+zero-read leaves, whole relations, or independently certified correction
+families.
+
+The external-boundary formula in the earlier document had the form
+\[
+ \partial_{\mathrm{led}}S^\circ
+    =E-G+Q+Z+\sum_jN_j.
+\]
+The correct formula must also contain the retained root family
+\(I^\circ\), with the sign inherited from \eqref{eq:stokes}.  Consequently
+the read only implies
+\[
+ \operatorname{Read}(E)
+   =-\operatorname{Read}(I^\circ)
+\]
+after the other displayed families have been discharged.  Proving the
+right-hand side zero is Step~7 itself.
+
+\section{Exact audit of the canonical exceptional chain}
+
+The preceding diagnosis can be made completely concrete with the objects
+already present in the Lean development.  Let
+\[
+ z_{\mathrm{can}}=
+ \texttt{rawCutoffExceptionalRelationLeftChain}
+\]
+and define its primitive discrepancy
+\[
+ \Delta_{\mathrm{can}}
+   =\src z_{\mathrm{can}}-P_{\mathcal E}.
+\]
+The boundary theorem already proved in Lean is
+\[
+                         \partial z_{\mathrm{can}}=B_{\mathcal E}.
+\]
+
+For the primitive calculation, abbreviate the five complete primitive
+aggregates by
+\begin{align*}
+ C&=\text{complete factor-two full-label primitive},\\
+ T&=\text{raw contextual terminal-two primitive},\\
+ N&=\text{non-hole mark-one primitive},\\
+ H&=\text{derived-tail hole primitive},\\
+ E&=\text{exceptional component primitive}.
+\end{align*}
+All source-placement errors occurring below are genuine elements of
+\(\Rel\).  The already formalized source formulas and the definition of
+\(z_{\mathrm{can}}\) give
+\begin{equation}
+                         \Delta_{\mathrm{can}}
+            =-(C+T+N+H+E)+r_0                         \label{eq:canonical-one}
+\end{equation}
+for some \(r_0\in\Rel\).  No component is asserted to be a relation in
+this calculation: all relation terms are the explicitly constructed
+aggregate placement errors.
+
+The verified mark-one splits give
+\begin{equation}
+                         N+H+E=P_{\mathrm{trace}},           \label{eq:mark-split}
+\end{equation}
+and the verified raw full-label Stokes equation gives
+\begin{equation}
+ C+P_{\mathrm{trace}}+T
+       =P_1(\Theta)-r_1                                    \label{eq:raw-stokes}
+\end{equation}
+for the grouped terminal one-factor relation \(r_1\in\Rel\).  Substitution
+in \eqref{eq:canonical-one} yields the exact identity
+\begin{equation}
+                         \Delta_{\mathrm{can}}
+             =-P_1(\Theta)+r_{\mathrm{can}}                 \label{eq:canonical-root}
+\end{equation}
+with \(r_{\mathrm{can}}\in\Rel\).  Applying evaluation and
+\eqref{eq:root-read} proves the following.
+
+\begin{theorem}[canonical root audit]\label{thm:canonical-audit}
+\begin{equation}
+                         \ev(\Delta_{\mathrm{can}})=-a.      \label{eq:canonical-eval}
+\end{equation}
+\end{theorem}
+
+This theorem was checked in Lean, without any new axiom or placeholder, as
+the statement
+\[
+\begin{split}
+&\texttt{evaluation n L data}\;\bigl(
+  \texttt{rawCutoffExceptionalRelationLeftDiscrepancy}\;\cdots\\
+&\hspace{35mm}
+  (\texttt{rawCutoffExceptionalRelationLeftChain}\;\cdots)\bigr)
+  =-a.
+\end{split}
+\]
+Its proof uses only the existing primitive formulas and the existing three
+mark-one splits, together with the two existing theorems
+\begin{gather*}
+ \texttt{rawPBWPrimitiveTheta\_eq\_complete\_add\_cutoff},\\
+ \texttt{pbwPrimitive\_rawCompleteCutoff\_external},
+\end{gather*}
+and the governing identities \texttt{pbwPrimitive\_theta} and
+\texttt{evaluates}.
+
+\begin{corollary}\label{cor:circular}
+The assertion \(\ev(\Delta_{\mathrm{can}})=0\) is equivalent to \(a=0\).
+In particular it is not an independent lemma from which Step~7 may be
+deduced.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:canonical-audit}, the asserted equality is
+\(-a=0\), which is equivalent to \(a=0\).
+\end{proof}
+
+This is the exact algebraic form of the circular cancellation observed in
+the earlier formalization attempts.
+
+\section{Why the terminal-package proposition does not repair the gap}
+
+The earlier document introduced an aggregate terminal chain
+\(z_{\mathrm{ter}}\) and asserted, after a descending continuation, that
+its boundary and evaluated source defect were exactly the retained terminal
+edges and the intermediate diagonal differences.  That assertion was not a
+consequence of the stated local rules.
+
+There are two separate problems.
+\begin{enumerate}
+\item The continuation was defined only verbally.  The existing normalized
+component frontier records component descendants, whereas a terminal source
+tensor requires a genuine full contextual relation.  The theorem
+\texttt{componentPBWFrontier\_factorTwo\_context\_ne\_hole} supplies such a
+relation for each supported factor-two state, but replacing the component
+by the full prefix creates the preceding-prefix terms already isolated in
+\texttt{ContextualTerminalDiagonalAudit}.  The available theorem proves
+their aggregate boundary, not the matching primitive formula.
+\item Even if that new continuation were constructed, its Stokes boundary
+would still contain the root family described in Section~4.  Omitting the
+root makes the claimed terminal-package identity false; retaining it leaves
+the governing term \(-P_1(\Theta)\), exactly as in
+\eqref{eq:canonical-root}.
+\end{enumerate}
+
+Thus Proposition~5.4 of the earlier version was not a smaller lemma.  It
+contained both the old missing primitive assertion and an omitted root
+term.  Attempting to formalize it would very likely be more complicated
+than the previous attempt, because it would additionally require a new
+state continuation and its preservation theorems.
+
+The evaluated cokernel does not alter this conclusion.  A quotient can
+package simultaneous boundary and primitive equations, but it cannot turn
+the nonzero root class into zero.  By Lemma~\ref{lem:range}, proving that
+the exceptional class vanishes is exactly proving the desired lift.
+
+\section{The correct root-inclusive target}
+
+A noncircular Step~7 proof must keep the root contribution and identify it
+with the terminal coordinate of a genuine terminal source cycle.  The
+minimal coordinate-level form is the following.
+
+\begin{proposition}[root-inclusive terminal certificate]\label{prop:correct-target}
+For the governing witness there are a genuine cycle
+\[
+ c\in Z_1K_2(D_n\hookrightarrow A_n)
+\]
+and a terminal preimage \(s\) whose underlying free-model element is
+\(\src(c)\), such that
+\begin{equation}
+ \operatorname{terminalEval}(s)
+       =\operatorname{coord}_C(a).                          \label{eq:root-certificate}
+\end{equation}
+\end{proposition}
+
+Point~6, already formalized, annihilates the terminal evaluation of the
+source primitive of every genuine cycle.  Hence
+\eqref{eq:root-certificate} implies
+\(\operatorname{coord}_C(a)=0\), and injectivity of the cyclic coordinate
+gives \(a=0\).
+
+This target matches the existing consumer
+\[
+             \texttt{eq\_zero\_of\_terminalSourceCoordinate}.
+\]
+Equivalently, one may construct a
+\texttt{TerminalQuadraticPacket} and apply the existing theorem
+\[
+                    \texttt{eq\_zero\_of\_terminalPacket}.
+\]
+Either route must establish a root-inclusive trace certificate.  It must
+not first discard the root and try to prove the exceptional edge zero in
+isolation.
+
+The original manuscript's closed-square equality is one mathematical proof
+of Proposition~\ref{prop:correct-target}: the terminal root, every
+horizontal and vertical intermediate diagonal, the oriented factor-two
+edge, and the terminal one-factor relations are read in one signed ledger.
+For Lean, however, the missing work remains the construction of that one
+cycle/certificate from the present collectors.  The current library has
+already formalized the local PBW identities, the diagonal transgression,
+the terminal realization, and the final consumer; it has not yet formalized
+the required root-inclusive certificate.
+
+\section{Implementation consequence}
+
+There is presently no basis for promising that Step~7 will be easier than
+the previous attempt.  The safe conclusion of this audit is narrower:
+\begin{itemize}
+\item do not implement the evaluated cokernel or the proposed terminal
+package;
+\item retain the current \texttt{Finsupp} collectors and aggregate source
+formulas;
+\item make the root term explicit in every invariant; and
+\item target the existing coordinate-level terminal consumer rather than a
+stronger full-relation lift of an isolated edge.
+\end{itemize}
+
+This avoids known false goals and unnecessary infrastructure.  It does not
+remove the one genuinely hard theorem: the root-inclusive terminal
+certificate.
+
+\section{Four-point implementation plan for all of Step~7}
+
+The first two points contain all mathematical and bookkeeping complexity.
+The last two are deliberately short applications of existing code.
+
+\begin{enumerate}
+\item \textbf{Freeze and verify the root-inclusive invariant.}
+  Add Theorem~\ref{thm:canonical-audit} to a small audit file in the Lean
+  library and prove the corresponding identity for every proposed partial
+  continuation.  State the final collector invariant with an explicit root
+  summand; never use an external-boundary partition lacking that summand.
+  Fix the final interface to be Proposition~\ref{prop:correct-target}, or
+  the equivalent \texttt{TerminalQuadraticPacket} certificate.  This point
+  prevents another long attempt at a goal which is secretly equivalent to
+  \(a=0\).
+
+\item \textbf{Construct the single root-inclusive terminal certificate.}
+  Work on the existing complete provenance and normalized-component
+  \texttt{Finsupp} ledgers.  Retain the initial governing rows, the paired
+  intermediate diagonals, the preceding-prefix corrections, and the
+  factor-two terminal rows in the same aggregate.  Prove simultaneously
+  that the resulting terminal chain is closed and that its complete source
+  primitive has the governing terminal coordinate.  Use the existing
+  \texttt{Assembly}/\texttt{HigherCharacters} transgression for paired
+  diagonals, the existing full-relation source-placement formulas for
+  factor-two rows, and the existing comb support results for the one-factor
+  frontier.  This is the only new substantive theorem.  If its proof begins
+  to require a second independent primitive collector, stop and strengthen
+  the common ledger invariant instead of splitting the two reads.
+
+\item \textbf{Invoke the existing terminal consumer.}
+  Package the cycle and coordinate equation from Point~2 and apply
+  \texttt{eq\_zero\_of\_terminalSourceCoordinate}; alternatively construct
+  the already defined \texttt{TerminalQuadraticPacket} and apply
+  \texttt{eq\_zero\_of\_terminalPacket}.  Point~6 and injectivity of the
+  cyclic coordinate then give \(a=0\).  No new PBW calculation belongs in
+  this point.
+
+\item \textbf{Export and test Step~7.}
+  Export the unconditional capstone expected by \texttt{StepSeven} and
+  \texttt{Main}, specialize the existing reduction theorem, and run the
+  complete project build and low-class regression tests, including the
+  empty intermediate-diagonal case \(n=2\).  This point is module wiring and
+  testing only.
+\end{enumerate}
+
+\section{Conclusion}
+
+The double-check changes the conclusion decisively.  The evaluated range
+criterion is correct, but the proposed proof of exceptional range membership
+omitted the initial governing root.  The exact Lean-checked identity
+\(\ev(\Delta_{\mathrm{can}})=-a\) shows that the omission concealed the
+whole Step~7 conclusion.  The previous proof is therefore withdrawn, and
+the PDF should be used as an implementation warning and corrected target,
+not as a proof of the exceptional lifting lemma.
+
+\end{document}

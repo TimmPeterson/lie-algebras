@@ -25,7 +25,7 @@ variable (n : ℕ) (L : Type u) [LieRing L] [Finite L]
 variable (data : CyclicTopData n L)
 variable (hn : 2 ≤ n)
 
-local instance : Fintype L := Fintype.ofFinite L
+local instance terminalFullLabelFintype : Fintype L := Fintype.ofFinite L
 
 private theorem rightSymbol_iota_mul_iota_two_scratch
     (x y : FreeModel n L) :

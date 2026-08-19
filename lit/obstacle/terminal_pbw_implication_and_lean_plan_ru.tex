@@ -1,0 +1,1548 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{russian}
+\setotherlanguage{english}
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+
+\usepackage[a4paper,margin=24mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{fvextra}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  urlcolor=blue!55!black,
+  citecolor=blue!55!black,
+  pdftitle={Терминальная PBW-импликация и план завершения Lean-формализации},
+  pdfauthor={}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Терминальная PBW-импликация}
+\rhead{План Lean-формализации}
+\cfoot{\thepage}
+
+\setlist[itemize]{leftmargin=2em,itemsep=0.35em,topsep=0.45em}
+\setlist[enumerate]{leftmargin=2.2em,itemsep=0.4em,topsep=0.45em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\allowdisplaybreaks
+
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{corollary}[theorem]{Следствие}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{construction}[theorem]{Конструкция}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{warning}[theorem]{Предупреждение}
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\pr}{\operatorname{pr}}
+\newcommand{\Rel}{\mathcal R}
+\newcommand{\Obs}{\operatorname{Obs}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\ev}{\operatorname{ev}}
+\newcommand{\front}{\operatorname{Front}}
+\newcommand{\src}{\operatorname{src}}
+\newcommand{\out}{\operatorname{out}}
+\newcommand{\wt}{\operatorname{wt}}
+\newcommand{\PBW}{\operatorname{PBW}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\barF}{\overline F}
+\newcommand{\eps}{\varepsilon}
+
+\definecolor{darkred}{RGB}{130,20,20}
+\definecolor{darkgreen}{RGB}{20,100,45}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{lightblue}{RGB}{238,246,255}
+\definecolor{lightred}{RGB}{255,242,242}
+\definecolor{lightgreen}{RGB}{240,250,242}
+
+\newenvironment{keybox}{%
+  \par\medskip\noindent
+  \begin{center}\begin{minipage}{0.94\textwidth}
+  \color{blue!55!black}\hrule\vspace{0.55em}
+}{%
+  \vspace{0.35em}\hrule\end{minipage}\end{center}\medskip
+}
+
+\newenvironment{dangerbox}{%
+  \par\medskip\noindent
+  \begin{center}\begin{minipage}{0.94\textwidth}
+  \color{darkred}\hrule\vspace{0.55em}
+}{%
+  \vspace{0.35em}\hrule\end{minipage}\end{center}\medskip
+}
+
+\newenvironment{successbox}{%
+  \par\medskip\noindent
+  \begin{center}\begin{minipage}{0.94\textwidth}
+  \color{darkgreen}\hrule\vspace{0.55em}
+}{%
+  \vspace{0.35em}\hrule\end{minipage}\end{center}\medskip
+}
+\lstdefinelanguage{Lean}{
+  morekeywords={def,theorem,lemma,structure,where,extends,inductive,match,with,if,then,else,let,in,by,have,show,exact,apply,refine,constructor,termination_by,decreasing_by,namespace,end,import,open,private,protected,instance,deriving,forall,exists},
+  sensitive=true,
+  morecomment=[l]{--},
+  morecomment=[s]{/-}{-/},
+  morestring=[b]"
+}
+\lstset{
+  language=Lean,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  stringstyle=\ttfamily,
+  backgroundcolor=\color{lightgray},
+  frame=single,
+  rulecolor=\color{black!20},
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  xleftmargin=0.4em,
+  xrightmargin=0.4em,
+  aboveskip=0.7em,
+  belowskip=0.7em
+}
+
+\title{\textbf{Терминальная PBW-импликация}\\[0.35em]
+\large Полная размеченная трасса, balanced ledger, нулевой obstruction\\
+и план завершения формализации в Lean}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Настоящий документ изолирует и подробно доказывает сложную импликацию,
+используемую в терминальной части PBW-сборки исходного доказательства.
+Главный результат имеет вид
+\[
+ \text{полная размеченная PBW/truncation-трасса}
+ \Longrightarrow
+ \text{balanced ledger}
+ \Longrightarrow
+ \Obs(\mathcal W_{\rm exc})=0.
+\]
+Именно эта импликация была потеряна при попытке формализации: агент оставил
+только абстрактную signed family $\mathcal W_{\rm exc}$ и пытался вывести
+нулевой obstruction из принадлежности порождённому отношениями идеалу. Такое
+утверждение неверно в общем случае. В исходном доказательстве имеется
+дополнительный свидетель --- полная размеченная трасса всех элементарных
+перестановок и усечений. Она сохраняет происхождение каждого occurrence,
+все lower-context descendants и общий набор коэффициентов. Из неё строится
+один и тот же элемент $z$, одновременно удовлетворяющий квадратичному и
+примитивному равенствам.
+
+После математического доказательства дан конкретный план Lean-реализации:
+какую сессию использовать, какие данные нельзя стирать, какие определения и
+леммы создать, как построить proof-producing collector и по каким критериям
+считать задачу завершённой.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Итоговый диагноз}
+
+\begin{keybox}
+\textbf{Математический итог.}
+Проблемная импликация в исходном доказательстве доказана. Её доказательство
+не является следствием одного лишь факта
+$\Theta\in\Rel U(F)$ и не является wordwise-утверждением. Оно использует
+полную размеченную трассу преобразований. Если трассу сохранить как явный
+свидетель, то из неё конструктивно получается balanced ledger, один общий
+элемент $z$ и, следовательно, нулевой terminal obstruction.
+\end{keybox}
+
+\begin{dangerbox}
+\textbf{Ошибка формализационной архитектуры.}
+Агент пытался доказать утверждение примерно следующего вида:
+\[
+  \text{SignedRelationWordFamily}(\mathcal W)
+  \;\Longrightarrow\;
+  \Obs(\mathcal W)=0,
+\]
+используя в основном значение суммы $\Theta_{\mathcal W}\in\Rel U(F)$.
+Это слишком сильное и вообще неверное утверждение. Правильная цель имеет
+дополнительный аргумент:
+\[
+  \text{CompleteMarkedTrace}(\mathcal W)
+  \;\Longrightarrow\;
+  \Obs(\mathcal W)=0.
+\]
+Трасса не является технической декорацией: она и есть недостающий witness.
+\end{dangerbox}
+
+Формально ситуация состоит из трёх уровней.
+
+\begin{enumerate}
+\item \textbf{Локальный уровень.} Каждая PBW-перестановка, перестановка
+обычного фактора с полным отношением и каждый шаг усечения являются буквальным
+целочисленным тождеством.
+
+\item \textbf{Глобальный уровень.} Все локальные шаги собираются в конечную
+размеченную трассу. Prefix-ledger invariant доказывает точное равенство между
+начальной signed family и конечным frontier.
+
+\item \textbf{Терминальный уровень.} После полного, а не преждевременного,
+суммирования frontier раскладывается на терминальные строки, целые relation
+leaves и попарно согласованные горизонтальные/вертикальные диагонали. Из
+терминальных строк определяется один элемент $z$; обе требуемые координаты
+читаются с тех же самых occurrences и тех же коэффициентов.
+\end{enumerate}
+
+Именно переход от первого уровня сразу к терминальному, с забыванием второго,
+создал ложную недостающую задачу.
+
+\section{Положение импликации в исходном доказательстве}
+
+Пусть $F$ --- градуированное относительно свободное метабелево кольцо Ли
+класса не выше $n+1$,
+\[
+ F=\bigoplus_{s=1}^{n+1}F_s,
+ \qquad M=F_{\ge 2}=[F,F],
+ \qquad [M,M]=0,
+\]
+$\Rel\triangleleft F$ --- идеал отношений, а $U(F)$ --- универсальная
+обёртывающая алгебра. Пусть
+\[
+ \Theta\in \Rel U(F)
+\]
+удовлетворяет governing conditions:
+
+\begin{enumerate}[label=(G\arabic*)]
+\item все многофакторные PBW-коэффициенты $\Theta$ веса не выше $2n$ равны
+нулю;
+\item однофакторная часть $\Theta$ однородна веса $n+1$.
+\end{enumerate}
+
+Для $2\le k\le n$ положим
+\[
+ A_k=F_{\le k},\qquad D_k=\pr_{\le k}(\Rel),
+ \qquad m_k=n+2-k,
+\]
+и рассмотрим Koszul-комплексы
+\[
+ K_{m_k}(k)=K_{m_k}(D_k\hookrightarrow A_k).
+\]
+Точная PBW-сборка строит цепи
+\[
+ \chi_k\in K_{m_k}(k)_1\quad(2\le k<n),
+ \qquad
+ \chi_n\in Z_1K_2(n).
+\]
+Их границы являются полными factor-$m_k$ symbols элемента $\Theta$ после
+проекции в $\Sym^{m_k}A_k$.
+
+Обозначим через $Q_n(\chi_n)\in C$ ориентированный примитивный коэффициент
+квадратичного блока и определим
+\begin{equation}\label{eq:eps-def}
+ \eps=
+ \iota_C\bigl(\pr_{1,n+1}\Theta\bigr)
+ -\sum_{k=2}^{n-1}\Phi_k(f_k\chi_k)
+ -Q_n(\chi_n).
+\end{equation}
+Проблемный переход состоит в доказательстве равенства
+\begin{equation}\label{eq:terminal-discrepancy}
+ \eps=-\sum_{k=2}^{n-1}T_k(\partial\chi_k).
+\end{equation}
+Затем governing conditions дают
+\begin{equation}\label{eq:T-vanish}
+ T_k(\partial\chi_k)=0,
+\end{equation}
+и потому $\eps=0$.
+
+Эквивалентная standalone-формулировка использует terminal obstruction. Пусть
+$\pi:F\twoheadrightarrow A$ --- нужная проекция, $D=\pi(\Rel)$,
+\[
+ K=D\otimes A,
+ \qquad B=\Sym^2A,
+ \qquad \partial(d\otimes a)=d\odot a,
+\]
+а $\lambda:D\to\Rel$ и $s:A\to F$ --- аддитивные сечения. Определим
+\[
+ \sigma(d\otimes a)
+ =P_1\bigl(\iota(\lambda d)\iota(sa)\bigr).
+\]
+Для signed full-relation word family $\mathcal W$ положим
+\[
+ \Theta_{\mathcal W}=\sum_e m_e\iota(\rho_e)X_e,
+ \quad
+ b_{\mathcal W}=\Sym^2(\pi)P_2(\Theta_{\mathcal W}),
+ \quad
+ p_{\mathcal W}=P_1(\Theta_{\mathcal W}).
+\]
+Далее
+\[
+ \Lambda:K\oplus\Rel\longrightarrow B\oplus F,
+ \qquad
+ \Lambda(z,r)=(\partial z,\sigma z-r),
+\]
+и
+\[
+ \Obs(\mathcal W)
+ =[(b_{\mathcal W},p_{\mathcal W})]\in\coker\Lambda.
+\]
+По определению
+\begin{equation}\label{eq:obstruction-criterion}
+ \Obs(\mathcal W)=0
+ \quad\Longleftrightarrow\quad
+ \exists z\in D\otimes A\;\exists r\in\Rel:\;
+ \begin{cases}
+  \partial z=b_{\mathcal W},\\
+  \sigma z=p_{\mathcal W}+r.
+ \end{cases}
+\end{equation}
+Критически важно, что в обеих строках стоит \emph{один и тот же} $z$.
+
+\section{Точный тезис, который требуется формализовать}
+
+Обозначим через $E=\mathcal W_{\rm exc}$ exceptional upper-edge family,
+возникающую внутри полной PBW/truncation-трассы. Правильный тезис имеет
+следующий вид.
+
+\begin{theorem}[Trace-to-obstruction implication]\label{thm:trace-to-obs}
+Пусть дана полная конечная размеченная трасса элементарных PBW- и
+truncation-преобразований, корневая signed family которой равна $E$. Пусть
+трасса:
+\begin{enumerate}[label=(T\arabic*)]
+\item сохраняет каждое полное отношение как единый relation occurrence;
+\item включает все descendants каждого корневого occurrence;
+\item использует только буквальные transfer- и truncation-тождества;
+\item заканчивается frontier, для которого выполнена исчерпывающая
+классификация по числу факторов и весу;
+\item сохраняет отдельные labels даже для occurrences с одинаковым
+алгебраическим значением.
+\end{enumerate}
+Тогда $E$ допускает balanced ledger. В частности,
+\[
+ \Obs(E)=0.
+\]
+Более точно, из трассы конструктивно определяется один элемент
+$z\in D\otimes A$ и элемент $r\in\Rel$, для которых
+\[
+ \partial z=b_E,
+ \qquad
+ \sigma z=p_E+r.
+\]
+\end{theorem}
+
+Вся сложность состоит в первой импликации
+\[
+ \text{CompleteMarkedTrace}(E)
+ \Longrightarrow
+ \text{BalancedLedger}(E).
+\]
+Вторая импликация является немедленным применением двух additive reads к
+ledger identity.
+
+\section{Почему данные одной signed family недостаточны}
+
+\subsection{PBW-проекция не сохраняет relation membership покоординатно}
+
+Пусть $F$ --- свободное двухступенно нильпотентное кольцо Ли на
+$a<b<c$, а $\Rel$ --- идеал, порождённый $a+c$. Для
+\[
+ \Theta=\iota(a+c)\iota(b)
+\]
+PBW-сборка даёт
+\[
+ \iota(c)\iota(b)=\iota(b)\iota(c)+\iota([c,b]),
+ \qquad
+ P_1(\Theta)=[c,b].
+\]
+Но $[c,b]\notin\Rel$. Следовательно,
+\[
+ \Theta\in\iota(\Rel)U(F)
+ \quad\not\Longrightarrow\quad
+ P_1(\Theta)\in\Rel.
+\]
+
+Аналогично, с двумя spectators можно получить factor-two projection, который
+не лежит в образе $\Rel\otimes F\to\Sym^2F$. Поэтому нельзя строить требуемую
+цепь по одному relation-left word и надеяться, что primitive correction
+автоматически будет целым отношением.
+
+\subsection{Что именно стирается при неправильной абстракции}
+
+Абстрактная family $\mathcal W$ хранит:
+\[
+ (m_e,\rho_e,X_e)_{e\in E}
+ \quad\text{и, следовательно,}\quad
+ \Theta_{\mathcal W}.
+\]
+Она не хранит:
+
+\begin{itemize}
+\item какой elementary rewrite породил конкретный descendant;
+\item к какому root occurrence он относится;
+\item с каким знаком он возник;
+\item какой horizontal occurrence парен с каким vertical occurrence;
+\item какие relation corrections должны быть сгруппированы до применения
+primitive read;
+\item какие terminal factor-two rows одновременно задают $\partial z$ и
+$\sigma z$.
+\end{itemize}
+
+После стирания этих данных агент видел две отдельные задачи:
+\[
+ \exists z_1:\ \partial z_1=b_E,
+ \qquad
+ \exists z_2,r:\ \sigma z_2=p_E+r,
+\]
+но требовалось доказать существование одного $z=z_1=z_2$. Никакая
+абстрактная принадлежность идеалу не устанавливает это совпадение.
+
+\begin{dangerbox}
+Нельзя сначала выбрать $z$ из factor-two boundary, а затем пытаться отдельно
+исправить primitive equation. Нельзя также сначала подобрать primitive lift и
+затем доказывать, что его Koszul boundary совпал с $b_E$. Правильный $z$
+не выбирается постфактум: он \emph{считывается из конкретных terminal row
+occurrences полной трассы}. Поэтому обе координаты совпадают по построению.
+\end{dangerbox}
+
+\section{Локальные тождества полной трассы}
+
+\subsection{PBW-transfer обычных факторов}
+
+Для соседних однородных обычных факторов используется буквальное тождество
+\begin{equation}\label{eq:ordinary-transfer}
+ [\cdots|v|u|\cdots]
+ =
+ [\cdots|u|v|\cdots]
+ +[\cdots|[v,u]|\cdots].
+\end{equation}
+Первый член уменьшает число PBW-инверсий, второй уменьшает число факторов на
+один.
+
+\subsection{Transfer с полным отношением}
+
+Если marked entry является полным отношением $\rho\in\Rel$, то
+\begin{equation}\label{eq:relation-transfer}
+ [\cdots|v|\rho|\cdots]
+ =
+ [\cdots|\rho|v|\cdots]
+ +[\cdots|[v,\rho]|\cdots].
+\end{equation}
+Поскольку $\Rel$ --- идеал Ли,
+\[
+ [v,\rho]\in\Rel.
+\]
+Следовательно, correction term снова содержит полное отношение. Ни один
+однородный хвост не объявляется отношением.
+
+\subsection{Marked transfer и truncation}
+
+Для однородного $v\in F_h$ и $k$-marked relation occurrence
+$\langle\rho,k\rangle$, вычисляющегося как $\pr_{\le k}\rho$, имеем
+\begin{equation}\label{eq:marked-transfer-doc}
+ [\cdots|v|\langle\rho,k\rangle|\cdots]
+ =
+ [\cdots|\langle\rho,k\rangle|v|\cdots]
+ +[\cdots|\langle[v,\rho],k+h\rangle|\cdots].
+\end{equation}
+Это тождество следует из
+\begin{equation}\label{eq:transfer-truncation-doc}
+ \pr_{\le k+h}[v,\rho]
+ =[v,\pr_{\le k}\rho].
+\end{equation}
+
+Шаг truncation имеет вид
+\begin{equation}\label{eq:marked-truncation-doc}
+ [\cdots|\langle\rho,k\rangle|\cdots]
+ =
+ [\cdots|\langle\rho,k-1\rangle|\cdots]
+ +[\cdots|\rho_k|\cdots].
+\end{equation}
+Здесь $\rho_k$ --- только $k$-я однородная компонента полного отношения; она
+не объявляется элементом $\Rel$. Она является горизонтальным edge quotient
+tower. Полный relation label остаётся на первом summand.
+
+\subsection{Критические пары}
+
+Все overlaps локальных правил исчерпываются следующими случаями.
+
+\begin{enumerate}
+\item Две непересекающиеся перестановки коммутируют.
+\item Три обычных фактора дают обычное тождество Якоби.
+\item Overlap с relation entry даёт
+\begin{equation}\label{eq:relation-jacobi-doc}
+ [u,[v,\rho]]-[v,[u,\rho]]=[[u,v],\rho].
+\end{equation}
+Все три relation expressions здесь являются полными отношениями.
+\item Overlap transfer/truncation замыкается тождеством
+\eqref{eq:transfer-truncation-doc}.
+\end{enumerate}
+
+Таким образом, локальные клетки образуют действительно замкнутые квадраты:
+порядок выполнения соседних шагов меняет только внутренние occurrences, но не
+внешнюю signed boundary.
+
+\section{Конечность и правильная мера}
+
+Каждый occurrence обрабатывается детерминированно по лексикографической мере.
+Удобно использовать одну из двух эквивалентных конвенций.
+
+\paragraph{Конвенция по active lower weight.}
+Если relation occurrence представлен как $\pr_{\ge s}\rho$, используем
+\[
+ \mu=(p,\operatorname{inv},n+1-s).
+\]
+Transfer correction уменьшает $p$, обычная перестановка уменьшает
+$\operatorname{inv}$, переход к следующему active weight увеличивает $s$ и
+уменьшает третью координату.
+
+\paragraph{Конвенция по truncation mark.}
+Если occurrence представлен как $\pr_{\le k}\rho$, используем
+\[
+ \mu'=(p,\operatorname{inv},k).
+\]
+Marked truncation $k\mapsto k-1$ уменьшает третью координату.
+
+\begin{warning}
+В Lean нельзя смешивать эти две записи меры в одном definition. В бумажном
+тексте они описывают одну и ту же конечность с противоположно
+параметризованной weight coordinate. В формализации следует выбрать только
+одну конвенцию; наиболее прямой вариант для правил
+\eqref{eq:marked-transfer-doc}--\eqref{eq:marked-truncation-doc} --- мера
+$(p,\operatorname{inv},k)$.
+\end{warning}
+
+Поскольку $p$, число инверсий и $k$ конечны и неотрицательны, рекурсивный
+collector завершается.
+
+\section{Глобальный prefix-ledger invariant}
+
+\subsection{Размеченные occurrences и steps}
+
+Пусть $\mathsf{Occ}$ --- множество \emph{размеченных} row occurrences. Два
+occurrences с одинаковым алгебраическим значением, но разным происхождением,
+считаются разными базисными элементами. Пусть
+\[
+ C_1=\Z[\mathsf{Occ}]
+\]
+--- свободная абелева группа на occurrences.
+
+Пусть $\mathsf{Step}$ --- множество размеченных elementary replacements. Для
+шага $s$ заданы один input occurrence $\src(s)$ и конечная signed list outputs
+\[
+ \out(s)=\sum_j\epsilon_j o_j,
+ \qquad \epsilon_j\in\{+1,-1\}.
+\]
+Положим
+\[
+ C_2=\Z[\mathsf{Step}],
+ \qquad
+ \delta(s)=\src(s)-\out(s).
+\]
+
+\subsection{Frontier recursion}
+
+Пусть $F_0=E$ --- начальная exceptional signed family с отдельными labels.
+Если на шаге $j+1$ обрабатывается occurrence $\src(s_{j+1})$, определим
+\begin{equation}\label{eq:frontier-rec}
+ F_{j+1}=F_j-\src(s_{j+1})+\out(s_{j+1}).
+\end{equation}
+Иными словами, input удаляется из frontier, а все signed outputs добавляются.
+
+\begin{lemma}[Prefix ledger]\label{lem:prefix-ledger-doc}
+Для каждого $j\ge0$
+\begin{equation}\label{eq:prefix-ledger-doc}
+ E-F_j=\sum_{i=1}^{j}\delta(s_i).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+При $j=0$ обе стороны равны нулю. Предположим формулу для $j$. Из
+\eqref{eq:frontier-rec} следует
+\[
+ E-F_{j+1}
+ =E-F_j+\src(s_{j+1})-\out(s_{j+1})
+ =E-F_j+\delta(s_{j+1}).
+\]
+Подставляя индукционное предположение, получаем
+\[
+ E-F_{j+1}
+ =\sum_{i=1}^{j+1}\delta(s_i).
+\]
+\end{proof}
+
+После завершения collector на шаге $N$ положим
+\[
+ S_E=\sum_{i=1}^{N}s_i\in C_2.
+\]
+Тогда
+\begin{equation}\label{eq:complete-ledger-doc}
+ \delta S_E=E-F_N.
+\end{equation}
+Это точное равенство в свободной абелевой группе на labelled occurrences.
+Оно не использует PBW-проекцию, quotient или предварительное сокращение
+алгебраически равных terms.
+
+\subsection{Если exceptional family является частью большей трассы}
+
+В полном исходном proof trace начальная family может быть больше $E$. Тогда
+нельзя просто удалить прочие корни до построения глобальных диагоналей.
+Правильная операция следующая.
+
+\begin{construction}[Descendant-closed exceptional subtrace]
+После построения полной размеченной трассы выбираются labelled root
+occurrences, составляющие $E$. В подtrace включаются:
+\begin{enumerate}
+\item все выбранные roots;
+\item step, обрабатывающий любой уже включённый occurrence;
+\item все outputs такого step;
+\item рекурсивно все descendants этих outputs.
+\end{enumerate}
+\end{construction}
+
+Поскольку labels различают даже равные значения, каждый occurrence имеет
+однозначное происхождение. Поэтому descendant closure является конечным
+подлесом полной трассы и автоматически удовлетворяет тому же prefix-ledger
+identity. Важно, что closure берётся \emph{после} построения полной trace
+structure либо одновременно с ней, но никогда не заменяется независимой
+wordwise-сборкой каждого значения в $U(F)$.
+
+\section{Additive reads и сохранение локальных тождеств}
+
+Пусть
+\[
+ \ev:C_1\longrightarrow U(F)
+\]
+отправляет labelled occurrence в его полное значение. Каждое elementary
+replacement является буквальным тождеством, поэтому
+\begin{equation}\label{eq:eval-delta-zero}
+ \ev\circ\delta=0.
+\end{equation}
+
+Нас интересуют два additive reads:
+\[
+ \beta:C_1\longrightarrow B=\Sym^2A,
+ \qquad
+ \alpha:C_1\longrightarrow\barF=F/\Rel.
+\]
+Они задаются как complete factor-two и complete factor-one PBW reads с
+последующей нужной проекцией. Из \eqref{eq:eval-delta-zero} следует
+\begin{equation}\label{eq:reads-delta-zero}
+ \beta\delta=0,
+ \qquad
+ \alpha\delta=0.
+\end{equation}
+
+Слово ``complete'' здесь принципиально: relation leaf сначала собирается как
+полный элемент $\Rel$, и лишь затем его класс в $F/\Rel$ объявляется нулём.
+Нельзя применять $\alpha$ к отдельным однородным координатам relation tail.
+
+\section{Исчерпывающая классификация terminal frontier}
+
+Рассмотрим однофакторный PBW-вклад веса $n+1$, возникающий при collection из
+placed $p$-row. Любой factor-lowering term является bracket tree. По тождеству
+Якоби bracket tree целочисленно выражается через сумму left-normed combs.
+Поскольку $M=F_{\ge2}$ и $[M,M]=0$, ненулевой метабелев comb содержит не
+более одного входа из $M$.
+
+Ниже перечислены все случаи.
+
+\subsection{Единственный $M$-вход есть relation component $\rho_k$}
+
+Все остальные $p-1$ входов должны лежать в $F_1$; иначе появился бы второй
+$M$-вход и comb равнялся бы нулю. Вес результата равен
+\[
+ k+(p-1).
+\]
+Он равен $n+1$ тогда и только тогда, когда
+\begin{equation}\label{eq:diagonal-condition}
+ p=n+2-k=m_k.
+\end{equation}
+Это ровно diagonal cell уровня $k$. Следовательно, ненулевые primitive
+contributions такого типа образуют только семейства $H_k$ и $V_k$.
+
+\subsection{Единственный $M$-вход является обычным фактором}
+
+Тогда relation input обязан иметь вес $1$. Пусть он равен $\rho_1$. Если
+заменить $\rho_1$ полным отношением
+\[
+ \rho=\rho_1+\rho_{\ge2},
+\]
+каждая добавочная компонента $\rho_j$, $j\ge2$, встретится с уже имеющимся
+обычным $M$-входом. Полученный comb имеет два входа из $M$ и равен нулю.
+Поэтому исходный comb буквально совпадает с comb, содержащим полное
+отношение $\rho$, а значит принадлежит $\Rel$ и исчезает после перехода к
+$F/\Rel$ или $C$.
+
+\subsection{Все входы имеют вес один}
+
+Для получения веса $n+1$ необходимо $p=n+1$. Снова заменим relation component
+$\rho_1$ полным $\rho$. Компонента $\rho_j$, $j\ge2$, после bracket с $n$
+входами веса один имеет вес
+\[
+ j+n\ge n+2,
+\]
+то есть выше nilpotency class $n+1$, и потому равна нулю. Следовательно,
+comb с $\rho_1$ равен полному commutator relation с $\rho$ и также исчезает.
+
+\subsection{Два $M$-входа}
+
+Такой comb равен нулю из-за $[M,M]=0$.
+
+\subsection{Остаётся spectator}
+
+Если после collection остаётся обычный multiplicative spectator, PBW-term
+имеет не менее двух факторов. Он не участвует в primitive read $P_1$.
+
+\subsection{Factor number больше $n+1$}
+
+Даже минимальный возможный вес превышает $n+1$, поэтому contribution к
+рассматриваемому weight component отсутствует.
+
+\subsection{Factor number два}
+
+Это единственный отдельный terminal case. Он образует oriented quadratic
+block и задаёт терминальную цепь $z$.
+
+\begin{proposition}[Полнота frontier classification]\label{prop:frontier-classification}
+После применения однофакторного weight-$(n+1)$ read весь terminal frontier
+является signed sum следующих и только следующих семейств:
+\begin{enumerate}
+\item genuine terminal factor-two rows $T$;
+\item whole-relation leaves $Q$, исчезающие в $F/\Rel$;
+\item horizontal diagonal families $H_k$;
+\item vertical diagonal families $V_k$;
+\item silent families, read которых равен нулю по одной из причин,
+перечисленных выше.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Каждый primitive contribution после Якоби является суммой combs. Разбиение
+по числу $M$-входов, по тому, relation ли единственный $M$-вход, и по числу
+оставшихся факторов взаимно исключающе и исчерпывает все combs. В каждом
+случае предыдущие подразделы либо относят term к одному из четырёх
+несilent семейств, либо доказывают нулевой read. Поэтому иных внешних
+семейств нет.
+\end{proof}
+
+\section{Диагональное совпадение: локальный расчёт коэффициентов и знаков}
+
+Пусть
+\[
+ a=\pr_{\le k-1}\rho\in D_{k-1}.
+\]
+Extension cocycle удовлетворяет
+\[
+ b_k(a)=-\rho_k\quad\text{в }U_k.
+\]
+По определению
+\[
+ \Phi_k(a;x_1\cdots x_{m_k-1})
+ =-\Theta_k\bigl(b_k(a);\bar x_1\cdots\bar x_{m_k-1}\bigr),
+\]
+следовательно,
+\begin{equation}\label{eq:horizontal-read-doc}
+ \Phi_k(a;x_1\cdots x_{m_k-1})
+ =\Theta_k\bigl(\bar\rho_k;\bar x_1\cdots\bar x_{m_k-1}\bigr).
+\end{equation}
+
+С другой стороны, в decomposition $A_k=A_{k-1}\oplus F_k$ элемент
+$a+\rho_k$ имеет $F_k$-компоненту $\rho_k$. Формула для $T_k$ даёт
+\begin{equation}\label{eq:vertical-read-doc}
+ T_k\bigl((a+\rho_k)x_1\cdots x_{m_k-1}\bigr)
+ =\Theta_k\bigl(\bar\rho_k;\bar x_1\cdots\bar x_{m_k-1}\bigr).
+\end{equation}
+Сравнивая \eqref{eq:horizontal-read-doc} и
+\eqref{eq:vertical-read-doc}, получаем равенство coefficients.
+
+Ориентация boundary клетки даёт horizontal edge со знаком $-$ и vertical
+edge со знаком $+$. Поэтому contribution одной labelled diagonal cell равен
+\begin{equation}\label{eq:diagonal-contribution-doc}
+ -\Phi_k(f_k\chi_k)+T_k(\partial\chi_k).
+\end{equation}
+Суммирование по labelled occurrences сохраняет исходные multiplicities и
+знаки; никакого деления или saturation здесь нет.
+
+\section{Почему терминальные rows определяют один и тот же $z$}
+
+Это центральная точка, которую неправильная абстракция агента уничтожила.
+
+Пусть genuine terminal factor-two frontier имеет вид
+\[
+ T=\sum_{e\in J}m_e\,t_e,
+\]
+где каждый $t_e$ содержит relation datum $d_e\in D$ и ordinary datum
+$a_e\in A$ с конкретным source placement. Определим
+\begin{equation}\label{eq:z-definition}
+ z=\sum_{e\in J}m_e\,d_e\otimes a_e\in D\otimes A.
+\end{equation}
+
+\subsection{Factor-two coordinate}
+
+Complete factor-two read каждого canonical source-placement row равен
+\[
+ d_e\odot a_e=\partial(d_e\otimes a_e).
+\]
+По аддитивности
+\begin{equation}\label{eq:beta-T}
+ \beta(T)=\partial z.
+\end{equation}
+
+\subsection{Primitive coordinate}
+
+По определению source-placement read
+\[
+ \sigma(d_e\otimes a_e)
+ =P_1\bigl(\iota(\lambda d_e)\iota(sa_e)\bigr).
+\]
+Если в terminal row relation entry первоначально находится не в source
+placement, последовательность adjacent relation interchanges переводит её в
+source placement. Каждая correction имеет вид
+\[
+ [v,\lambda d_e]\in\Rel.
+\]
+Поэтому в $F/\Rel$ primitive read terminal row равен классу
+$\sigma(d_e\otimes a_e)$. Суммируя, получаем
+\begin{equation}\label{eq:alpha-T}
+ \alpha(T)=[\sigma z]\in F/\Rel.
+\end{equation}
+
+\begin{successbox}
+Равенства \eqref{eq:beta-T} и \eqref{eq:alpha-T} используют один набор
+labelled terminal occurrences и одни коэффициенты $m_e$. Поэтому элемент
+$z$ в них совпадает по определению. Никакой дополнительной uniqueness lemma
+и никакого сравнения двух независимо выбранных lifts не требуется.
+\end{successbox}
+
+\section{Построение balanced ledger из полной трассы}
+
+После удаления silent reads, но без удаления их descendants до формирования
+глобальной boundary, terminal frontier имеет ориентированное разложение
+\begin{equation}\label{eq:frontier-decomp}
+ F_N=T-Q-\sum_k(V_k-H_k).
+\end{equation}
+Знаки здесь выбраны так, чтобы вместе с
+$\delta S_E=E-F_N$ получить стандартную balanced-ledger формулу
+\begin{equation}\label{eq:balanced-ledger-doc}
+ \delta S_E
+ =E-T+Q+\sum_k(V_k-H_k).
+\end{equation}
+
+Для диагональных семейств локальный closed-square calculation даёт
+\begin{equation}\label{eq:reads-diagonal}
+ \beta(H_k)=\beta(V_k),
+ \qquad
+ \alpha(H_k)=\alpha(V_k).
+\end{equation}
+Первое равенство выражает совместимость factor-two symbol с
+transfer/truncation square; второе является detached form chain identity
+\[
+ \Phi_k(f_k\chi_k)=T_k(\partial\chi_k).
+\]
+Для whole-relation leaves
+\begin{equation}\label{eq:reads-Q}
+ \beta(Q)=0,
+ \qquad
+ \alpha(Q)=0,
+\end{equation}
+после полного, а не покомпонентного, группирования relation entries.
+Наконец, из \eqref{eq:beta-T}--\eqref{eq:alpha-T}
+\[
+ \beta(T)=\partial z,
+ \qquad
+ \alpha(T)=[\sigma z].
+\]
+Таким образом, данные
+\[
+ (S_E,E,T,Q,(H_k,V_k)_k,z)
+\]
+являются balanced ledger в точном смысле standalone obstruction formulation.
+
+\begin{theorem}[Balanced ledger из trace]\label{thm:trace-balanced}
+Каждая descendant-closed complete marked trace exceptional family $E$
+канонически задаёт balanced ledger для $E$.
+\end{theorem}
+
+\begin{proof}
+Берём $S_E$ как signed sum всех elementary steps descendant-closed subtrace.
+Лемма~\ref{lem:prefix-ledger-doc} даёт
+$\delta S_E=E-F_N$. Предложение~\ref{prop:frontier-classification}
+разлагает $F_N$ в виде \eqref{eq:frontier-decomp}. Терминальная family задаёт
+$z$ формулой \eqref{eq:z-definition} и удовлетворяет
+\eqref{eq:beta-T}--\eqref{eq:alpha-T}. Whole-relation leaves удовлетворяют
+\eqref{eq:reads-Q}, а диагональные families ---
+\eqref{eq:reads-diagonal}. Подстановка даёт все поля balanced ledger.
+\end{proof}
+
+\section{Из balanced ledger следует нулевой obstruction}
+
+\begin{theorem}[Finite marked Stokes]\label{thm:stokes-doc}
+Если $E$ допускает balanced ledger
+\eqref{eq:balanced-ledger-doc}, то
+\[
+ \Obs(E)=0.
+\]
+\end{theorem}
+
+\begin{proof}
+Применим $\beta$ к \eqref{eq:balanced-ledger-doc}. По
+\eqref{eq:reads-delta-zero}, $\beta\delta S_E=0$. По
+\eqref{eq:reads-Q} relation leaves не дают вклада, а по
+\eqref{eq:reads-diagonal} диагональные terms сокращаются. Поэтому
+\[
+ 0=\beta(E)-\beta(T)=b_E-\partial z,
+\]
+то есть
+\begin{equation}\label{eq:first-lift}
+ \partial z=b_E.
+\end{equation}
+
+Теперь применим $\alpha$. Снова $\alpha\delta S_E=0$, relation leaves
+исчезают и диагонали сокращаются. Получаем
+\[
+ 0=\alpha(E)-\alpha(T)=[p_E]-[\sigma z]\quad\text{в }F/\Rel.
+\]
+Следовательно, существует $r\in\Rel$ такой, что
+\begin{equation}\label{eq:second-lift}
+ \sigma z=p_E+r.
+\end{equation}
+Равенства \eqref{eq:first-lift} и \eqref{eq:second-lift} используют один и
+тот же $z$, построенный из terminal rows. По критерию
+\eqref{eq:obstruction-criterion} имеем $\Obs(E)=0$.
+\end{proof}
+
+Теорема~\ref{thm:trace-to-obs} теперь следует из
+теорем~\ref{thm:trace-balanced} и \ref{thm:stokes-doc}.
+
+\section{Возврат к terminal discrepancy исходного доказательства}
+
+Полная trace boundary после primitive weight-$(n+1)$ read имеет четыре
+несilent family:
+\[
+ \begin{array}{c|c}
+ \text{family} & \text{contribution}\\
+ \hline
+ \text{terminal one-factor edge}
+   & \iota_C(\pr_{1,n+1}\Theta)\\
+ \text{horizontal diagonal edge at }k
+   & -\Phi_k(f_k\chi_k)\\
+ \text{oriented factor-two edge}
+   & -Q_n(\chi_n)\\
+ \text{vertical diagonal edge at }k
+   & +T_k(\partial\chi_k).\\
+ \end{array}
+\]
+Поскольку evaluation каждой elementary step boundary равен нулю, сумма
+внешней boundary равна нулю:
+\begin{equation}\label{eq:global-external}
+ 0=
+ \iota_C(\pr_{1,n+1}\Theta)
+ -\sum_{k=2}^{n-1}\Phi_k(f_k\chi_k)
+ -Q_n(\chi_n)
+ +\sum_{k=2}^{n-1}T_k(\partial\chi_k).
+\end{equation}
+По определению \eqref{eq:eps-def} это
+\[
+ \eps+\sum_{k=2}^{n-1}T_k(\partial\chi_k)=0,
+\]
+то есть именно \eqref{eq:terminal-discrepancy}.
+
+Остаётся governing vanishing. Функционал $T_k$ поддержан только на
+\[
+ F_k\Sym^{m_k-1}(F_1)\subseteq\Sym^{m_k}A_k.
+\]
+Каждый такой monomial имеет total bracket weight
+\[
+ k+(m_k-1)=k+(n+1-k)=n+1.
+\]
+Но $\partial\chi_k$ есть complete factor-$m_k$ symbol $\Theta$, а все
+многофакторные PBW-коэффициенты $\Theta$ веса не выше $2n$, в частности веса
+$n+1$, равны нулю. Следовательно,
+\[
+ T_k(\partial\chi_k)=0
+\]
+для всех $2\le k<n$. Из \eqref{eq:terminal-discrepancy} получаем
+\[
+ \eps=0.
+\]
+Это завершает проблемную импликацию исходного доказательства.
+
+\section{Особый случай $n=2$}
+
+При $n=2$ промежуточных индексов $2\le k<n$ нет. Target weight равен $3$.
+Primitive contribution из трёх factors является целочисленной суммой terms
+\[
+ [\rho_1,x,y],\qquad x,y\in F_1.
+\]
+Поскольку $F$ имеет class $3$, для каждой higher component $\rho_j$, $j\ge2$,
+\[
+ \wt[\rho_j,x,y]=j+2\ge4,
+\]
+и этот bracket равен нулю. Поэтому
+\[
+ [\rho_1,x,y]=[\rho,x,y]\in\Rel.
+\]
+Более трёх positive-weight factors не могут дать вес $3$. Единственный
+несilent factor-two contribution есть $Q_2(\chi_2)$. Prefix-ledger identity
+даёт
+\[
+ \iota_C(\pr_{1,3}\Theta)-Q_2(\chi_2)=0.
+\]
+Таким образом, общий trace argument корректно включает $n=2$, а в Lean этот
+случай можно либо оставить в общей конструкции с пустыми sums, либо закрыть
+отдельной короткой леммой.
+
+\section{Точная локализация ошибки агента}
+
+\subsection{Неправильная цель}
+
+Агент свёл Step~7 к statement
+\[
+ \Obs(\mathcal W_{\rm exc})=0
+\]
+для standalone family и затем пытался доказать его, используя только данные
+самой family. Но в исходном аргументе $\mathcal W_{\rm exc}$ не произвольна:
+она снабжена происхождением как labelled upper-edge family полной trace.
+Правильная формулировка должна быть одной из двух:
+\[
+ \texttt{CompleteMarkedTrace Wexc -> Obstruction Wexc = 0}
+\]
+или
+\[
+ \texttt{trace.exceptionalFamily = Wexc -> Obstruction Wexc = 0}.
+\]
+
+\subsection{Потеря lower-context descendants}
+
+При независимой collection relation-left words появляются unwanted primitive
+components. В полном trace они компенсируются lower-context diagonal terms.
+Если nonexceptional или proper-subset families удалить до образования
+глобального signed ledger, компенсация исчезает. Поэтому нельзя передавать в
+финальную лемму только очищенный список words без descendant closure.
+
+\subsection{Потеря labels}
+
+Если occurrences отождествлять по алгебраическому значению, нельзя строго
+сказать, какой output стал каким последующим input и с каким знаком. Prefix
+identity должен жить в свободной группе на labels, а не в $U(F)$. Evaluation
+в $U(F)$ применяется только после доказательства combinatorial identity.
+
+\subsection{Попытка построить две цепи вместо одной}
+
+При раздельной работе с factor-two и primitive reads агент неизбежно получает
+два потенциальных lifts. Затем вся исходная сложность возникает как
+обязанность доказать их совпадение. Полный trace решает это иначе: $z$
+определяется ровно один раз из terminal rows, а обе координаты являются
+read-функциями одного объекта.
+
+\subsection{Почему разбиение на подпункты переносило сложность}
+
+Если сначала постулировать existence factor-two lift, затем primitive
+compatibility, а затем их coherence, то недостающая глобальная trace
+перемещается в coherence assumption. Если объединить несколько подпунктов,
+агент снова сталкивается с исходной задачей: построить один descendant-closed
+ledger. Это не случайность, а признак неверно выбранной границы абстракции.
+
+\section{Какую сессию использовать}
+
+\begin{keybox}
+\textbf{Рекомендация: начать новую сессию на чистом коммите.}
+Старую сессию следует использовать только для фиксации текущего состояния:
+сохранить рабочий diff, записать точное имя незакрытой Lean-теоремы, список
+задействованных definitions и последнюю проходящую build-команду. Продолжать
+математический поиск в старой сессии не следует: её контекст уже многократно
+сжимался и содержит устойчивую неправильную модель задачи --- попытку вывести
+obstruction из family без trace witness.
+\end{keybox}
+
+Новая сессия должна начинаться не с просьбы ``докажи missing lemma'', а с
+конкретной задачи изменить тип данных и провести существующий collector как
+proof-producing trace до balanced ledger.
+
+\section{Пошаговый план работы с агентом}
+
+\subsection{Шаг 0. Зафиксировать исходное состояние}
+
+Перед новой сессией:
+\begin{enumerate}
+\item сохранить текущую рабочую ветку или commit;
+\item убедиться, что проект компилируется до единственного известного
+placeholder;
+\item записать имя terminal theorem и файл, где он находится;
+\item сохранить все удачные локальные леммы агента, но удалить или явно
+пометить как deprecated ложные abstractions вида ``ideal membership implies
+primitive lift'';
+\item добавить этот документ в репозиторий рядом с проблемным Lean-файлом.
+\end{enumerate}
+
+\subsection{Шаг 1. Провести аудит потери witness}
+
+Первое задание новой сессии: найти, в каком месте Lean-код превращает полную
+trace structure в простую signed family. Агент должен ответить кодом, а не
+общим рассуждением:
+\begin{itemize}
+\item какой definition создаёт exceptional family;
+\item где теряются labels;
+\item где удаляются descendants;
+\item где terminal factor-two rows перестают быть доступными для primitive
+read;
+\item какая существующая функция collection уже может возвращать trace или
+может быть минимально расширена.
+\end{itemize}
+После этого агент сразу вносит минимальное изменение типов; отдельного
+долгого отчёта не требуется.
+
+\subsection{Шаг 2. Ввести явный тип complete trace}
+
+Имена ниже схематические; их следует сопоставить существующему коду.
+
+\begin{lstlisting}
+structure MarkedOccurrence where
+  id        : OccurrenceId
+  row       : MarkedRow
+  coeff     : Z
+
+structure RewriteStep where
+  input     : MarkedOccurrence
+  outputs   : List MarkedOccurrence
+  validEval : eval input = signedEval outputs
+  decreases : measure outputs < measure input
+
+structure CompleteMarkedTrace (E : SignedFamily) where
+  steps          : List RewriteStep
+  initial        : frontier 0 = E
+  next_frontier  : ...
+  all_outputs_tracked : ...
+  terminal       : isTerminal finalFrontier
+\end{lstlisting}
+
+Существенные требования:
+\begin{enumerate}
+\item occurrence ID входит в равенства frontier;
+\item relation field хранит полный $\rho$, mark хранится отдельно;
+\item homogeneous component $\rho_k$ является ordinary edge datum, а не
+relation proof;
+\item outputs каждого step перечислены полностью;
+\item collector не возвращает только normal form: он возвращает trace.
+\end{enumerate}
+
+\subsection{Шаг 3. Формализовать только три локальных rewrite rules}
+
+Не следует начинать с global obstruction. Сначала должны компилироваться
+буквальные леммы:
+
+\begin{lstlisting}
+theorem eval_ordinaryTransfer (s : OrdinaryTransfer) :
+  eval s.input = signedEval s.outputs := ...
+
+theorem eval_markedRelationTransfer (s : MarkedRelationTransfer) :
+  eval s.input = signedEval s.outputs := ...
+
+theorem eval_markedTruncation (s : MarkedTruncation) :
+  eval s.input = signedEval s.outputs := ...
+\end{lstlisting}
+
+Отдельно:
+
+\begin{lstlisting}
+theorem bracket_truncation_square
+    (v : Homogeneous F h) (rho : Rel) :
+  projLE (k + h) [v, rho] = [v, projLE k rho] := ...
+\end{lstlisting}
+
+Ни в одной из этих лемм нельзя предполагать, что $\rho_k\in\Rel$.
+
+\subsection{Шаг 4. Сделать collector proof-producing}
+
+Collector должен быть well-founded recursion по одной фиксированной мере,
+например
+\[
+ (\text{factorCount},\text{unresolvedPairs},\text{mark}).
+\]
+
+\begin{lstlisting}
+def collectTrace (E : SignedFamily) : CompleteMarkedTrace E :=
+  collectAux E (measure E)
+termination_by measure E
+\end{lstlisting}
+
+Каждый recursive branch обязан вернуть:
+\begin{enumerate}
+\item конкретный RewriteStep;
+\item список descendants;
+\item proof local evaluation equality;
+\item proof strict decrease;
+\item продолжение trace для каждого output, который не terminal.
+\end{enumerate}
+
+Если существующий collector уже вычисляет normal form, его не нужно
+переписывать с нуля: следует расширить return type журналом steps и доказать,
+что забывание журнала даёт прежний result.
+
+\subsection{Шаг 5. Доказать prefix-ledger как общую лемму списка steps}
+
+Эта лемма не должна знать ничего об алгебрах Ли.
+
+\begin{lstlisting}
+theorem prefixLedger
+    (tr : CompleteMarkedTrace E) (j : Nat) :
+  E - tr.frontier j = boundary (tr.steps.take j) := ...
+
+corollary completeLedger (tr : CompleteMarkedTrace E) :
+  E - tr.finalFrontier = boundary tr.steps := ...
+\end{lstlisting}
+
+Доказательство --- индукция по $j$ с раскрытием одного frontier update. Если
+агент здесь начинает использовать PBW, значит типы выбраны неправильно.
+
+\subsection{Шаг 6. Сохранить exceptional family вместе с descendant closure}
+
+Если $E$ является частью более крупной trace, требуется функция:
+
+\begin{lstlisting}
+def descendantSubtrace
+    (tr : CompleteMarkedTrace I)
+    (roots : LabelSubfamily tr.initialFamily) :
+    CompleteMarkedTrace roots.family := ...
+\end{lstlisting}
+
+Она должна фильтровать по labels и рекурсивной parent relation, а не по
+равенству значений rows. Все lower-context descendants остаются внутри.
+
+\subsection{Шаг 7. Классифицировать final frontier}
+
+Вместо попытки сразу доказать \texttt{Obs = 0} определить структуру результата:
+
+\begin{lstlisting}
+structure TerminalDecomposition (tr : CompleteMarkedTrace E) where
+  terminalRows : SignedFamily
+  relationLeaves : SignedFamily
+  horizontal : Finset K -> SignedFamily
+  vertical   : Finset K -> SignedFamily
+  silent     : SignedFamily
+  frontier_eq :
+    tr.finalFrontier =
+      terminalRows - relationLeaves -
+      sum k, (vertical k - horizontal k) + silent
+  silent_alpha : alpha silent = 0
+  silent_beta  : beta silent = 0
+\end{lstlisting}
+
+Главная математическая лемма здесь --- comb classification. Её следует
+доказывать разбором:
+\begin{enumerate}
+\item zero, one или at least two $M$-inputs;
+\item relation component или ordinary component является единственным
+$M$-input;
+\item число factors;
+\item weight equation $k+p-1=n+1$.
+\end{enumerate}
+
+Не следует стирать silent family definitionally: она остаётся в decomposition
+и только затем её reads доказываются равными нулю.
+
+\subsection{Шаг 8. Определить общий terminal chain $z$}
+
+\begin{lstlisting}
+def terminalChain
+    (d : TerminalDecomposition tr) : D tensorProduct Z A :=
+  signedSum (d.terminalRows.map rowToTensor)
+\end{lstlisting}
+
+Затем две леммы должны быть доказаны для одного definition:
+
+\begin{lstlisting}
+theorem beta_terminalRows :
+  beta d.terminalRows = partial (terminalChain d) := ...
+
+theorem alpha_terminalRows :
+  alpha d.terminalRows = quotientRel (sigma (terminalChain d)) := ...
+\end{lstlisting}
+
+Вторая лемма использует только adjacent relation interchanges и факт, что
+каждая correction принадлежит полному relation ideal.
+
+\subsection{Шаг 9. Доказать диагональные равенства}
+
+Для каждого $k$:
+
+\begin{lstlisting}
+theorem diagonal_beta (k) :
+  beta (d.horizontal k) = beta (d.vertical k) := ...
+
+theorem diagonal_alpha (k) :
+  alpha (d.horizontal k) = alpha (d.vertical k) := ...
+\end{lstlisting}
+
+\texttt{diagonal\_alpha} должна сводиться к уже имеющейся chain transgression
+\[
+ \Phi_k(f_kc)=T_k(\partial c),
+\]
+а не заново доказывать глобальную PBW-лемму.
+
+\subsection{Шаг 10. Собрать balanced ledger}
+
+\begin{lstlisting}
+def traceToBalancedLedger
+    (tr : CompleteMarkedTrace E)
+    (d  : TerminalDecomposition tr) :
+    BalancedLedger E :=
+{ steps := tr.steps
+  terminal := d.terminalRows
+  relationLeaves := d.relationLeaves
+  horizontal := d.horizontal
+  vertical := d.vertical
+  z := terminalChain d
+  ledger_eq := ...
+  beta_terminal := beta_terminalRows d
+  alpha_terminal := alpha_terminalRows d
+  diagonal_beta := diagonal_beta d
+  diagonal_alpha := diagonal_alpha d }
+\end{lstlisting}
+
+После этого standalone Stokes lemma закрывает obstruction:
+
+\begin{lstlisting}
+theorem exceptionalObstructionVanishing
+    (tr : CompleteMarkedTrace Wexc) :
+    obstruction Wexc = 0 :=
+  finiteMarkedStokes (traceToBalancedLedger tr (classifyFrontier tr))
+\end{lstlisting}
+
+\subsection{Шаг 11. Подключить к исходной теореме}
+
+Исходный PBW collector должен возвращать одновременно $\chi_k$, $\chi_n$ и
+trace witness. Затем terminal discrepancy получается из
+\texttt{exceptionalObstructionVanishing} либо непосредственно из evaluated complete
+ledger. После этого применяются уже имеющиеся support/governing lemmas,
+дающие $T_k(\partial\chi_k)=0$.
+
+\section{Что запрещено агенту делать}
+
+В prompt и review criteria следует явно закрепить следующие запреты.
+
+\begin{enumerate}
+\item Не добавлять hypothesis, эквивалентную \texttt{BalancedLedger E} или
+\texttt{Obstruction E = 0}.
+\item Не использовать \texttt{sorry}, \texttt{admit}, новые \texttt{axiom} или opaque placeholder.
+\item Не доказывать wordwise lemma для отдельного relation-left word.
+\item Не выводить primitive relation membership только из
+$\Theta\in\Rel U(F)$.
+\item Не объявлять $\rho_k$ полным отношением.
+\item Не удалять nonexceptional, proper-subset или silent descendants до
+получения global ledger identity.
+\item Не выбирать factor-two lift и primitive lift независимо.
+\item Не quotient labels по equality algebraic values.
+\item Не заменять полный build локальным toy theorem, который не подключается
+к исходному statement.
+\item Не менять формулировку исходной математической теоремы и не добавлять к
+ней новый public assumption \texttt{trace}; trace должен строиться существующим
+collector внутри proof.
+\end{enumerate}
+
+\section{Критерии приёмки Lean-решения}
+
+Решение считается завершённым только при одновременном выполнении всех
+условий.
+
+\begin{enumerate}
+\item Компилируется исходная terminal lemma без placeholders.
+\item Компилируется вся исходная theorem, а не только новый standalone файл.
+\item В public theorem не добавлены новые assumptions.
+\item \texttt{CompleteMarkedTrace} либо существующий эквивалент реально строится из
+PBW witness.
+\item \texttt{terminalChain} определяется один раз и используется в обеих read
+lemmas.
+\item Полные отношения сохраняются в relation occurrences; homogeneous tails
+не получают relation proof.
+\item Prefix-ledger theorem сформулирован на labels.
+\item Frontier decomposition содержит явные silent/relation/diagonal
+families, а не скрывает их simplifier-ом.
+\item Project-wide search не находит новых \texttt{sorry}, \texttt{admit} и \texttt{axiom} в
+изменённой части.
+\item Проверка аксиом конечной theorem не показывает неожиданных assumptions.
+\item Полный project build проходит на чистом checkout текущего commit.
+\end{enumerate}
+
+\section{Рекомендуемый prompt для новой сессии Codex}
+
+Ниже дан prompt, который следует передать вместе с этим документом и точными
+именами Lean-файлов проекта.
+
+\begin{Verbatim}[fontsize=\small,breaklines=true,breakanywhere=true,frame=single,framesep=2mm]
+Работай с текущим компилируемым commit. Главная проблема уже
+математически локализована.
+
+НЕПРАВИЛЬНАЯ цель, которую нельзя доказывать:
+  SignedRelationWordFamily W -> Obstruction W = 0
+или любая её версия, использующая только Theta W in Rel * U(F).
+Это утверждение неверно в общем случае.
+
+ПРАВИЛЬНАЯ цель:
+  CompleteMarkedTrace Wexc -> BalancedLedger Wexc
+  -> Obstruction Wexc = 0.
+
+Wexc не является произвольной family. Она возникает как labelled
+upper-edge family полной PBW/truncation trace. Нельзя забывать labels,
+parent/descendant data, lower-context descendants или terminal row
+placements.
+
+Твоя задача:
+1. Найди место, где текущий код стирает complete trace и оставляет
+   только Wexc.
+2. Минимально расширь collector так, чтобы он возвращал proof-producing
+   CompleteMarkedTrace: labelled steps, full outputs, local evaluation
+   equalities и termination measure.
+3. Докажи generic prefix-ledger identity by induction on steps.
+4. Построй descendant-closed subtrace для Wexc, если она является
+   частью большей trace.
+5. Классифицируй final frontier на terminal rows, whole relation leaves,
+   horizontal/vertical diagonals и silent rows.
+6. Определи terminalChain z ОДИН РАЗ как signed sum tensors из terminal
+   rows.
+7. Докажи для этого же z:
+      beta terminalRows = partial z
+      alpha terminalRows = [sigma z] in F/Rel.
+8. Докажи diagonal read equalities, используя существующую
+   chain-transgression Phi_k(f_k c) = T_k(partial c).
+9. Собери BalancedLedger и примени finiteMarkedStokes.
+10. Подключи результат к исходной terminal discrepancy lemma и собери
+    весь проект.
+
+Жёсткие ограничения:
+- no sorry/admit/new axioms;
+- no new public hypotheses in the original theorem;
+- rho_k is never treated as a relation;
+- do not delete descendants before the global ledger equality;
+- do not choose two unrelated chains for the two reads;
+- do not replace labelled occurrences by their algebraic values.
+
+После каждого логически завершённого изменения запускай компиляцию
+изменённого модуля. Конечный критерий: весь исходный theorem compiles
+on a clean checkout and #print axioms contains no unexpected axioms.
+
+Основной математический reference:
+terminal_pbw_implication_and_lean_plan_ru.tex,
+особенно разделы о prefix ledger, frontier classification,
+same terminal chain z и trace-to-balanced-ledger.
+\end{Verbatim}
+
+\section{Минимальный и устойчивый варианты патча}
+
+\subsection{Минимальный патч}
+
+Если текущий collector уже создаёт внутренний список шагов, но затем его
+забывает, достаточно:
+\begin{enumerate}
+\item сохранить этот список в return structure;
+\item добавить labels;
+\item доказать prefix ledger;
+\item определить terminal chain по существующему terminal frontier;
+\item передать trace witness в missing lemma.
+\end{enumerate}
+Это предпочтительный путь, если он не требует переписывания основной PBW
+инфраструктуры.
+
+\subsection{Устойчивый рефакторинг}
+
+Если collector сразу вычисляет только значения в quotient или normal form,
+следует создать отдельный proof-producing collector. Его forgetting map может
+воспроизводить старый result. Такой вариант требует больше кода, но устраняет
+корневую причину проблемы и делает поздние изменения безопаснее.
+
+\subsection{Правило выбора}
+
+Использовать минимальный патч, если в текущем коде можно указать конкретный
+тип, уже содержащий полный step history. Использовать устойчивый рефакторинг,
+если history нигде не существует или homogeneous components уже заменили
+full relations в типах.
+
+\section{Диагностические исходы}
+
+Новая формализация может обнаружить реальную проблему только в одном из
+следующих конкретных мест:
+
+\begin{enumerate}
+\item local rewrite identity не типизируется без ложного relation proof для
+$\rho_k$;
+\item termination measure не убывает на одном из реальных branches;
+\item descendant closure теряет output occurrence;
+\item frontier classification выдаёт пятый nonsilent primitive case;
+\item terminal rows не могут быть поставлены в source placement с correction
+в полном $\Rel$;
+\item horizontal и vertical reads одной labelled cell имеют разные
+coefficients или signs;
+\item terminal factor-two и primitive reads требуют разных coefficient lists.
+\end{enumerate}
+
+Каждый из этих исходов является точной, проверяемой локализацией. Агент не
+должен отвечать общим ``combinatorics is hard''. Он обязан вывести минимальный
+непроходящий Lean statement с конкретными terms и types. Однако исходное
+бумажное доказательство уже содержит расчёты, исключающие перечисленные
+проблемы: local rules буквальны, мера конечна, comb classification исчерпывающа,
+диагональные coefficients совпадают, а общий $z$ определяется terminal rows.
+
+\section{Краткий оперативный план для автора}
+
+\begin{enumerate}
+\item Зафиксировать текущую ветку и не продолжать старую длинную сессию.
+\item Добавить этот .tex и скомпилированный PDF в рабочую ветку.
+\item Начать новую сессию с prompt из предыдущего раздела.
+\item Потребовать первым кодовым результатом тип \texttt{CompleteMarkedTrace} или
+эквивалентное расширение уже существующего collector.
+\item Не принимать промежуточную лемму, если она содержит новый assumption,
+который по существу равен balanced-ledger existence.
+\item Проверить, что \texttt{terminalChain} определён ровно один раз.
+\item Проверить descendant closure и labels до анализа PBW reads.
+\item После \texttt{traceToBalancedLedger} немедленно подключить Stokes lemma и
+исходную terminal theorem.
+\item Запустить полный clean build и проверить аксиомы конечной theorem.
+\end{enumerate}
+
+\section{Заключение}
+
+Недостающая импликация не требует нового математического принципа. Она
+является конечным integral Stokes argument для полной размеченной
+PBW/truncation-трассы. Её доказательство состоит из пяти строго отделённых
+фактов:
+
+\begin{enumerate}
+\item local transfer/truncation steps являются буквальными тождествами и
+сохраняют полные отношения;
+\item prefix-ledger invariant превращает конечную trace в точное boundary
+identity на labels;
+\item comb analysis исчерпывающе классифицирует primitive weight-$(n+1)$
+frontier;
+\item terminal factor-two rows задают один общий $z$, обе координаты которого
+получаются двумя reads тех же occurrences;
+\item diagonal cells имеют одинаковые coefficients и противоположные boundary
+orientations, после чего marked Stokes даёт $\Obs=0$.
+\end{enumerate}
+
+Агент застрял потому, что начал после шага, на котором trace witness уже был
+забыт. Возвращение этого witness в типы Lean делает правильную импликацию
+конструктивной и устраняет необходимость угадывать terminal chain из одного
+лишь значения signed family.
+
+\end{document}

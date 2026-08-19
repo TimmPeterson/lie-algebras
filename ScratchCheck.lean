@@ -1,0 +1,50 @@
+import LieRings.DimensionSubring.MetabelianVanishing.Tower
+#check FreeMetabelian.Evaluation.rightAction
+#check FreeMetabelian.Evaluation.rightActionLinear
+#check FreeMetabelian.Evaluation.actionMultilinear
+#check FreeMetabelian.Evaluation.actionMultilinear_symmetric
+#check FreeMetabelian.Evaluation.symmetricAction
+#check FreeMetabelian.Evaluation.symmetricAction_tprod
+#check LieSubmodule.liftQ
+#check Submodule.liftQ
+#check LinearMap.llcomp
+#check LinearMap.lflip
+#check LinearMap.quotKerEquivOfSurjective
+#check Submodule.Quotient.eq
+#check LieModule.lowerCentralSeries_succ
+#check LieSubmodule.lie_mem_lie
+#check LieModule.derivedSeries_le_lowerCentralSeries
+#check LinearMap.compMultilinearMap
+#check MultilinearMap.codRestrict
+#check MultilinearMap.domDomCongr
+#check MultilinearMap.uncurryRight
+#check Submodule.Quotient.out
+#check Submodule.Quotient.out_eq
+#check Submodule.Quotient.mk_out
+#check Quotient.out
+#check Quotient.out_eq
+#check Module.End.mul_apply
+#check Module.End.one_apply
+#check List.prod_cons
+#check Commute.list_prod_left
+#check Commute.list_prod_right
+#check List.Perm.prod_eq'
+#check List.perm_cons_append_cons
+#check Module.int_smul_eq_zsmul
+#check Fin.succAbove
+#check Fin.succAbove_zero
+#check Fin.succAbove_ne
+#check Equiv.sum_comp
+#check Fintype.sum_equiv
+#check TensorProduct.map_tmul
+#check SymmetricPower.map_insert
+#check LinearMap.liftQ
+#check Submodule.liftQ
+#print LieAlgebra.derivedSeries
+#print LieAlgebra.derivedSeriesOfIdeal
+example (L : Type) [LieRing L] :
+    LieAlgebra.derivedSeries ℤ L 1 = LieModule.lowerCentralSeries ℤ L L 1 := by
+  rw [show (1 : ℕ) = 0 + 1 by omega,
+    LieAlgebra.derivedSeries_def, LieAlgebra.derivedSeriesOfIdeal_succ,
+    LieAlgebra.derivedSeriesOfIdeal_zero, LieModule.lowerCentralSeries_succ,
+    LieModule.lowerCentralSeries_zero]

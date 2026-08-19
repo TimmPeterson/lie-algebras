@@ -15,6 +15,8 @@ import LieRings.PBW.FreeModuleStatement
 import LieRings.PBW.Surjectivity
 import LieRings.PBW.TriangularRepresentation
 import LieRings.PBW.CartanEilenberg
+import LieRings.PBW.IntegralFreeModule
+import LieRings.PBW.WeightedGraded
 import LieRings.PBW.Conditions
 import LieRings.PBW.Higgins
 import LieRings.PBW.HigginsUniversal
@@ -28,6 +30,12 @@ import LieRings.Examples.QuotientAndDegreeTwo
 import LieRings.Examples.DegreeThree
 import LieRings.Examples.FreeLieDimensionSubring
 import LieRings.Examples.PBW
+import LieRings.LinearAlgebra.InvariantFactorSmith
+import LieRings.DimensionSubring.MetabelianVanishing.Main
+import LieRings.Homological.PresentationComparison
+import LieRings.Metabelian.FreeEvaluation
+import LieRings.DimensionSubring.MetabelianVanishing.QuadraticCertificate
+import LieRings.DimensionSubring.MetabelianVanishing.Point456Tests
 
 /-!
 # Lie rings

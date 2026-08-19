@@ -53,6 +53,26 @@ private def normalFormStep (C : FiniteTaggedCollector P A) (p : P)
 def normalForm (C : FiniteTaggedCollector P A) (p : P) : P →₀ ℤ :=
   C.wellFounded.fix (fun p rec ↦ C.normalFormStep p rec) p
 
+/-- The explicit recursive equation for a nonterminal normalization step.
+This is the finite trace equation used by provenance-sensitive clients; it
+does not assert confluence or compare different rewrite orders. -/
+theorem normalForm_eq_sum_of_expansion (C : FiniteTaggedCollector P A)
+    (p : P) (qs : List (ℤ × P)) (h : C.expansion p = some qs) :
+    C.normalForm p =
+      (qs.map fun q ↦ q.1 • C.normalForm q.2).sum := by
+  rw [normalForm, C.wellFounded.fix_eq]
+  unfold normalFormStep
+  split
+  · rename_i hnone
+    rw [h] at hnone
+    contradiction
+  · rename_i qs' hsome
+    have hqs : qs' = qs := by simpa [h] using hsome.symm
+    subst qs'
+    exact congrArg List.sum
+      (List.attach_map_val
+        (l := qs) (f := fun q ↦ q.1 • C.normalForm q.2))
+
 /-- Evaluating a fully collected normal form recovers the value of the original tag. -/
 theorem evaluate_normalForm (C : FiniteTaggedCollector P A) (p : P) :
     C.evaluate (C.normalForm p) = C.value p := by
@@ -128,6 +148,49 @@ theorem expansion_eq_none_of_mem_normalForm_support
   by_contra hnonterminal
   exact Finsupp.mem_support_iff.mp hq
     (C.normalForm_apply_eq_zero_of_nonterminal p q hnonterminal)
+
+/-- Any predicate preserved by every rewrite output is inherited by every
+tag having nonzero coefficient in the deterministic normal form. -/
+theorem invariant_of_normalForm_apply_ne_zero
+    (C : FiniteTaggedCollector P A) (I : P → Prop)
+    (hstep : ∀ {p qs}, C.expansion p = some qs → I p →
+      ∀ q ∈ qs, I q.2)
+    {p q : P} (hp : I p) (hq : C.normalForm p q ≠ 0) : I q := by
+  induction p using C.wellFounded.induction with
+  | h p ih =>
+      rw [normalForm, C.wellFounded.fix_eq] at hq
+      unfold normalFormStep at hq
+      split at hq
+      · rename_i hpterm
+        have hpq : p = q := by
+          by_contra hpq
+          exact hq (by simp [hpq])
+        subst q
+        exact hp
+      · rename_i qs hexpand
+        by_contra hnq
+        apply hq
+        have hz : ∀ r ∈ qs,
+            C.normalForm r.2 q = 0 := by
+          intro r hr
+          apply Classical.byContradiction
+          intro hrq
+          exact hnq (ih r.2 (C.decreases hexpand r hr)
+            (hstep hexpand hp r hr) hrq)
+        have hsum (xs : List (P →₀ ℤ)) :
+            xs.sum q = (xs.map fun f ↦ f q).sum := by
+          induction xs with
+          | nil => simp
+          | cons x xs ihxs => simp [ihxs]
+        rw [hsum]
+        simp only [List.map_map]
+        apply List.sum_eq_zero
+        intro z hzmem
+        simp only [List.mem_map] at hzmem
+        obtain ⟨r, hr, rfl⟩ := hzmem
+        change r.1.1 • C.normalForm r.1.2 q = 0
+        rw [hz r.1 r.2]
+        exact smul_zero _
 
 end FiniteTaggedCollector
 
