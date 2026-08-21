@@ -173,6 +173,17 @@ body.nav-open .site-header {
 .site-nav a.is-active { color: var(--ink); }
 .site-nav a:hover::after,
 .site-nav a.is-active::after { right: 0; }
+.reference-mark__symbol { font-family: var(--serif); font-size: 1.05rem; line-height: 0; }
+.reference-mark__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
 
 .github-link {
   justify-self: end;
@@ -360,30 +371,6 @@ body.nav-open .site-header {
 .source-line:hover { color: white; background: rgba(255,255,255,0.04); }
 .source-line code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .source-line svg { flex: 0 0 auto; width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; }
-
-.hero-stamp {
-  position: absolute;
-  z-index: 4;
-  right: 2px;
-  bottom: 46px;
-  width: 116px;
-  height: 116px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  border: 1px solid var(--line-strong);
-  border-radius: 50%;
-  color: var(--ink-soft);
-  background: rgba(243,241,235,0.9);
-  backdrop-filter: blur(10px);
-  transform: rotate(-9deg);
-}
-.hero-stamp span { font-family: var(--serif); font-size: 2.3rem; }
-.hero-stamp small { color: var(--muted); font-size: 0.55rem; font-weight: 740; letter-spacing: 0.1em; line-height: 1.35; text-transform: uppercase; }
-
-.hero-rule { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; margin-top: 74px; color: var(--muted); font-size: 0.58rem; font-weight: 760; letter-spacing: 0.15em; }
-.hero-rule i { height: 1px; background: var(--line); }
 
 .section { padding: 112px 0; }
 
@@ -573,6 +560,24 @@ body.nav-open .site-header {
 .start-links a { color: var(--dark-muted); font-size: 0.78rem; font-weight: 650; }
 .start-links a:hover { color: var(--accent); }
 
+.references { position: relative; overflow: hidden; color: white; background: var(--dark); }
+.references::before { content: "§"; position: absolute; right: -0.04em; top: -0.42em; color: rgba(255,255,255,0.025); font-family: var(--serif); font-size: clamp(24rem, 48vw, 44rem); line-height: 1; pointer-events: none; }
+.references .section-heading { position: relative; margin-bottom: 48px; }
+.references .section-kicker { color: #8fa096; }
+.reference-list { position: relative; margin: 0; padding: 0; border-top: 1px solid rgba(255,255,255,0.12); list-style: none; }
+.reference-item { scroll-margin-top: 96px; display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; align-items: center; gap: 28px; padding: 34px 4px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+.reference-number { align-self: start; padding-top: 7px; color: #718078; font-family: var(--mono); font-size: 0.68rem; }
+.reference-authors { margin: 0 0 5px; color: #91a098; font-size: 0.65rem; font-weight: 730; letter-spacing: 0.1em; text-transform: uppercase; }
+.reference-citation h3 { margin: 0; font-family: var(--serif); font-size: clamp(1.55rem, 2.8vw, 2.35rem); font-weight: 470; letter-spacing: -0.035em; line-height: 1.15; }
+.reference-citation h3 a { display: inline-flex; align-items: baseline; gap: 12px; }
+.reference-citation h3 a span { color: #718078; font-family: var(--sans); font-size: 0.8rem; transition: color 150ms ease, transform 150ms ease; }
+.reference-citation h3 a:hover span { color: var(--accent); transform: translate(2px, -2px); }
+.reference-citation > p:last-child { margin: 11px 0 0; color: var(--dark-muted); font-size: 0.78rem; }
+.reference-citation cite { font-style: italic; }
+.reference-doi { min-width: 76px; display: inline-flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border: 1px solid rgba(255,255,255,0.15); border-radius: 999px; color: #bdc6bf; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.05em; transition: color 150ms ease, border-color 150ms ease, background 150ms ease; }
+.reference-doi:hover { color: white; border-color: rgba(255,255,255,0.28); background: rgba(255,255,255,0.06); }
+.reference-doi span { font-size: 0.7rem; }
+
 .site-footer { padding: 50px 0; border-top: 1px solid var(--line); }
 .footer-grid { display: grid; grid-template-columns: 1fr auto auto; align-items: end; gap: 60px; }
 .brand--footer { margin-bottom: 12px; }
@@ -594,7 +599,6 @@ body.nav-open .site-header {
   .hero-grid { grid-template-columns: 1fr 0.9fr; gap: 36px; }
   .hero-title-primary { font-size: clamp(3.25rem, 7vw, 4.6rem); }
   .hero-title-secondary { font-size: clamp(2rem, 3.8vw, 2.7rem); }
-  .hero-stamp { right: -8px; }
   .result-card { grid-column: span 6; }
   .result-card--pbw, .result-card--quotient { grid-column: span 6; }
   .result-card--pbw { min-height: 500px; }
@@ -613,12 +617,13 @@ body.nav-open .site-header {
   body.nav-open .site-nav { transform: translateY(0); opacity: 1; pointer-events: auto; }
   .site-nav a { padding: 13px 3px; border-bottom: 1px solid var(--line); }
   .site-nav a::after { display: none; }
+  .reference-mark__symbol { margin-right: 8px; }
+  .reference-mark__label { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; white-space: normal; }
   .hero { min-height: 0; padding-top: 126px; }
   .hero-grid { grid-template-columns: 1fr; }
   .hero-copy { max-width: 680px; }
   .hero-visual { min-height: 500px; }
   .focus-card { width: min(88%, 480px); }
-  .hero-stamp { right: 5%; bottom: 35px; }
   .section { padding: 86px 0; }
   .section-heading--row { grid-template-columns: 1fr; gap: 24px; }
   .flow-branches { grid-template-columns: 1fr; gap: 52px; padding-top: 0; }
@@ -666,9 +671,6 @@ body.nav-open .site-header {
   .focus-card { width: 94%; }
   .focus-card__body { padding: 30px 24px; }
   .display-formula { font-size: 2.75rem; }
-  .hero-stamp { width: 90px; height: 90px; right: 0; bottom: 8px; }
-  .hero-stamp span { font-size: 1.8rem; }
-  .hero-rule { margin-top: 45px; }
   .section { padding: 74px 0; }
   .section-heading { margin-bottom: 38px; }
   .section-heading h2 { font-size: clamp(2.55rem, 12vw, 3.65rem); }
@@ -701,6 +703,11 @@ body.nav-open .site-header {
   .definition-link { align-items: flex-start; }
   .definition-link code { font-size: 0.7rem; }
   .start-card { padding: 28px 22px; border-radius: 22px; }
+  .reference-item { grid-template-columns: 34px minmax(0, 1fr); gap: 16px; padding: 28px 0; }
+  .reference-number { padding-top: 5px; }
+  .reference-citation h3 { font-size: 1.55rem; }
+  .reference-citation h3 a { gap: 8px; }
+  .reference-doi { grid-column: 2; width: max-content; min-width: 72px; margin-top: -2px; }
   .footer-grid { grid-template-columns: 1fr; gap: 30px; }
   .footer-links { flex-wrap: wrap; }
 }

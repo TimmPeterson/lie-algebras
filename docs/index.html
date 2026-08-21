@@ -38,6 +38,10 @@
         <a href="#architecture">Architecture</a>
         <a href="#statistics">Statistics</a>
         <a href="#definitions">Definitions</a>
+        <a class="reference-mark" href="#references" aria-label="References" title="References">
+          <span class="reference-mark__symbol" aria-hidden="true">§</span>
+          <span class="reference-mark__label">References</span>
+        </a>
       </nav>
 
       <a class="github-link" href="https://github.com/TimmPeterson/lie-algebras" target="_blank" rel="noreferrer">
@@ -86,13 +90,13 @@
             </div>
             <div class="focus-card__body">
               <p class="focus-label">Nilpotent metabelian theorem</p>
-              <div class="display-formula" aria-label="delta sub two c minus one of K equals zero">
-                δ<sub>2c−1</sub>(K) = 0
+              <div class="display-formula" aria-label="delta sub two c minus one of L equals zero">
+                δ<sub>2c−1</sub>(L) = 0
               </div>
               <div class="assumptions">
-                <span>K metabelian</span>
+                <span>L metabelian</span>
                 <span>c ≥ 2</span>
-                <span>γ<sub>c+1</sub>(K) = 0</span>
+                <span>γ<sub>c+1</sub>(L) = 0</span>
               </div>
             </div>
             <a class="source-line" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/MetabelianTwoFactor.lean#L2636" target="_blank" rel="noreferrer">
@@ -100,13 +104,8 @@
               <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 14 14 6M8 6h6v6"/></svg>
             </a>
           </article>
-          <div class="hero-stamp" aria-hidden="true">
-            <span>ℤ</span>
-            <small>integral<br>theory</small>
-          </div>
         </div>
       </div>
-      <div class="hero-rule page-shell" aria-hidden="true"><span>01</span><i></i><span>VERIFIED MATHEMATICS</span></div>
     </section>
 
     <section class="section theorem-map" id="theorem-map">
@@ -532,6 +531,57 @@
         </article>
       </div>
     </section>
+
+    <section class="section references" id="references">
+      <div class="page-shell">
+        <header class="section-heading section-heading--light reveal">
+          <p class="section-kicker">Bibliography</p>
+          <h2>References.</h2>
+        </header>
+
+        <ol class="reference-list">
+          <li class="reference-item reveal" id="ref-bartholdi-passi">
+            <span class="reference-number">01</span>
+            <div class="reference-citation">
+              <p class="reference-authors">Laurent Bartholdi · Inder Bir S. Passi</p>
+              <h3><a href="https://arxiv.org/abs/1308.2118" target="_blank" rel="noreferrer">Lie Dimension Subrings <span aria-hidden="true">↗</span></a></h3>
+              <p><cite>International Journal of Algebra and Computation</cite> 25, no. 8 (2015), 1301–1325.</p>
+            </div>
+            <a class="reference-doi" href="https://doi.org/10.1142/S0218196715500423" target="_blank" rel="noreferrer">DOI <span aria-hidden="true">↗</span></a>
+          </li>
+
+          <li class="reference-item reveal" id="ref-passi-sicking">
+            <span class="reference-number">02</span>
+            <div class="reference-citation">
+              <p class="reference-authors">Inder Bir S. Passi · Thomas Sicking</p>
+              <h3><a href="https://arxiv.org/abs/1602.04919" target="_blank" rel="noreferrer">Dimension Quotients of Metabelian Lie Rings <span aria-hidden="true">↗</span></a></h3>
+              <p><cite>International Journal of Algebra and Computation</cite> 27, no. 2 (2017), 251–258.</p>
+            </div>
+            <a class="reference-doi" href="https://doi.org/10.1142/S0218196717500114" target="_blank" rel="noreferrer">DOI <span aria-hidden="true">↗</span></a>
+          </li>
+
+          <li class="reference-item reveal" id="ref-bourbaki">
+            <span class="reference-number">03</span>
+            <div class="reference-citation">
+              <p class="reference-authors">N. Bourbaki</p>
+              <h3><a href="https://link.springer.com/book/9783540642428" target="_blank" rel="noreferrer">Lie Groups and Lie Algebras: Chapters 1–3 <span aria-hidden="true">↗</span></a></h3>
+              <p><cite>Elements of Mathematics</cite>. Springer-Verlag, Berlin, 1989.</p>
+            </div>
+            <a class="reference-doi" href="https://link.springer.com/book/9783540642428" target="_blank" rel="noreferrer">Springer <span aria-hidden="true">↗</span></a>
+          </li>
+
+          <li class="reference-item reveal" id="ref-higgins">
+            <span class="reference-number">04</span>
+            <div class="reference-citation">
+              <p class="reference-authors">P. J. Higgins</p>
+              <h3><a href="https://doi.org/10.1016/0021-8693(69)90086-6" target="_blank" rel="noreferrer">Baer Invariants and the Birkhoff-Witt Theorem <span aria-hidden="true">↗</span></a></h3>
+              <p><cite>Journal of Algebra</cite> 11, no. 4 (1969), 469–482.</p>
+            </div>
+            <a class="reference-doi" href="https://doi.org/10.1016/0021-8693(69)90086-6" target="_blank" rel="noreferrer">DOI <span aria-hidden="true">↗</span></a>
+          </li>
+        </ol>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -551,6 +601,7 @@
         <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/MainResults.lean" target="_blank" rel="noreferrer">Main results</a>
         <a href="#theorem-map">Theorem map</a>
         <a href="#definitions">Definitions</a>
+        <a href="#references">References</a>
       </div>
       <p class="footer-meta">Lean 4 · mathlib v4.29.0<br><span data-year></span></p>
     </div>
