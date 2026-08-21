@@ -475,6 +475,25 @@ body.nav-open .site-header {
 }
 .result-status--new { color: #9e351c; background: var(--accent-soft); }
 .result-status--reference { color: var(--blue); background: var(--blue-soft); }
+.result-scope {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  background: rgba(255,255,255,0.55);
+  font-family: "Cambria Math", var(--serif);
+  font-size: 0.76rem;
+  font-weight: 710;
+  letter-spacing: 0.015em;
+  line-height: 1;
+  text-transform: none;
+  white-space: nowrap;
+}
+.result-scope i { font-style: italic; }
 
 .result-groups { display: grid; gap: 96px; }
 .result-group { padding-top: 34px; border-top: 1px solid var(--line-strong); }
@@ -529,6 +548,7 @@ body.nav-open .site-header {
 
 .result-card__top {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
@@ -541,6 +561,7 @@ body.nav-open .site-header {
   text-transform: uppercase;
 }
 .result-card--pbw-suite .result-card__top { color: #9ca79f; }
+.result-badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; margin-left: auto; }
 .result-card h4 {
   margin: 0;
   font-family: var(--serif);
@@ -584,6 +605,7 @@ body.nav-open .site-header {
 .result-citation:hover { color: var(--accent-dark); border-color: rgba(223,88,52,0.34); background: var(--accent-soft); }
 .result-card--pbw-suite .result-citation { color: #d5ddd7; border-color: rgba(255,255,255,0.13); background: rgba(255,255,255,0.065); }
 .result-card--pbw-suite .result-citation:hover { color: white; border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.11); }
+.result-card--pbw-suite .result-scope { color: #d5ddd7; border-color: rgba(255,255,255,0.13); background: rgba(255,255,255,0.065); }
 
 .result-source {
   min-width: 0;

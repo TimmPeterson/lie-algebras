@@ -186,12 +186,14 @@
             <p class="section-kicker">Result catalogue</p>
             <h2>New mathematics.<br>Classical theorems, formalized.</h2>
           </div>
-          <p><strong>NEW</strong> marks statements not previously known. Citation markers identify established results now verified in Lean. Every item is compiled in <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/MainResults.lean" target="_blank" rel="noreferrer">MainResults.lean</a>.</p>
+          <p><strong>NEW</strong> marks statements not previously known. Citations identify established results now verified in Lean; coefficient badges record the implemented base ring, not the theorem’s maximal generality. Every item is compiled in <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/MainResults.lean" target="_blank" rel="noreferrer">MainResults.lean</a>.</p>
         </header>
 
         <div class="result-legend reveal" aria-label="Result status legend">
           <span><b class="result-status result-status--new">NEW</b> Previously unknown</span>
           <span><b class="result-status result-status--reference">Reference</b> Known theorem, now formalized</span>
+          <span><b class="result-scope"><i>R</i></b> Commutative base ring</span>
+          <span><b class="result-scope">ℤ</b> Integer base ring</span>
         </div>
 
         <div class="result-groups">
@@ -207,7 +209,7 @@
 
             <div class="result-grid">
               <article class="result-card reveal">
-                <div class="result-card__top"><span>Exact identity</span><span class="result-status result-status--new">NEW</span></div>
+                <div class="result-card__top"><span>Exact identity</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
                 <h4>Exact centrality</h4>
                 <div class="result-formula">[δ<sub>n</sub>(L), L] = γ<sub>n+1</sub>(L)</div>
                 <p>For every positive n over every commutative base ring.</p>
@@ -215,7 +217,7 @@
               </article>
 
               <article class="result-card reveal" data-delay="1">
-                <div class="result-card__top"><span>Bracket inclusion</span><span class="result-status result-status--new">NEW</span></div>
+                <div class="result-card__top"><span>Bracket inclusion</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
                 <h4>Strong centrality</h4>
                 <div class="result-formula">[δ<sub>m</sub>(L), δ<sub>n</sub>(L)] ⊆ γ<sub>m+n</sub>(L)</div>
                 <p>For all positive m and n, without supplementary hypotheses.</p>
@@ -223,7 +225,7 @@
               </article>
 
               <article class="result-card result-card--wide result-card--action reveal">
-                <div class="result-card__top"><span>Enveloping action</span><span class="result-status result-status--new">NEW</span></div>
+                <div class="result-card__top"><span>Enveloping action</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
                 <div class="result-card__split">
                   <div>
                     <h4>Augmentation action realizes the full tail</h4>
@@ -235,7 +237,7 @@
               </article>
 
               <article class="result-card result-card--consequence reveal">
-                <div class="result-card__top"><span>Graded consequence</span><span class="result-status result-status--new">NEW</span></div>
+                <div class="result-card__top"><span>Graded consequence</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
                 <h4>A homogeneous Lie ideal</h4>
                 <div class="result-formula result-formula--compact">im(gr<sub>γ</sub> → gr<sub>δ</sub>) ◁<sub>gr</sub> gr<sub>δ</sub>(L)</div>
                 <p>The image of the canonical comparison map is both a Lie ideal and graded.</p>
@@ -243,7 +245,7 @@
               </article>
 
               <article class="result-card result-card--consequence reveal" data-delay="1">
-                <div class="result-card__top"><span>Graded consequence</span><span class="result-status result-status--new">NEW</span></div>
+                <div class="result-card__top"><span>Graded consequence</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
                 <h4>An Abelian cokernel</h4>
                 <div class="result-formula result-formula--compact">gr<sub>δ</sub>(L) / im(gr<sub>γ</sub>) &nbsp;is Abelian</div>
                 <p>The quotient by the canonical graded image is well-defined and has zero bracket.</p>
@@ -264,7 +266,7 @@
 
             <div class="result-grid">
               <article class="result-card reveal">
-                <div class="result-card__top"><span>Degree two</span><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a></div>
+                <div class="result-card__top"><span>Degree two</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
                 <h4>First equality</h4>
                 <div class="result-formula">δ<sub>2</sub>(L) = γ<sub>2</sub>(L)</div>
                 <p>Over every commutative base ring.</p>
@@ -272,7 +274,7 @@
               </article>
 
               <article class="result-card reveal" data-delay="1">
-                <div class="result-card__top"><span>Degree three</span><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a></div>
+                <div class="result-card__top"><span>Degree three</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
                 <h4>Second equality</h4>
                 <div class="result-formula">δ<sub>3</sub>(L) = γ<sub>3</sub>(L)</div>
                 <p>For every Lie ring.</p>
@@ -280,7 +282,7 @@
               </article>
 
               <article class="result-card reveal">
-                <div class="result-card__top"><span>Degree four</span><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a></div>
+                <div class="result-card__top"><span>Degree four</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
                 <h4>Factor-two bound</h4>
                 <div class="result-formula">2δ<sub>4</sub>(L) ⊆ γ<sub>4</sub>(L)</div>
                 <p>For every Lie ring.</p>
@@ -288,7 +290,7 @@
               </article>
 
               <article class="result-card reveal" data-delay="1">
-                <div class="result-card__top"><span>Free Lie rings</span><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a></div>
+                <div class="result-card__top"><span>Free Lie rings</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
                 <h4>Equality in every degree</h4>
                 <div class="result-formula">δ<sub>n</sub>(F) = γ<sub>n</sub>(F)</div>
                 <p>For a free Lie ring F and every positive n.</p>
@@ -311,7 +313,7 @@
               <article class="result-card result-card--wide result-card--pbw-suite reveal">
                 <div class="result-card__top">
                   <span>PBW formulations</span>
-                  <span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span>
+                  <span class="result-badges"><span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span>
                 </div>
                 <h4>PBW in three useful forms</h4>
                 <div class="pbw-statements">
@@ -329,7 +331,7 @@
               <article class="result-card reveal">
                 <div class="result-card__top">
                   <span>Integral embedding</span>
-                  <span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span>
+                  <span class="result-badges"><span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span><span class="result-scope" title="Formalized over the integers">ℤ</span></span>
                 </div>
                 <h4>Canonical embedding</h4>
                 <div class="result-formula result-formula--display">L ↪ U<sub>ℤ</sub>(L)</div>
@@ -340,7 +342,7 @@
               <article class="result-card result-card--quotient reveal" data-delay="1">
                 <div class="result-card__top">
                   <span>Universal enveloping</span>
-                  <span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span>
+                  <span class="result-badges"><span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span>
                 </div>
                 <h4>Quotients commute with U</h4>
                 <div class="result-formula result-formula--compact">U<sub>R</sub>(L/I) ≃ U<sub>R</sub>(L)/⟨I⟩</div>
