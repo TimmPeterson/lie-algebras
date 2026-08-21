@@ -130,6 +130,12 @@ example (n : ℕ) (L : Type v) [LieRing L]
       lowerCentralSeries ℤ L (n + 1) :=
   MetabelianTwoFactor.odd_dimensionSubring_le_lowerCentralSeries n L hn hmeta
 
+/-- Consequently, the intersections of all dimension and lower-central terms agree for every
+metabelian Lie ring: `δ_ω(L) = γ_ω(L)`. -/
+example (L : Type v) [LieRing L] (hmeta : IsMetabelian L) :
+    dimensionSubringOmega ℤ L = lowerCentralSeriesOmega ℤ L :=
+  MetabelianTwoFactor.dimensionSubringOmega_eq_lowerCentralSeriesOmega L hmeta
+
 /-- For every Lie ring, with no metabelian, finiteness, or torsion assumption,
 `δ₅(L) ⊆ γ₄(L)`. This is a corollary of the nilpotent theorem at `c = 3`, not a base case
 used in its proof. -/

@@ -1,4 +1,11 @@
+import LieRings.DimensionSubring.DegreeThree
+import LieRings.DimensionSubring.DegreeFive.AdaptedPlacedInput
+import LieRings.DimensionSubring.DegreeFive.AdaptedPresentation
+import LieRings.DimensionSubring.DegreeFive.AdaptedWeightedClassTwoPBW
+import LieRings.DimensionSubring.DegreeFive.FiniteRelationRowExpansion
 import LieRings.DimensionSubring.DegreeFive.FiniteWitnessReduction
+import LieRings.DimensionSubring.DegreeFive.PresentationKernel
+import LieRings.DimensionSubring.DegreeFive.WordExpansion
 import Mathlib.Algebra.MonoidAlgebra.MapDomain
 import Mathlib.Algebra.MvPolynomial.Basic
 import Mathlib.Algebra.MvPolynomial.Degrees
@@ -44,7 +51,7 @@ structure FreeDimensionFourWitness (a : L) where
   highWord_mem : highWord ∈ UEA.augmentationIdeal ℤ (CanonicalFreeLie L) ^ 4
   relationDifference :
     UniversalEnvelopingAlgebra.ι ℤ lieLift - highWord ∈
-      DegreeFive.rightRelationSpan ℤ (CanonicalFreeLie L)
+      UEA.rightRelationSpan ℤ (CanonicalFreeLie L)
         (DegreeFive.CanonicalLieRelationsIdeal L)
 
 /-- A degree-four witness may be chosen with its Lie lift in `γ₂` of the free Lie ring. -/
@@ -93,7 +100,7 @@ theorem FreeDimensionFourWitness.exists_relation_finsupp
         (UniversalEnvelopingAlgebra.ι ℤ
           (p.1 : CanonicalFreeLie L) * p.2)) =
         UniversalEnvelopingAlgebra.ι ℤ w.lieLift - w.highWord := by
-  exact DegreeFive.exists_relation_finsupp_of_mem_rightRelationSpan ℤ
+  exact UEA.exists_relation_finsupp_of_mem_rightRelationSpan ℤ
     (CanonicalFreeLie L) (DegreeFive.CanonicalLieRelationsIdeal L)
       w.relationDifference
 
@@ -222,7 +229,7 @@ private theorem exists_normalizedDimensionFourWitness
   have hrelIdeal :
       UniversalEnvelopingAlgebra.ι ℤ w.lieLift - w.highWord ∈
         UEA.idealOfLieIdeal ℤ (CanonicalFreeLie L) R := by
-    rw [DegreeFive.idealOfLieIdeal_eq_rightRelationIdeal]
+    rw [UEA.idealOfLieIdeal_eq_rightRelationIdeal]
     exact w.relationDifference
   obtain ⟨c, hc⟩ := exists_relation_on_right_finsupp R hrelIdeal
   let multiplier : UEA ℤ (CanonicalFreeLie L) × R →
@@ -4755,27 +4762,10 @@ theorem twoDeltaFourProperty_of_finite_extraction
     DegreeFive.TwoDeltaFourProperty.{u} :=
   twoDeltaFourProperty_of_finite (finiteTwoDeltaFour_of_extraction h)
 
-/-- Once the finite coefficient extraction is supplied, the already completed standing
-reduction gives the integral fifth-dimension theorem with no remaining hypotheses. -/
-theorem dimensionSubring_five_le_lowerCentralSeries_three_of_finite_extraction
-    (h : FiniteBartholdiPassiExtractionProperty.{u})
-    (M : Type u) [LieRing M] :
-    dimensionSubring ℤ M 5 ≤ lowerCentralSeries ℤ M 3 :=
-  DegreeFive.dimensionSubring_five_le_lowerCentralSeries_three M
-    (twoDeltaFourProperty_of_finite_extraction h)
-
 /-- Bartholdi--Passi's factor-two theorem for every Lie ring over `ℤ`. -/
 theorem twoDeltaFourProperty : DegreeFive.TwoDeltaFourProperty.{u} :=
   twoDeltaFourProperty_of_finite_extraction
     finiteBartholdiPassiExtraction
-
-/-- For every Lie ring over `ℤ`, the fifth dimension subring is contained in
-the fourth lower-central-series term. -/
-theorem dimensionSubring_five_le_lowerCentralSeries_three
-    (M : Type u) [LieRing M] :
-    dimensionSubring ℤ M 5 ≤ lowerCentralSeries ℤ M 3 :=
-  DegreeFive.dimensionSubring_five_le_lowerCentralSeries_three M
-    twoDeltaFourProperty
 
 end
 

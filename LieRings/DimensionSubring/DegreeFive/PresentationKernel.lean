@@ -1,11 +1,13 @@
-import LieRings.DimensionSubring.DegreeFive.RelationIdeal
+import LieRings.DimensionSubring.DegreeFive.RelationTruncation
+import LieRings.DimensionSubring.Functoriality
+import LieRings.UniversalEnveloping.RelationCollection
 import Mathlib.LinearAlgebra.Isomorphisms
 
 /-!
 # The enveloping kernel of the canonical free presentation
 
 This file identifies the kernel of `U(F) → U(L)` with the collected relation ideal.  It is the
-precise presentation criterion needed to lift a fifth-dimension witness to the free associative
+precise presentation criterion needed to lift a fourth-dimension witness to the free associative
 algebra.
 -/
 
@@ -151,10 +153,10 @@ linear combination of products `ι(r)u` with the relation on the left. -/
 theorem mem_kernel_canonical_uea_evaluation_iff_relation_sum
     (u : UEA ℤ (CanonicalFreeLie L)) :
     UEA.map ℤ (CanonicalFreeLie L) L (canonicalFreeLieEvaluation L) u = 0 ↔
-      u ∈ rightRelationSpan ℤ (CanonicalFreeLie L)
+      u ∈ UEA.rightRelationSpan ℤ (CanonicalFreeLie L)
         (CanonicalLieRelationsIdeal L) := by
   rw [mem_kernel_canonical_uea_evaluation_iff L u]
-  exact mem_idealOfLieIdeal_iff_relation_sum ℤ (CanonicalFreeLie L)
+  exact UEA.mem_idealOfLieIdeal_iff_relation_sum ℤ (CanonicalFreeLie L)
     (CanonicalLieRelationsIdeal L) u
 
 end

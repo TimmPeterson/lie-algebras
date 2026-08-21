@@ -3,6 +3,7 @@ import LieRings.PBW.WeightedGraded
 import LieRings.PBW.FactorSymbol
 import LieRings.Homological.IntegralPolarization
 import LieRings.LinearAlgebra.InvariantFactorSmith
+import LieRings.DimensionSubring.FreeLie
 import LieRings.DimensionSubring.Functoriality
 import LieRings.UniversalEnveloping.RelationCollection
 import Mathlib.Algebra.Module.CharacterModule
@@ -2925,6 +2926,24 @@ theorem odd_dimensionSubring_le_lowerCentralSeries
   exact dimensionSubring_le_of_quotient_eq_bot ℤ L I
     (2 * n + 1) hquotVanish
 
+/-! ## Equality at omega -/
+
+/-- **Dimension-subring equality at omega for metabelian Lie rings.**
+The odd-dimensional inclusion places every element of `δ_ω(L)` arbitrarily deep in the
+lower central series; the reverse inclusion is the standard one in every finite degree. -/
+theorem dimensionSubringOmega_eq_lowerCentralSeriesOmega
+    (L : Type u) [LieRing L] (hmeta : IsMetabelian L) :
+    dimensionSubringOmega ℤ L = lowerCentralSeriesOmega ℤ L := by
+  apply le_antisymm
+  · intro x hx
+    rw [mem_lowerCentralSeriesOmega]
+    intro k
+    have hdeep : x ∈ lowerCentralSeries ℤ L ((k + 1) + 1) :=
+      odd_dimensionSubring_le_lowerCentralSeries (k + 1) L (by omega) hmeta
+        ((mem_dimensionSubringOmega ℤ L).mp hx (2 * (k + 1) + 1))
+    exact LieModule.antitone_lowerCentralSeries ℤ L L (by omega) hdeep
+  · exact lowerCentralSeriesOmega_le_dimensionSubringOmega ℤ L
+
 /-! ## The arbitrary degree-five specialization -/
 
 /-- The first derived ideal is exactly the first zero-based lower-central term. -/
@@ -3014,6 +3033,7 @@ theorem dimensionSubring_five_le_lowerCentralSeries_three
 assert_no_sorry Presentation.dimensionSubring_quotient_eq_bot
 assert_no_sorry nilpotent_dimensionSubring_eq_bot
 assert_no_sorry odd_dimensionSubring_le_lowerCentralSeries
+assert_no_sorry dimensionSubringOmega_eq_lowerCentralSeriesOmega
 assert_no_sorry dimensionSubring_five_le_lowerCentralSeries_three
 
 end

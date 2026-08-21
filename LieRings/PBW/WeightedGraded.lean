@@ -1,8 +1,8 @@
-import LieRings.PBW.IntegralFreeModule
 import LieRings.DimensionSubring.Functoriality
-import LieRings.DimensionSubring.DegreeFive.RelationIdeal
-import LieRings.DimensionSubring.DegreeFive.PlacedIdentities
-import LieRings.DimensionSubring.DegreeFive.SemanticCollector
+import LieRings.PBW.Collection
+import LieRings.PBW.IntegralFreeModule
+import LieRings.UniversalEnveloping.Quotient
+import Mathlib.Data.Multiset.Fintype
 import Mathlib.RingTheory.MvPolynomial.Homogeneous
 import Mathlib.RingTheory.MvPolynomial.WeightedHomogeneous
 
@@ -21,7 +21,6 @@ namespace LieRings.PBW
 noncomputable section
 
 open scoped BigOperators
-open LieRings.DegreeFive
 
 universe u v
 
@@ -512,10 +511,10 @@ private theorem pbwPolynomial_basisWord_isWeighted (xs : List ι) :
   induction xs using hwell.induction with
   | h xs ih =>
       classical
-      cases hchosen : LieRings.DegreeFive.chooseAdjacentInversion? xs with
+      cases hchosen : chooseAdjacentInversion? xs with
       | none =>
           have hordered : xs.Pairwise (· ≤ ·) :=
-            (LieRings.DegreeFive.chooseAdjacentInversion?_eq_none_iff_pairwise xs).mp hchosen
+            (chooseAdjacentInversion?_eq_none_iff_pairwise xs).mp hchosen
           let e : ι →₀ ℕ := Multiset.toFinsupp (xs : Multiset ι)
           have hcoordinate :
               B.pbwEquiv.symm (basisWord ℤ L ι B.basis xs) =
@@ -538,7 +537,7 @@ private theorem pbwPolynomial_basisWord_isWeighted (xs : List ι) :
           simpa [e]
       | some d =>
           obtain ⟨hxs, hxy⟩ :=
-            LieRings.DegreeFive.chooseAdjacentInversion?_eq_some_realizes hchosen
+            chooseAdjacentInversion?_eq_some_realizes hchosen
           let swapped := d.left ++ d.y :: d.x :: d.right
           have hswapDescent : descent swapped xs := by
             unfold descent complexity swapped
@@ -984,9 +983,10 @@ theorem mem_ker_map_iff_mem_idealOfLieIdeal {F : Type*} {K : Type*}
             Ideal.Quotient.mk (UEA.idealOfLieIdeal ℤ F (LieHom.ker f))
               (UniversalEnvelopingAlgebra.ι ℤ x)
           rw [UEA.map_ι]
-          change E (UniversalEnvelopingAlgebra.ι ℤ
+          change (UEA.quotientEquivLieIdeal ℤ F (LieHom.ker f))
+            (UniversalEnvelopingAlgebra.ι ℤ
               (LieSubmodule.Quotient.mk x : F ⧸ LieHom.ker f)) = _
-          rw [UEA.quotientEquivLieIdeal_ι_mk]
+          exact UEA.quotientEquivLieIdeal_ι_mk ℤ F (LieHom.ker f) x
         exact DFunLike.congr_fun hgh u]
       exact Ideal.Quotient.eq_zero_iff_mem
 

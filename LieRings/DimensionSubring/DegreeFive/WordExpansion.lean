@@ -1,13 +1,7 @@
-import LieRings.DimensionSubring.DegreeFive.RelationRows
-import LieRings.DimensionSubring.DegreeFive.PlacedIdentities
 import LieRings.DimensionSubring.DegreeFive.LowWeight
 
 /-!
-# Expanding the right factors into genuine finite words
-
-The relation ledger has arbitrary enveloping elements on the right.  Via
-`U(FreeLie(X)) ≃ FreeAlgebra(X)`, each is now expanded as a finite integral sum of actual words,
-which are the initial tagged packets for placed collection.
+# Finite word expansions in a free associative algebra
 -/
 
 namespace LieRings
@@ -68,7 +62,7 @@ theorem monoidBasisElement_eq_freeAlgebraWord (w : FreeMonoid X) :
       simp [FreeAlgebra.equivMonoidAlgebraFreeMonoid]
       exact one_nsmul (FreeAlgebra.ι ℤ x)
 
-/-- Every free associative polynomial is an actual finite integral sum of generator words. -/
+/-- Every free associative polynomial is a finite integral sum of generator words. -/
 theorem exists_freeAlgebra_word_finsupp (p : FreeAlgebra ℤ X) :
     ∃ c : FreeMonoid X →₀ ℤ,
       c.sum (fun w n ↦ n • freeAlgebraWord X (FreeMonoid.toList w)) = p := by
@@ -109,21 +103,8 @@ theorem exists_freeAlgebra_word_finsupp (p : FreeAlgebra ℤ X) :
               rw [smul_eq_mul, mul_one]
     _ = p := FreeAlgebra.equivMonoidAlgebraFreeMonoid.symm_apply_apply p
 
-/-- Multiplying by a fixed left factor preserves the finite word expansion. -/
-theorem exists_mul_freeAlgebra_word_finsupp
-    (a p : FreeAlgebra ℤ X) :
-    ∃ c : FreeMonoid X →₀ ℤ,
-      c.sum (fun w n ↦ n •
-        (a * freeAlgebraWord X (FreeMonoid.toList w))) = a * p := by
-  obtain ⟨c, hc⟩ := exists_freeAlgebra_word_finsupp X p
-  refine ⟨c, ?_⟩
-  rw [← hc, Finsupp.mul_sum]
-  apply Finsupp.sum_congr
-  intro w hw
-  exact (mul_smul_comm (c w) a
-    (freeAlgebraWord X (FreeMonoid.toList w))).symm
-
 end
+
 
 end DegreeFive
 

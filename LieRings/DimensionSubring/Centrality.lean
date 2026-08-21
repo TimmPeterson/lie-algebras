@@ -22,10 +22,6 @@ universe u v
 variable (R : Type u) (L : Type v)
 variable [CommRing R] [LieRing L] [LieAlgebra R L]
 
-/-- The usual lower central series, with term `0` equal to `L` (thus term `n` is `γₙ₊₁`). -/
-abbrev lowerCentralSeries (n : ℕ) : LieIdeal R L :=
-  LieModule.lowerCentralSeries R L L n
-
 /--
 Relative dimension centrality: `[A, δₙ(L)]` lies in the `n`-fold relative commutator
 `[A, L, ..., L]`.
@@ -69,6 +65,18 @@ theorem lowerCentralSeries_le_dimensionSubring (n : ℕ) :
         exact Ideal.mul_mem_mul hy' hx
       rw [LieHom.map_lie, LieRing.of_associative_ring_bracket]
       exact (UEA.augmentationIdeal R L ^ (n + 1 + 1)).sub_mem hxy hyx
+
+/-- The lower-central intersection is always contained in the dimension-subring intersection. -/
+theorem lowerCentralSeriesOmega_le_dimensionSubringOmega :
+    lowerCentralSeriesOmega R L ≤ dimensionSubringOmega R L := by
+  intro x hx
+  rw [mem_dimensionSubringOmega]
+  intro n
+  cases n with
+  | zero => simp
+  | succ n =>
+      exact lowerCentralSeries_le_dimensionSubring R L n
+        ((mem_lowerCentralSeriesOmega R L).mp hx n)
 
 /--
 Dimension centrality, in a hypothesis-free positive-index form:

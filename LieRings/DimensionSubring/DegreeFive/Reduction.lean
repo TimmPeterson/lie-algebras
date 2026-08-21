@@ -1,10 +1,8 @@
-import LieRings.DimensionSubring.DegreeThree
+import LieRings.DimensionSubring.Centrality
 import LieRings.DimensionSubring.Functoriality
 
 /-!
-# Reduction of the fifth dimension-subring theorem to class three
-
-With this library's indexing, `γ₄(L)` is `lowerCentralSeries ℤ L 3`.
+# The class-three quotient
 -/
 
 namespace LieRings
@@ -38,18 +36,8 @@ theorem classThreeQuotient_lowerCentralSeries_three_eq_bot :
   exact (LieSubmodule.Quotient.mk_eq_zero'
     (N := lowerCentralSeries ℤ L 3)).mpr hx
 
-/-- The precise quotient reduction for the desired degree-five theorem.
-
-It remains only to prove that the fifth dimension subring vanishes in every class-three
-quotient. No finiteness or torsion hypothesis occurs here.
--/
-theorem dimensionSubring_five_le_lowerCentralSeries_three_of_quotient
-    (hquot : dimensionSubring ℤ (ClassThreeQuotient L) 5 = ⊥) :
-    dimensionSubring ℤ L 5 ≤ lowerCentralSeries ℤ L 3 :=
-  dimensionSubring_le_of_quotient_eq_bot ℤ L
-    (lowerCentralSeries ℤ L 3) 5 hquot
-
 end
+
 
 end DegreeFive
 
