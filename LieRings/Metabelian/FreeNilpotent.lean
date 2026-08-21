@@ -1,5 +1,5 @@
 import LieRings.Metabelian.HallBasis
-import LieRings.DimensionSubring.MetabelianVanishing.ExternalInputs
+import LieRings.Metabelian.Basic
 import Mathlib.LinearAlgebra.StdBasis
 
 /-!

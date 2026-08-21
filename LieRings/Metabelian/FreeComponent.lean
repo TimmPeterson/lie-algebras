@@ -1,4 +1,4 @@
-import LieRings.Homological.Koszul
+import LieRings.Metabelian.JacobiBoundary
 import Mathlib.LinearAlgebra.ExteriorPower.Basis
 
 /-!
@@ -47,17 +47,17 @@ instance (q : ℕ) : Module ℤ (JacobiSource X q) := by
       change Module ℤ ((⋀[ℤ]^3 X) ⊗[ℤ] Sym[ℤ] (Fin q) X)
       infer_instance
 
-/-- Jacobi is precisely the third Koszul differential for the identity map. -/
+/-- The Jacobi relation is the third alternating boundary for the identity map. -/
 def jacobi : (q : ℕ) → JacobiSource X q →ₗ[ℤ] PreComponent X q
   | 0 => 0
   | Nat.succ q => by
       change ((⋀[ℤ]^3 X) ⊗[ℤ] Sym[ℤ] (Fin q) X) →ₗ[ℤ]
         ((⋀[ℤ]^2 X) ⊗[ℤ] Sym[ℤ] (Fin (q + 1)) X)
-      exact Koszul.AllDegrees.differential (LinearMap.id : X →ₗ[ℤ] X) 2 q
+      exact JacobiBoundary.differential (LinearMap.id : X →ₗ[ℤ] X) 2 q
 
 @[simp]
 theorem jacobi_wedge_tmul (q : ℕ) (a : Fin 3 → X)
-    (u : Sym[ℤ] (Fin q) X) :
+    (u : Sym[ℤ] (Fin q)X) :
     jacobi X (Nat.succ q) (exteriorPower.ιMulti ℤ 3 a ⊗ₜ[ℤ] u) =
       exteriorPower.ιMulti ℤ 2 ((0 : Fin 3).removeNth a) ⊗ₜ[ℤ]
           SymmetricPower.insert ℤ X q (a 0) u -
@@ -66,9 +66,9 @@ theorem jacobi_wedge_tmul (q : ℕ) (a : Fin 3 → X)
         exteriorPower.ιMulti ℤ 2 ((2 : Fin 3).removeNth a) ⊗ₜ[ℤ]
           SymmetricPower.insert ℤ X q (a 2) u := by
   rw [jacobi]
-  change Koszul.AllDegrees.differential LinearMap.id 2 q
+  change JacobiBoundary.differential LinearMap.id 2 q
       (exteriorPower.ιMulti ℤ 3 a ⊗ₜ[ℤ] u) = _
-  rw [Koszul.AllDegrees.differential_wedge_tmul, Fin.sum_univ_three]
+  rw [JacobiBoundary.differential_wedge_tmul, Fin.sum_univ_three]
   simp only [Fin.val_zero, Nat.reduceSubDiff, one_smul, LinearMap.id_apply,
     Fin.val_one, pow_one, neg_smul, Fin.isValue]
   norm_num
@@ -205,7 +205,7 @@ def source (q : ℕ) (x : X) :
 
 @[simp]
 theorem pre_tmul (q : ℕ) (x : X) (w : ⋀[ℤ]^2 X)
-    (s : Sym[ℤ] (Fin q) X) :
+    (s : Sym[ℤ] (Fin q)X) :
     pre X q x (w ⊗ₜ[ℤ] s) =
       w ⊗ₜ[ℤ] SymmetricPower.insert ℤ X q x s := by
   change (TensorProduct.map LinearMap.id (SymmetricPower.insert ℤ X q x))

@@ -17,6 +17,9 @@ declarations.
 
 ## Main proven results
 
+All statements in this section are restated as compiled examples in
+[`LieRings/MainResults.lean`](LieRings/MainResults.lean).
+
 ### PBW and the canonical embedding
 
 - For an Abelian Lie algebra, PBW is a basis-free algebra equivalence:
@@ -131,9 +134,8 @@ PBW, quotients, dimension centrality, and free Lie rings.
 LieRings/UniversalEnveloping/   augmentation, actions, and quotients
 LieRings/DimensionSubring/      dimension-subring and lower-central results
 LieRings/Graded/                associated graded Lie algebras of filtrations
+LieRings/Metabelian/            the finite free-metabelian model
 LieRings/PBW/                   PBW statements, Higgins embedding, and conditions
 LieRings/Examples/              copyable examples
-lit/                            source papers and proof notes
+lit/obstacle/short_natural_proof.tex  proof manuscript for the main theorem
 ```
-
-The longer implementation roadmap is in [`ROADMAP.md`](ROADMAP.md).

@@ -200,7 +200,7 @@ def preEval (hmeta : LieRings.IsMetabelian L)
 @[simp]
 theorem preEval_tmul (hmeta : LieRings.IsMetabelian L)
     (f : X →ₗ[ℤ] L) (q : ℕ) (w : ⋀[ℤ]^2 X)
-    (s : Sym[ℤ] (Fin q) X) :
+    (s : Sym[ℤ] (Fin q)X) :
     preEval hmeta f q (w ⊗ₜ[ℤ] s) =
       ((symmetricAction hmeta f q s) (wedgeEval f w)).1 := by
   change preEvalBilinear hmeta f q w s = _
@@ -208,7 +208,7 @@ theorem preEval_tmul (hmeta : LieRings.IsMetabelian L)
 
 private theorem rightAction_commute_symmetricAction
     (hmeta : LieRings.IsMetabelian L) (f : X →ₗ[ℤ] L)
-    (q : ℕ) (x : X) (s : Sym[ℤ] (Fin q) X) :
+    (q : ℕ) (x : X) (s : Sym[ℤ] (Fin q)X) :
     Commute (rightAction f x) (symmetricAction hmeta f q s) := by
   let left : Sym[ℤ] (Fin q) X →ₗ[ℤ] Module.End ℤ (Derived L) :=
     (LinearMap.mulLeft ℤ (rightAction f x)).comp (symmetricAction hmeta f q)
@@ -230,7 +230,7 @@ private theorem rightAction_commute_symmetricAction
 
 theorem preEval_insert (hmeta : LieRings.IsMetabelian L)
     (f : X →ₗ[ℤ] L) (q : ℕ) (x : X) (w : ⋀[ℤ]^2 X)
-    (s : Sym[ℤ] (Fin q) X) :
+    (s : Sym[ℤ] (Fin q)X) :
     preEval hmeta f (q + 1)
         (w ⊗ₜ[ℤ] SymmetricPower.insert ℤ X q x s) =
       ⁅preEval hmeta f q (w ⊗ₜ[ℤ] s), f x⁆ := by

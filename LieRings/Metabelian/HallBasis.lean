@@ -481,26 +481,27 @@ private theorem hallMap_comp_componentTwoNormalizer :
     wedge_skew b (pairHigh w) (pairLow w)]
   simp
 
-/-- The Koszul `d₂` representation of a metabelian component.  In positive
-symmetric degree it descends because `d₂ d₃ = 0`. -/
+/-- The alternating-boundary representation of a metabelian component.  In
+positive symmetric degree it descends because consecutive boundaries compose
+to zero. -/
 private def representation :
     (q : ℕ) → Component X q →ₗ[ℤ]
       (⋀[ℤ]^1 X) ⊗[ℤ] Sym[ℤ] (Fin (q + 1)) X
   | 0 =>
-      (Koszul.AllDegrees.differential
+      (JacobiBoundary.differential
         (LinearMap.id : X →ₗ[ℤ] X) 1 0).comp
           ((TensorProduct.mk ℤ (⋀[ℤ]^2 X)
             (Sym[ℤ] (Fin 0) X)).flip
               (SymmetricPower.monomialBasis b 0 Sym.nil))
   | q + 1 =>
       (LinearMap.range (jacobi X (q + 1))).liftQ
-        (Koszul.AllDegrees.differential
+        (JacobiBoundary.differential
           (LinearMap.id : X →ₗ[ℤ] X) 1 (q + 1)) (by
             rintro _ ⟨z, rfl⟩
-            change Koszul.AllDegrees.differential LinearMap.id 1 (q + 1)
-              (Koszul.AllDegrees.differential LinearMap.id 2 q z) = 0
+            change JacobiBoundary.differential LinearMap.id 1 (q + 1)
+              (JacobiBoundary.differential LinearMap.id 2 q z) = 0
             exact LinearMap.congr_fun
-              (Koszul.AllDegrees.differential_comp_differential
+              (JacobiBoundary.differential_comp_differential
                 (LinearMap.id : X →ₗ[ℤ] X) 1 q) z)
 
 private theorem representation_hallVector (q : ℕ) (h : HallIndex ι q) :
@@ -511,11 +512,11 @@ private theorem representation_hallVector (q : ℕ) (h : HallIndex ι q) :
           SymmetricPower.monomialBasis b (q + 1) (h.head ::ₛ h.teeth) := by
   cases q with
   | zero =>
-      change Koszul.AllDegrees.differential LinearMap.id 1 0
+      change JacobiBoundary.differential LinearMap.id 1 0
           (wedge b h.head h.pivot ⊗ₜ[ℤ]
             SymmetricPower.monomialBasis b 0 Sym.nil) = _
       rw [show h.teeth = Sym.nil from Subsingleton.elim _ _, wedge,
-        Koszul.AllDegrees.differential_wedge_tmul, Fin.sum_univ_two]
+        JacobiBoundary.differential_wedge_tmul, Fin.sum_univ_two]
       simp only [Fin.val_zero, Nat.reduceSubDiff, one_smul,
         LinearMap.id_apply, Fin.val_one, pow_one, neg_smul, Fin.isValue]
       rw [removeNth_pair_zero, removeNth_pair_one]
@@ -530,10 +531,10 @@ private theorem representation_hallVector (q : ℕ) (h : HallIndex ι q) :
       rw [hhead, hpivot]
       abel
   | succ q =>
-      change Koszul.AllDegrees.differential LinearMap.id 1 (q + 1)
+      change JacobiBoundary.differential LinearMap.id 1 (q + 1)
           (wedge b h.head h.pivot ⊗ₜ[ℤ]
             SymmetricPower.monomialBasis b (q + 1) h.teeth) = _
-      rw [wedge, Koszul.AllDegrees.differential_wedge_tmul,
+      rw [wedge, JacobiBoundary.differential_wedge_tmul,
         Fin.sum_univ_two]
       simp only [Fin.val_zero, Nat.reduceSubDiff, one_smul,
         LinearMap.id_apply, Fin.val_one, pow_one, neg_smul, Fin.isValue]
@@ -689,8 +690,8 @@ private theorem coordinate_hallMap (q : ℕ) (h : HallIndex ι q)
   exact LinearMap.congr_fun hlhs x
 
 /-- The standard Hall combs are linearly independent.  The proof is integral:
-the Koszul `d₂` representation supplies an honest coefficient functional for
-each Hall comb, so no passage to a field is involved. -/
+the alternating-boundary representation supplies an honest coefficient
+functional for each Hall comb, so no passage to a field is involved. -/
 theorem hallMap_injective (q : ℕ) : Function.Injective (hallMap b q) := by
   intro x y hxy
   ext h

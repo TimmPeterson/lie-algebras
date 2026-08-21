@@ -1,4 +1,0 @@
-import LieRings.DimensionSubring.MetabelianVanishing.HigherCharacters
-
-#check LieRings.MetabelianVanishing.derived_eq_lowerCentralSeries_one
-#check LieRings.MetabelianVanishing.T_homogeneous_eq_zero_of_derived_weightOne

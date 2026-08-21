@@ -1,33 +1,36 @@
-import LieRings.DimensionSubring.MetabelianVanishing.Main
+import LieRings
 import Mathlib.Util.AssertNoSorry
 
-#print axioms LieRings.DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three
-#check LieRings.DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three
+/-!
+# Public-result audit
 
-assert_no_sorry LieRings.DegreeFour.dimensionSubring_five_le_lowerCentralSeries_three
+Every result advertised in `README.md` is checked here against accidental
+dependencies on `sorry`.
+-/
 
-/-! The two already-known odd degrees use only the established degree-three
-and degree-five results.  Keeping this check on the dedicated low-degree
-theorem makes that dependency visible even though the final reduced theorem
-also has a general `n ≥ 3` branch. -/
+assert_no_sorry LieRings.PBW.abelianEquivSymmetric
+assert_no_sorry LieRings.PBW.orderedPBWMap_surjective
+assert_no_sorry LieRings.PBW.TriangularRepresentation.freeModulePBW
+assert_no_sorry LieRings.PBW.canonicalMap_injective_int
 
-#check LieRings.MetabelianVanishing.reducedTopLayerVanishes_of_le_two
-#print axioms LieRings.MetabelianVanishing.reducedTopLayerVanishes_of_le_two
+assert_no_sorry LieRings.UEA.quotientEquivLieIdeal
+assert_no_sorry LieRings.dimensionSubring_two_eq_lowerCentralSeries_one
+assert_no_sorry LieRings.dimensionSubring_three_eq_lowerCentralSeries_two
+assert_no_sorry LieRings.FreeLieDimension.dimensionSubring_succ_eq_lowerCentralSeries
+assert_no_sorry LieRings.dimensionSubring_bracket_eq_lowerCentralSeries_of_pos
+assert_no_sorry LieRings.bracket_dimensionSubring_le_lowerCentralSeries_of_pos
+assert_no_sorry LieRings.UEA.actionSubmodule_augmentationIdeal_pow_eq_lcs
+assert_no_sorry LieRings.DegreeFour.twoDeltaFourProperty
 
-assert_no_sorry LieRings.MetabelianVanishing.reducedTopLayerVanishes_of_le_two
+assert_no_sorry LieRings.MetabelianTwoFactor.nilpotent_dimensionSubring_eq_bot
+assert_no_sorry LieRings.MetabelianTwoFactor.odd_dimensionSubring_le_lowerCentralSeries
+assert_no_sorry LieRings.MetabelianTwoFactor.dimensionSubring_five_le_lowerCentralSeries_three
 
-/-! These conditional assertions audit the Step-8 glue independently of the
-Step-7 capstone.  The corresponding unconditional assertions are added below
-when the capstone is imported. -/
-
-#check LieRings.MetabelianVanishing.reducedTopLayerVanishes_of_stepSeven
-#check LieRings.finite_metabelian_odd_dimensionSubring_eq_bot_of_stepSeven
-#check LieRings.MetabelianVanishing.GoverningWitness.eq_zero_of_completeFactorTwoCorrection
-
-#print axioms LieRings.MetabelianVanishing.reducedTopLayerVanishes_of_stepSeven
-#print axioms LieRings.finite_metabelian_odd_dimensionSubring_eq_bot_of_stepSeven
-#print axioms LieRings.MetabelianVanishing.GoverningWitness.eq_zero_of_completeFactorTwoCorrection
-
-assert_no_sorry LieRings.MetabelianVanishing.reducedTopLayerVanishes_of_stepSeven
-assert_no_sorry LieRings.finite_metabelian_odd_dimensionSubring_eq_bot_of_stepSeven
-assert_no_sorry LieRings.MetabelianVanishing.GoverningWitness.eq_zero_of_completeFactorTwoCorrection
+assert_no_sorry LieRings.LieFiltration.AssociatedGraded
+assert_no_sorry LieRings.lowerCentralFiltration
+assert_no_sorry LieRings.dimensionFiltration
+assert_no_sorry LieRings.lowerCentralToDimensionGraded
+assert_no_sorry LieRings.dimensionGradedImage
+assert_no_sorry LieRings.dimensionGradedImage_isGraded
+assert_no_sorry LieRings.DimensionGradedCokernel
+assert_no_sorry LieRings.dimensionGradedCokernel_isLieAbelian
