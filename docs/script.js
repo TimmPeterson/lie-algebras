@@ -123,8 +123,4 @@
       window.setTimeout(() => { label.textContent = 'Copy'; }, 1600);
     });
   });
-
-  document.querySelectorAll('[data-year]').forEach((element) => {
-    element.textContent = `© ${new Date().getFullYear()}`;
-  });
 })();

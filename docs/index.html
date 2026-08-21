@@ -183,73 +183,172 @@
       <div class="page-shell">
         <header class="section-heading section-heading--row reveal">
           <div>
-            <p class="section-kicker">Established results</p>
-            <h2>A compact formal library,<br>beyond the headline.</h2>
+            <p class="section-kicker">Result catalogue</p>
+            <h2>New mathematics.<br>Classical theorems, formalized.</h2>
           </div>
-          <p>Every item below is exposed as a compiled example in <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/MainResults.lean" target="_blank" rel="noreferrer">MainResults.lean</a>.</p>
+          <p><strong>NEW</strong> marks statements not previously known. Citation markers identify established results now verified in Lean. Every item is compiled in <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/MainResults.lean" target="_blank" rel="noreferrer">MainResults.lean</a>.</p>
         </header>
 
-        <div class="result-grid">
-          <article class="result-card result-card--pbw reveal">
-            <div class="card-topline"><span>PBW</span><span>01</span></div>
-            <h3>Canonical embedding</h3>
-            <div class="card-formula">L ↪ U<sub>ℤ</sub>(L)</div>
-            <p>Every Lie ring embeds in its universal enveloping algebra over ℤ—without choosing a basis.</p>
-            <ul class="result-list">
-              <li>U<sub>R</sub>(A) ≃ Sym<sub>R</sub>(A) when A is Abelian</li>
-              <li>Ordered PBW monomials span for an ordered basis</li>
-              <li>A triangular representation gives the full PBW statement</li>
-            </ul>
-            <a class="card-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/HigginsEmbedding.lean#L906" target="_blank" rel="noreferrer"><code>PBW.canonicalMap_injective_int</code><span>↗</span></a>
-          </article>
+        <div class="result-legend reveal" aria-label="Result status legend">
+          <span><b class="result-status result-status--new">NEW</b> Previously unknown</span>
+          <span><b class="result-status result-status--reference">Reference</b> Known theorem, now formalized</span>
+        </div>
 
-          <article class="result-card result-card--quotient reveal" data-delay="1">
-            <div class="card-topline"><span>Universal enveloping</span><span>02</span></div>
-            <h3>Quotients commute with U</h3>
-            <div class="card-formula card-formula--small">U<sub>R</sub>(L/I) ≃ U<sub>R</sub>(L)/⟨I⟩</div>
-            <p>The enveloping algebra of a Lie quotient is the expected associative quotient. This powers the functorial reductions used throughout.</p>
-            <a class="card-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Quotient.lean" target="_blank" rel="noreferrer"><code>UEA.quotientEquivLieIdeal</code><span>↗</span></a>
-          </article>
+        <div class="result-groups">
+          <section class="result-group result-group--new">
+            <header class="result-group__header reveal">
+              <span class="result-group__index">01</span>
+              <div>
+                <p>New results</p>
+                <h3>Dimension centrality</h3>
+              </div>
+              <p>Exact centrality, strong centrality, and their associated-graded consequences.</p>
+            </header>
 
-          <article class="result-card reveal">
-            <div class="card-topline"><span>Exact low degrees</span><span>03</span></div>
-            <h3>The filtrations first agree</h3>
-            <div class="stacked-formula"><span>δ<sub>2</sub>(L) = γ<sub>2</sub>(L)</span><span>δ<sub>3</sub>(L) = γ<sub>3</sub>(L)</span></div>
-            <p>The degree-two equality holds over every commutative base ring; degree three holds for every Lie ring.</p>
-          </article>
+            <div class="result-grid">
+              <article class="result-card reveal">
+                <div class="result-card__top"><span>Exact identity</span><span class="result-status result-status--new">NEW</span></div>
+                <h4>Exact centrality</h4>
+                <div class="result-formula">[δ<sub>n</sub>(L), L] = γ<sub>n+1</sub>(L)</div>
+                <p>For every positive n over every commutative base ring.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Centrality.lean#L99" target="_blank" rel="noreferrer"><code>dimensionSubring_bracket_eq_lowerCentralSeries_of_pos</code><span>↗</span></a>
+              </article>
 
-          <article class="result-card reveal" data-delay="1">
-            <div class="card-topline"><span>Free Lie rings</span><span>04</span></div>
-            <h3>Agreement in every degree</h3>
-            <div class="card-formula card-formula--small">δ<sub>n</sub>(F) = γ<sub>n</sub>(F)</div>
-            <p>For a free Lie ring F and every positive degree n, the dimension and lower-central filtrations coincide.</p>
-          </article>
+              <article class="result-card reveal" data-delay="1">
+                <div class="result-card__top"><span>Bracket inclusion</span><span class="result-status result-status--new">NEW</span></div>
+                <h4>Strong centrality</h4>
+                <div class="result-formula">[δ<sub>m</sub>(L), δ<sub>n</sub>(L)] ⊆ γ<sub>m+n</sub>(L)</div>
+                <p>For all positive m and n, without supplementary hypotheses.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Centrality.lean#L138" target="_blank" rel="noreferrer"><code>bracket_dimensionSubring_le_lowerCentralSeries_of_pos</code><span>↗</span></a>
+              </article>
 
-          <article class="result-card result-card--warm reveal" data-delay="2">
-            <div class="card-topline"><span>Degree four</span><span>05</span></div>
-            <h3>A sharp factor-two bound</h3>
-            <div class="card-formula card-formula--small">2δ<sub>4</sub>(L) ⊆ γ<sub>4</sub>(L)</div>
-            <p>Bartholdi–Passi’s factor-two theorem, formalized for every Lie ring.</p>
-            <a class="card-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/DegreeFour.lean#L4766" target="_blank" rel="noreferrer"><code>DegreeFour.twoDeltaFourProperty</code><span>↗</span></a>
-          </article>
+              <article class="result-card result-card--wide result-card--action reveal">
+                <div class="result-card__top"><span>Enveloping action</span><span class="result-status result-status--new">NEW</span></div>
+                <div class="result-card__split">
+                  <div>
+                    <h4>Augmentation action realizes the full tail</h4>
+                    <p>For every Lie submodule A in a Lie module and every n.</p>
+                  </div>
+                  <div class="result-formula result-formula--display">A · ω(L)<sup>n</sup> = [A,<sub>n</sub>L]</div>
+                </div>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Adjoint.lean#L132" target="_blank" rel="noreferrer"><code>UEA.actionSubmodule_augmentationIdeal_pow_eq_lcs</code><span>↗</span></a>
+              </article>
 
-          <article class="result-card result-card--centrality reveal">
-            <div class="card-topline"><span>Dimension centrality</span><span>06</span></div>
-            <h3>Brackets recover the classical series</h3>
-            <div class="formula-pair">
-              <span>[δ<sub>n</sub>(L), L] = γ<sub>n+1</sub>(L)</span>
-              <span>[δ<sub>m</sub>(L), δ<sub>n</sub>(L)] ⊆ γ<sub>m+n</sub>(L)</span>
+              <article class="result-card result-card--consequence reveal">
+                <div class="result-card__top"><span>Graded consequence</span><span class="result-status result-status--new">NEW</span></div>
+                <h4>A homogeneous Lie ideal</h4>
+                <div class="result-formula result-formula--compact">im(gr<sub>γ</sub> → gr<sub>δ</sub>) ◁<sub>gr</sub> gr<sub>δ</sub>(L)</div>
+                <p>The image of the canonical comparison map is both a Lie ideal and graded.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L174" target="_blank" rel="noreferrer"><code>dimensionGradedImage_isGraded</code><span>↗</span></a>
+              </article>
+
+              <article class="result-card result-card--consequence reveal" data-delay="1">
+                <div class="result-card__top"><span>Graded consequence</span><span class="result-status result-status--new">NEW</span></div>
+                <h4>An Abelian cokernel</h4>
+                <div class="result-formula result-formula--compact">gr<sub>δ</sub>(L) / im(gr<sub>γ</sub>) &nbsp;is Abelian</div>
+                <p>The quotient by the canonical graded image is well-defined and has zero bracket.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L248" target="_blank" rel="noreferrer"><code>dimensionGradedCokernel_isLieAbelian</code><span>↗</span></a>
+              </article>
             </div>
-            <p>More generally, augmentation-ideal action realizes the full relative lower-central tail: A·ω(L)<sup>n</sup> = [A,<sub>n</sub>L].</p>
-          </article>
+          </section>
 
-          <article class="result-card result-card--graded reveal" data-delay="1">
-            <div class="card-topline"><span>Associated graded</span><span>07</span></div>
-            <h3>The comparison is a graded Lie map</h3>
-            <div class="card-formula card-formula--small">gr<sub>γ</sub>(L) → gr<sub>δ</sub>(L)</div>
-            <p>Both filtrations define associated graded Lie algebras. The canonical image is homogeneous, and its graded cokernel is Abelian.</p>
-            <a class="card-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean" target="_blank" rel="noreferrer"><code>DimensionGradedCokernel</code><span>↗</span></a>
-          </article>
+          <section class="result-group result-group--known">
+            <header class="result-group__header reveal">
+              <span class="result-group__index">02</span>
+              <div>
+                <p>Known results</p>
+                <h3>Dimension subrings</h3>
+              </div>
+              <p>Classical dimension-series theorems, now available as compiled Lean statements.</p>
+            </header>
+
+            <div class="result-grid">
+              <article class="result-card reveal">
+                <div class="result-card__top"><span>Degree two</span><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a></div>
+                <h4>First equality</h4>
+                <div class="result-formula">δ<sub>2</sub>(L) = γ<sub>2</sub>(L)</div>
+                <p>Over every commutative base ring.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/DegreeTwo.lean#L124" target="_blank" rel="noreferrer"><code>dimensionSubring_two_eq_lowerCentralSeries_one</code><span>↗</span></a>
+              </article>
+
+              <article class="result-card reveal" data-delay="1">
+                <div class="result-card__top"><span>Degree three</span><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a></div>
+                <h4>Second equality</h4>
+                <div class="result-formula">δ<sub>3</sub>(L) = γ<sub>3</sub>(L)</div>
+                <p>For every Lie ring.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/DegreeThree.lean#L704" target="_blank" rel="noreferrer"><code>dimensionSubring_three_eq_lowerCentralSeries_two</code><span>↗</span></a>
+              </article>
+
+              <article class="result-card reveal">
+                <div class="result-card__top"><span>Degree four</span><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a></div>
+                <h4>Factor-two bound</h4>
+                <div class="result-formula">2δ<sub>4</sub>(L) ⊆ γ<sub>4</sub>(L)</div>
+                <p>For every Lie ring.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/DegreeFour.lean#L4766" target="_blank" rel="noreferrer"><code>DegreeFour.twoDeltaFourProperty</code><span>↗</span></a>
+              </article>
+
+              <article class="result-card reveal" data-delay="1">
+                <div class="result-card__top"><span>Free Lie rings</span><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a></div>
+                <h4>Equality in every degree</h4>
+                <div class="result-formula">δ<sub>n</sub>(F) = γ<sub>n</sub>(F)</div>
+                <p>For a free Lie ring F and every positive n.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/FreeLie.lean#L663" target="_blank" rel="noreferrer"><code>FreeLieDimension.dimensionSubring_succ_eq_lowerCentralSeries</code><span>↗</span></a>
+              </article>
+            </div>
+          </section>
+
+          <section class="result-group result-group--foundations">
+            <header class="result-group__header reveal">
+              <span class="result-group__index">03</span>
+              <div>
+                <p>Formalized foundations</p>
+                <h3>UEA, PBW, and utilities</h3>
+              </div>
+              <p>Reusable formulations of PBW and universal-enveloping constructions over rings.</p>
+            </header>
+
+            <div class="result-grid">
+              <article class="result-card result-card--wide result-card--pbw-suite reveal">
+                <div class="result-card__top">
+                  <span>PBW formulations</span>
+                  <span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span>
+                </div>
+                <h4>PBW in three useful forms</h4>
+                <div class="pbw-statements">
+                  <span>U<sub>R</sub>(A) ≃ Sym<sub>R</sub>(A)<small>A Abelian</small></span>
+                  <span>ordered monomials span U<sub>R</sub>(L)<small>ordered basis</small></span>
+                  <span>triangular action ⟹ full PBW<small>bijective PBW map</small></span>
+                </div>
+                <div class="result-sources">
+                  <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/Abelian.lean#L62" target="_blank" rel="noreferrer"><code>PBW.abelianEquivSymmetric</code><span>↗</span></a>
+                  <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/Surjectivity.lean#L229" target="_blank" rel="noreferrer"><code>PBW.orderedPBWMap_surjective</code><span>↗</span></a>
+                  <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/TriangularRepresentation.lean#L166" target="_blank" rel="noreferrer"><code>TriangularRepresentation.freeModulePBW</code><span>↗</span></a>
+                </div>
+              </article>
+
+              <article class="result-card reveal">
+                <div class="result-card__top">
+                  <span>Integral embedding</span>
+                  <span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span>
+                </div>
+                <h4>Canonical embedding</h4>
+                <div class="result-formula result-formula--display">L ↪ U<sub>ℤ</sub>(L)</div>
+                <p>Every Lie ring embeds canonically, without a basis or auxiliary parameter.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/HigginsEmbedding.lean#L906" target="_blank" rel="noreferrer"><code>PBW.canonicalMap_injective_int</code><span>↗</span></a>
+              </article>
+
+              <article class="result-card result-card--quotient reveal" data-delay="1">
+                <div class="result-card__top">
+                  <span>Universal enveloping</span>
+                  <span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span>
+                </div>
+                <h4>Quotients commute with U</h4>
+                <div class="result-formula result-formula--compact">U<sub>R</sub>(L/I) ≃ U<sub>R</sub>(L)/⟨I⟩</div>
+                <p>The expected associative quotient, for every Lie ideal I.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Quotient.lean#L169" target="_blank" rel="noreferrer"><code>UEA.quotientEquivLieIdeal</code><span>↗</span></a>
+              </article>
+            </div>
+          </section>
         </div>
       </div>
     </section>
@@ -603,7 +702,11 @@
         <a href="#definitions">Definitions</a>
         <a href="#references">References</a>
       </div>
-      <p class="footer-meta">Lean 4 · mathlib v4.29.0<br><span data-year></span></p>
+      <p class="footer-meta">
+        <span class="footer-authors">Vasiliy Ionin · Tima Petrov</span>
+        <time datetime="2026-08">August 2026</time>
+        <span>Lean 4 · mathlib v4.29.0</span>
+      </p>
     </div>
   </footer>
 </body>
