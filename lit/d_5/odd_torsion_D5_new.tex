@@ -1,0 +1,453 @@
+\documentclass[10pt,a4paper]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[a4paper,left=18mm,right=18mm,top=15mm,bottom=15mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\microtypesetup{expansion=false}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb Z[1/2]}
+\newcommand{\E}{\mathbb Q/\mathbb Z[1/2]}
+\newcommand{\U}{\operatorname U}
+\newcommand{\Sym}{\operatorname {Sym}}
+\newcommand{\aug}{\varpi}
+\newcommand{\dlt}{\delta}
+\newcommand{\gm}{\gamma}
+
+\title[Odd torsion in the fifth Lie dimension quotient]
+{Odd torsion in the fifth Lie dimension quotient:\\
+a four-weight proof}
+\author{}
+\date{22 August 2026}
+
+\begin{document}
+
+\begin{abstract}
+For a Lie ring $L$, let
+$\delta_n(L)=L\cap\varpi(L)^n$, where $\varpi(L)$ is the augmentation
+ideal of its enveloping algebra.  We prove that
+$\delta_5(L)/\gamma_5(L)$ has no odd torsion.  Localization at $2$
+reduces the theorem directly to $\delta_5(K)=0$ for a class-four
+$\mathbb Z[1/2]$-Lie algebra $K$.  Its metabelian quotient puts a
+possible element in $K''$.  There are then only two exposed PBW edges
+in bracket weight four, of shapes $211$ and $31$.  Their readouts are
+explicit Koszul coboundaries.  Polarizing only the two weight-one
+entries makes their common $22$ root the weight-four face of one full
+commutator relation, so it cancels without a separate overlap ledger.
+Only division by $2$ is used.
+\end{abstract}
+
+\maketitle
+
+For a Lie ring $A$ write $\U(A)$ for its universal enveloping algebra,
+$\aug(A)$ for its augmentation ideal, and
+\[
+ \dlt_s(A)=A\cap\aug(A)^s,
+ \qquad \gm_{s+1}(A)=[\gm_s(A),A].
+\]
+We use the established metabelian estimate
+\begin{equation}
+                 2\dlt_s(M)\subseteq\gm_s(M)
+                 \qquad(M''=0),                         \label{eq:PS}
+\end{equation}
+proved in \cite[Theorem 2.1]{PS}.  Intersections are inverse images
+under the canonical map $A\to\U(A)$.
+
+\section{The class-four packet}
+
+Throughout this section scalars are in $\R$, and a character means an
+$\R$-linear map to $\E$.  Multiplication by $2$ is invertible on $\E$;
+moreover $\E$
+detects nonzero elements of finitely generated $\R$-modules (use the
+structure theorem over the PID $\R$).  We prove the only new ingredient
+first.  Dimension subrings here are formed in $\U_{\R}$.  This causes no
+conflict with \eqref{eq:PS}.  Indeed, for $\R$-modules $P,Q$ the map
+$P\otimes_{\Z}Q\to P\otimes_{\R}Q$ is an isomorphism: a factor $1/2$
+may be moved from one entry to the other.  Hence the nonunital tensor
+algebras over $\Z$ and $\R$ agree.  Quotienting by the same enveloping
+relations therefore identifies the augmentation ideals of
+$\U_{\Z}(K)$ and $\U_{\R}(K)$, with all their powers.  Their lower
+central terms agree as well, since $r[x,y]=[rx,y]$ for $r\in\R$.
+
+\begin{lemma}[four-weight packet]\label{lem:packet}
+Let $K$ be an $\R$-Lie algebra with $\gm_5(K)=0$.  Then
+\[
+                         \dlt_5(K)\cap K''=0.
+\]
+\end{lemma}
+
+\begin{proof}
+It is enough to consider finitely generated $K$.  Indeed, a witness
+for $a\in\delta_5(K)$ is a finite tensor-algebra identity.  Adjoin to
+its entries finitely many entries of an expression for $a\in K''$.
+The $\R$-subalgebra they generate is still of class at most four, is
+finitely generated as an $\R$-module (it is a quotient of a
+finite-rank free nilpotent algebra of class four), and contains the
+same two witnesses.
+
+Suppose that $0\ne a\in\delta_5(K)\cap K''$.  Put
+\[
+ V=K/\gm_2K,\quad B=\gm_2K/\gm_3K,\quad
+ W=\gm_3K/\gm_4K,\quad D=\gm_4K.
+\]
+Since $K''=[\gamma_2K,\gamma_2K]\subseteq D$, the finitely generated
+module $D$ has a character
+$\chi:D\to\E$ with $\chi(a)\ne0$.  Bracketing gives a well-defined map
+\begin{equation}
+                 g:V\otimes W\longrightarrow D,
+                 \qquad g(x,w)=[x,w].                  \label{eq:g}
+\end{equation}
+Changing its lifts changes the bracket by
+$[\gamma_2K,\gamma_3K]+[K,\gamma_4K]\subseteq\gamma_5K=0$.
+For $b\in B$ and $x,y\in V$ define
+\begin{equation}
+ \Theta^+_\chi(b;xy)=\frac12\chi
+ \bigl([[b,x],y]+[[b,y],x]\bigr).                     \label{eq:theta}
+\end{equation}
+This is independent of all lifts: changing a $B$-lift by $\gamma_3K$
+or a $V$-lift by $\gamma_2K$ changes the bracket by $\gamma_5K$.
+It is symmetric in $x,y$, and Jacobi gives
+\begin{equation}
+ [[b,x],y]-[[b,y],x]=[b,[x,y]].                         \label{eq:jacobi}
+\end{equation}
+
+Choose a finite presentation $K=F/\mathcal R$, where
+$F=F_1\oplus\cdots\oplus F_4$ is the free nilpotent $\R$-Lie algebra
+of class four on finitely many generators.  The following additive
+presentations have free terms, since $\R$ is a PID:
+\[
+ \begin{array}{lll}
+ S_1=\ker(F_1\oplus F_2\to K/\gamma_3K),
+   &S_0=F_1\oplus F_2,&\partial_S:S_1\hookrightarrow S_0,\\
+ R_1=\ker(F_1\oplus F_2\oplus F_3\to K/\gamma_4K),
+   &R_0=F_1\oplus F_2\oplus F_3,&\partial_R:R_1\hookrightarrow R_0.
+ \end{array}
+\]
+For $s\in S_0$ write $s_V,s_B$ for the images of its $F_1,F_2$
+coordinates in $V,B$; for $z\in R_0$ define $z_V,z_W$ similarly.
+On symmetric powers set
+\begin{align}
+ T_3(s_1s_2s_3)
+   &=\Theta^+_\chi((s_1)_B;(s_2)_V(s_3)_V)
+     +\Theta^+_\chi((s_2)_B;(s_1)_V(s_3)_V)\notag\\
+   &\qquad+\Theta^+_\chi((s_3)_B;(s_1)_V(s_2)_V),       \label{eq:T3}\\
+ T_2(z_1z_2)
+   &=-\chi g((z_1)_V,(z_2)_W)
+     -\chi g((z_2)_V,(z_1)_W).                         \label{eq:T2}
+\end{align}
+These formulas are symmetric, hence well defined.  If
+$K_m(C)_1=C_1\otimes\Sym^{m-1}C_0$ and
+$\partial(u;v)=\partial(u)v$, put $dT=T\circ\partial$.  Then
+\begin{align}
+ (dT_3)(U;vw)&=\Theta^+_\chi(U_B;v_Vw_V),               \label{eq:dT3}\\
+ (dT_2)(Y;z)&=-\chi g(z_V,Y_W).                         \label{eq:dT2}
+\end{align}
+Indeed $U_V=Y_V=0$, so the displayed terms are the only survivors.
+Also $T_3$ and $T_2$ are supported respectively in weights
+$2+1+1=4$ and $3+1=4$.
+
+We now extract the two chains to which
+\eqref{eq:dT3}--\eqref{eq:dT2} apply.  Choose
+$f\in F''\cap F_4$ mapping to $a$; this is possible because
+$F''\subseteq F_4$ in class four and $F''\twoheadrightarrow K''$.
+Since $a\in\delta_5(K)$, there is
+$\theta\in\mathcal R\U(F)$ such that
+\begin{equation}
+                         \theta-f\in\aug(F)^5.          \label{eq:witness}
+\end{equation}
+Here the two-sided relation ideal is $\mathcal R\U(F)$, since
+$x\rho=\rho x+[x,\rho]$ and $[x,\rho]\in\mathcal R$.
+Write
+$\theta=\sum_{\alpha\in A}c_\alpha\rho_\alpha u_\alpha$ with $A$
+finite, giving every occurrence $\alpha$ of a full relation its own
+label; angle brackets below remember this occurrence label, not merely
+the value of $\rho_\alpha$.  Fix homogeneous PBW
+bases and work modulo total weight at least five.  Put
+$\rho^{[k]}=\rho_1+\cdots+\rho_k$ for the homogeneous pieces of
+$\rho$, and write $\langle\rho,k\rangle$ for an occurrence which
+evaluates as $\rho^{[k]}$ but retains the label $\rho$.  Besides the
+ordinary PBW swap, use the literal labelled rules
+\begin{align}
+ vu&=uv+[v,u],\notag\\
+ v\langle\rho,k\rangle
+   &=\langle\rho,k\rangle v+
+     \langle[v,\rho],k+h\rangle &&(v\in F_h),\notag\\
+ \langle\rho,k\rangle
+   &=\langle\rho,k-1\rangle+\rho_k .                  \label{eq:collect}
+\end{align}
+Indices are capped at four.  The second equality is exact in the
+range retained because
+$\operatorname {pr}_{\leq k+h}[v,\rho]=[v,\rho^{[k]}]$.
+Thus its correction is still labelled by the full relation
+$[v,\rho]\in\mathcal R$, whereas the unmarked $\rho_k$ in the last
+line is never declared a relation.
+
+Process factor number from four down to one, using a fixed PBW order
+and decreasing the cut index at each prescribed occurrence.  Every
+commutator correction has fewer factors.  In a three-factor row with two ordinary
+$F_1$-entries put the mark on the left, use the polarized transfer
+\eqref{eq:polarize} below once, and append its lower-factor outputs.
+In a $22$ row put the
+ordinary factor on the left by $\rho Y=Y\rho+[\rho,Y]$, retaining that
+placement thereafter.  Order a row by factor number, its unresolved
+compulsory-transfer flag, its marked cut index (put $-1$ if unmarked),
+and its number of PBW inversions, all in descending processing order.
+Every same-factor output lowers the first datum at which it changes,
+and every commutator output has fewer factors.  Thus the calculation
+terminates.
+
+Here is an indexed form of the collector.  Let $\mathcal P$ be the
+free $\R$-module on labelled placed rows of weight at most four, and
+let $\operatorname{ev}:\mathcal P\to\U(F)/\U(F)_{\ge5}$ evaluate a
+row, where $\U(F)_{\ge5}$ is the span of PBW monomials of total weight
+at least five.  PBW-expand each $u_\alpha$, retaining the relation
+mark; this gives an initial frontier $C_0\in\mathcal P$.  If step $j$ selects the occurrence
+$r_j$ with coefficient $b_j$ and its literal rule has output
+$O_j\in\mathcal P$, give every occurrence in $O_j$ a fresh child label
+recording $r_j$ as parent, and set
+\begin{equation}
+ C_{j+1}=C_j-b_jr_j+b_jO_j,\qquad
+ C_0-C_N=\sum_{j=0}^{N-1}b_j(r_j-O_j).                 \label{eq:frontier}
+\end{equation}
+The second equality is induction on $N$, and
+$\operatorname{ev}(r_j-O_j)=0$ for every $j$.  Thus
+$\operatorname{ev}(C_N)=\operatorname{ev}(C_0)=\theta$ in the retained
+weights.  At the one-factor frontier, the cut descendants belonging to one
+marked relation occurrence are first reassembled to the full relation
+and only then set equal to zero in $K$.
+
+For $p=3,2$, let $A_p$ be the finite set of distinctly labelled marked
+$p$-factor occurrences when their factor-preserving symbols are taken,
+including every correction arriving from the preceding queue; write
+$c_\nu$ for the coefficient of occurrence $\nu$.  After the prescribed
+placement and projection, define
+\[
+ q_3(\nu)=(\rho_\nu^{[2]};x_\nu y_\nu)\in K_3(S)_1,
+ \qquad q_2(\nu)=(\rho_\nu^{[3]};z_\nu)\in K_2(R)_1,
+ \qquad
+ \Xi_p=\sum_{\nu\in A_p}c_\nu q_p(\nu).
+\]
+The truncations lie in the asserted kernels because $\rho_\nu$ maps to
+zero and the omitted pieces have weight at least three, respectively
+four.  Let $\sigma_p$ denote the $p$-factor PBW coefficient in weights
+at most four.  PBW identifies the factor-number symbol with a symmetric
+algebra.  Thus the factor-preserving output of occurrence $\nu$ is
+$\partial q_p(\nu)$ and every other output enters a lower queue.
+Induction in \eqref{eq:frontier} gives the literal identities
+\begin{equation}
+ \sigma_p(\theta)=\sum_{\nu\in A_p}c_\nu\partial q_p(\nu)
+                 =\partial\Xi_p\qquad(p=3,2).           \label{eq:symbol}
+\end{equation}
+Total bracket weight is preserved throughout, and PBW gives
+\begin{equation}
+                         \aug(F)^5=\U(F)_{\ge5}.         \label{eq:PBWweight}
+\end{equation}
+Since $f$ has one factor,
+\eqref{eq:witness}--\eqref{eq:PBWweight} imply
+\begin{equation}
+       \partial\Xi_3,\ \partial\Xi_2
+       \quad\hbox{have weight at least five}.           \label{eq:cycles}
+\end{equation}
+
+For clarity, we compute the complete one-factor output of this
+triangular collection.  Positive weights summing to at most four give
+the exhaustive table
+\begin{equation}
+\begin{array}{c|c|c}
+\text{factors}&\text{weight partitions}&\text{non-full exposed edge}\\ \hline
+4&1111&\text{none}\\
+3&111,112&211\\
+2&11,12,13,22&31\text{ and the common }22\text{ root}\\
+1&1,2,3,4&\text{primitive coefficient.}
+\end{array}                                                   \label{eq:table}
+\end{equation}
+Indeed, a primitive descendant contains one homogeneous relation
+component of weight $s$ and external entries of total weight $4-s$.
+Replacing that component by its full labelled relation leaves only
+the successive tail transitions
+\[
+       (1\longrightarrow2)+1+1,\qquad
+       (1,2\longrightarrow3)+1,\qquad
+       (1,2,3\longrightarrow4).
+\]
+These are $211$, $31$, and terminal reassembly.  If an external entry
+has weight two, the sole additional possibility is $4=2+2$, the common
+root treated below.  To see directly that no spectator term has been
+lost, repeated transfer is the literal identity
+\begin{equation}
+ Bx_1\cdots x_t=
+ \sum_{I\subseteq\{1,\ldots,t\}}x_{I^c}[B;x_I],         \label{eq:subsets}
+\end{equation}
+where the two orders are inherited from $1<\cdots<t$; induction on
+$t$ proves the formula.  Applied simultaneously to all components of a
+labelled relation, each proper-subset term, with its spectators, is a
+component of the full labelled commutator $[\rho;x_I]$.  Only the full
+subset can reach one factor.  This proves the asserted exhaustiveness.
+
+For the $211$ transition write its relation as
+$\rho=X-B+\rho_{\ge3}$.  Exact collection gives
+\begin{equation}
+ Bxy=xyB+x[B,y]+y[B,x]+[[B,x],y].                       \label{eq:Bxy}
+\end{equation}
+The primitive tooth of the tail $-B$ is $-[[B,x],y]$.
+Its symmetric part is $-\Theta^+_\chi(B;xy)$, exactly
+\eqref{eq:dT3}, because
+$U_B=-B$.  Nothing is lost by symmetrizing: with $Y=[x,y]$,
+\begin{equation}
+ \rho xy=\tfrac12\rho(xy+yx)+\tfrac12Y\rho
+                              +\tfrac12[\rho,Y].         \label{eq:polarize}
+\end{equation}
+The difference between the oriented and symmetric teeth is
+$-\frac12[B,Y]$ by \eqref{eq:jacobi}.  The weight-four face of the
+last output in \eqref{eq:polarize} is also $-\frac12[B,Y]$, with the
+opposite boundary orientation,
+because
+$[\rho,Y]=[X,Y]-[B,Y]+[\rho_{\ge3},Y]$ is a full relation.
+Thus these faces cancel.  The placed output $Y\rho$ is the same $22$
+edge; the identity $\rho Y=Y\rho+[\rho,Y]$ shows that its other
+orientation differs by that same full relation.  Hence the root is
+counted once and contributes no additional primitive term.
+This is labelwise for every $22$ row, not merely after summing their
+symmetric symbols.  Since $F_2$ is spanned by brackets, reduce to
+$Y=[x,y]$ and apply \eqref{eq:polarize} to
+$\rho Y=\rho xy-\rho yx$.  The two symmetric three-factor terms cancel
+and the remaining terms are exactly
+$Y\rho+[\rho,Y]=\rho Y$.  Thus each occurrence carries its own closing
+full-relation cell.
+
+For the $31$ transition write the corresponding element of $R_1$ with
+weight-three coordinate $-W$.  Moving this tail past $x$ gives
+$-[W,x]=[x,W]$, whose character value is
+$-\chi g(x,-W)=(dT_2)(Y;x)$ by \eqref{eq:dT2}.  The last transition
+reassembles a full relation.
+
+We can now write the promised indexed readout.  Partition the terminal
+one-factor occurrences into $A_1^{\rm rel}$ and $A_1^{\rm exp}$,
+according as they are reassembled full relations $\tau_\mu$ or
+unmarked primitive terms $z_\mu$; retain their coefficients $c_\mu$,
+and write $\bar z_\mu$ for the image in $K$.
+Taking the one-factor PBW coefficient in \eqref{eq:frontier}, and then
+using \eqref{eq:witness}--\eqref{eq:PBWweight}, gives the literal equality
+\[
+ f=\sigma_1(\theta)=\sigma_1(\operatorname{ev}C_N)=
+ \sum_{\mu\in A_1^{\rm rel}}c_\mu\tau_\mu+
+ \sum_{\mu\in A_1^{\rm exp}}c_\mu z_\mu .
+\]
+The first sum maps to zero in $K$.  Since fresh labels retain their
+parent, the replacement list is a finite rooted forest.  Table
+\eqref{eq:table} defines a source map
+$s:A_1^{\rm exp}\to A_3\sqcup A_2$: it sends a terminal tooth to the
+unique queue occurrence where its $211$ or $31$ edge was exposed.
+The occurrencewise computations above, including the labelwise $22$
+closure, say precisely that for $\nu\in A_p$,
+\begin{equation}
+ \sum_{\substack{\mu\in A_1^{\rm exp}\\s(\mu)=\nu}}
+ c_\mu\chi(\bar z_\mu)
+       =c_\nu(dT_p)(q_p(\nu))\qquad(p=3,2).             \label{eq:fibre}
+\end{equation}
+Summing the disjoint finite fibres in \eqref{eq:fibre}, and using the
+definitions of $\Xi_p$, gives the completely indexed formula
+\begin{align}
+ \chi(a)
+ &=\sum_{\mu\in A_1^{\rm exp}}c_\mu\chi(\bar z_\mu)\notag\\
+ &=\sum_{\nu\in A_3}c_\nu(dT_3)(q_3(\nu))
+   +\sum_{\nu\in A_2}c_\nu(dT_2)(q_2(\nu))\notag\\
+ &=dT_3(\Xi_3)+dT_2(\Xi_2).                            \label{eq:readout}
+\end{align}
+$A_1^{\rm exp},A_3,A_2$ are finite sets of distinct occurrence labels.
+Thus \eqref{eq:frontier}, proved by induction on the finite replacement
+list, is the only global bookkeeping step; no confluence assertion or
+unindexed cancellation is used.
+
+\pagebreak[3]
+For comparison, all possible adjacent
+overlaps are also closed:
+cuts commute by linearity and with transfers by the projection identity
+following \eqref{eq:collect}; ordinary three-factor transfers give
+Jacobi, disjoint transfers commute, and a marked overlap is
+\[
+ [u,[v,\rho]]-[v,[u,\rho]]=[[u,v],\rho].
+\]
+Interchanging $x,y$ across the polarized step gives precisely
+$\rho(xy-yx)-[x,y]\rho-[\rho,[x,y]]=0$, the $22$ closure above.
+Since every rule is an adjacent transfer, a cut, or this single
+polarization, there are no further critical pairs.
+
+Finally, \eqref{eq:dT3}--\eqref{eq:dT2}, \eqref{eq:cycles}, and the
+weight-four support give
+\[
+ \chi(a)=T_3(\partial\Xi_3)+T_2(\partial\Xi_2)=0,
+\]
+contrary to the choice of $\chi$.  This proves the lemma.
+\end{proof}
+
+\section{Localization and conclusion}
+
+\begin{corollary}\label{cor:class4}
+If $K$ is an $\R$-Lie algebra with $\gamma_5(K)=0$, then
+$\delta_5(K)=0$.
+\end{corollary}
+
+\begin{proof}
+For $x\in\delta_5(K)$, naturality puts its image in
+$\delta_5(K/K'')$.  It is killed by $2$ by \eqref{eq:PS}, since this
+metabelian algebra has zero fifth lower-central term.
+As $2$ is invertible, $x\in K''$; Lemma~\ref{lem:packet} gives $x=0$.
+\end{proof}
+
+\begin{theorem}
+For every Lie ring $L$, the abelian group
+\[
+                         \delta_5(L)/\gamma_5(L)
+\]
+has no nonzero element of odd order.
+\end{theorem}
+
+\begin{proof}
+Suppose that an odd-order class is represented by $x\in\delta_5(L)$,
+and put $M=L/\gamma_5(L)$.  Its image $\bar x$ is nonzero and belongs
+to $\delta_5(M)$.  Localize at $2$:
+\[
+                            K=\R\otimes_\Z M.
+\]
+The element $1\otimes\bar x$ is still nonzero: the kernel of
+$M\to K$ consists of elements killed by a power of $2$.  Base change
+for enveloping algebras gives
+\[
+ \U_\R(K)=\R\otimes_\Z\U_\Z(M),\qquad
+ \aug_\R(K)^5=\R\otimes_\Z\aug_\Z(M)^5,
+\]
+so $1\otimes\bar x\in\delta_5(K)$.  But $K$ has class at most four,
+and Corollary~\ref{cor:class4} says that $\delta_5(K)=0$, a
+contradiction.
+\end{proof}
+
+\begin{remark}
+Only the averages in \eqref{eq:theta} and \eqref{eq:polarize} require
+a denominator, and that denominator is $2$.  Formula
+\eqref{eq:polarize} is the small point of the proof: it
+places the $22$ term and the full commutator relation in the same
+identity, so the Jacobi root \eqref{eq:jacobi} cannot be omitted or
+counted twice.
+\end{remark}
+
+\begin{thebibliography}{9}
+
+\bibitem{PS}
+I.~B.~S. Passi and T.~Sicking,
+\emph{Dimension quotients of metabelian Lie rings},
+Internat. J. Algebra Comput. \textbf{27} (2017), 251--258;
+\href{https://arxiv.org/abs/1602.04919}{arXiv:1602.04919}.
+
+\end{thebibliography}
+
+\end{document}
