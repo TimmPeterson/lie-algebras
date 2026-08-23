@@ -410,6 +410,14 @@ def quotientHom (P : FreePresentation L) (hJI : J ≤ I) :
       quotientMk I (P.evaluation x)
     rfl
 
+/-- The morphism from a presentation of `L` to the compatible presentation of `L/I`. -/
+def quotientProjectionHom (P : FreePresentation L) (I : LieIdeal ℤ L) :
+    Hom P (P.quotient I) where
+  base := quotientMk I
+  free := LieHom.id
+  commutes := by
+    rfl
+
 /-- The module `I/J`, represented as the quotient of the subtype `I`. -/
 abbrev IdealQuotient :=
   I ⧸ J.toSubmodule.comap I.toSubmodule.subtype
@@ -471,6 +479,12 @@ def hopfTransgression (P : FreePresentation L)
     ((J.toSubmodule.comap I.toSubmodule.subtype).mkQ.comp
       (hopfTransgressionRaw P I))
     (hopfTransgressionRaw_hopfRelations_le_ker P hcentral)
+
+/-- The five-term transgression `H₂(L/I) → I/[L,I]` attached to a presentation of `L`. -/
+def hopfQuotientTransgression (P : FreePresentation L) (I : LieIdeal ℤ L) :
+    (P.quotient I).hopfSecondHomology →ₗ[ℤ]
+      IdealQuotient I ⁅(⊤ : LieIdeal ℤ L), I⁆ :=
+  hopfTransgression P (le_refl ⁅(⊤ : LieIdeal ℤ L), I⁆)
 
 @[simp]
 theorem hopfTransgression_mk (P : FreePresentation L)
@@ -536,6 +550,109 @@ theorem map_derived_eq_derived (P : FreePresentation L) :
   rw [LieIdeal.map_bracket_eq P.evaluation P.surjective,
     map_top_eq_top_of_surjective P]
 
+/-- Exactness at `H₂(L/I)` in the Hopf five-term sequence, proved directly from one free
+presentation. -/
+theorem range_quotientProjectionHom_hopfMap_eq_ker_hopfQuotientTransgression
+    (P : FreePresentation L) (I : LieIdeal ℤ L) :
+    LinearMap.range (quotientProjectionHom P I).hopfMap =
+      LinearMap.ker (hopfQuotientTransgression P I) := by
+  have hmapI :
+      LieIdeal.map P.evaluation (LieIdeal.comap P.evaluation I) = I := by
+    apply le_antisymm
+    · exact LieIdeal.map_comap_le
+    · intro y hy
+      obtain ⟨x, rfl⟩ := P.surjective y
+      exact LieIdeal.mem_map hy
+  have hmapDenominator :
+      LieIdeal.map P.evaluation (P.quotient I).hopfDenominator =
+        ⁅(⊤ : LieIdeal ℤ L), I⁆ := by
+    calc
+      LieIdeal.map P.evaluation (P.quotient I).hopfDenominator =
+          ⁅LieIdeal.map P.evaluation (⊤ : LieIdeal ℤ P.Free),
+            LieIdeal.map P.evaluation (P.quotient I).relations⁆ :=
+        LieIdeal.map_bracket_eq P.evaluation P.surjective
+      _ = ⁅(⊤ : LieIdeal ℤ L), I⁆ := by
+        rw [map_top_eq_top_of_surjective P, quotient_relations, hmapI]
+  apply le_antisymm
+  · rintro z ⟨y, rfl⟩
+    rw [LinearMap.mem_ker]
+    induction y using Submodule.Quotient.induction_on with
+    | _ x =>
+        rw [Hom.hopfMap_mk]
+        change hopfQuotientTransgression P I
+            (Submodule.Quotient.mk
+              ((quotientProjectionHom P I).numeratorMap x)) = 0
+        rw [hopfQuotientTransgression, hopfTransgression_mk]
+        apply (Submodule.Quotient.mk_eq_zero _).2
+        change P.evaluation (x : P.Free) ∈
+          ⁅(⊤ : LieIdeal ℤ L), I⁆
+        have hx : P.evaluation (x : P.Free) = 0 := x.property.1
+        rw [hx]
+        exact LieSubmodule.zero_mem _
+  · intro z hz
+    induction z using Submodule.Quotient.induction_on with
+    | _ x =>
+        rw [LinearMap.mem_ker] at hz
+        change hopfQuotientTransgression P I
+            (Submodule.Quotient.mk x) = 0 at hz
+        rw [hopfQuotientTransgression, hopfTransgression_mk] at hz
+        have hxcomm : P.evaluation (x : (P.quotient I).Free) ∈
+            ⁅(⊤ : LieIdeal ℤ L), I⁆ := by
+          have hmem : hopfTransgressionRaw P I x ∈
+              (⁅(⊤ : LieIdeal ℤ L), I⁆).toSubmodule.comap
+                I.toSubmodule.subtype :=
+            (Submodule.Quotient.mk_eq_zero _).1 hz
+          exact hmem
+        have hxmap : P.evaluation (x : (P.quotient I).Free) ∈
+            LieIdeal.map P.evaluation (P.quotient I).hopfDenominator := by
+          rw [hmapDenominator]
+          exact hxcomm
+        obtain ⟨y, hy⟩ :=
+          LieIdeal.mem_map_of_surjective P.surjective hxmap
+        let xFree : P.Free := by
+          change FreeLieAlgebra ℤ P.Generators
+          simpa only [Free, quotient] using
+            (x : (P.quotient I).Free)
+        let yFree : P.Free := by
+          exact y.1
+        let xTarget : (P.quotient I).Free := x
+        let yTarget : (P.quotient I).Free := by
+          change FreeLieAlgebra ℤ P.Generators
+          exact yFree
+        have hyFree : P.evaluation yFree = P.evaluation xFree := by
+          simpa only [xFree, yFree, Free, quotient] using hy
+        have hyDenominator : yTarget ∈ (P.quotient I).hopfDenominator := by
+          simpa only [yTarget, yFree, Free, quotient] using y.property
+        have hxderived : xFree ∈ P.derived := by
+          simpa only [xFree, derived, Free, quotient] using x.property.2
+        have hyderived : yFree ∈ P.derived := by
+          simpa only [yFree, derived, Free, quotient] using
+            ((P.quotient I).hopfDenominator_le_hopfNumerator hyDenominator).2
+        let r : P.hopfNumerator :=
+          ⟨xFree - yFree, ⟨by
+            change P.evaluation (xFree - yFree) = 0
+            rw [map_sub, hyFree, sub_self],
+            P.derived.sub_mem hxderived hyderived⟩⟩
+        refine ⟨Submodule.Quotient.mk r, ?_⟩
+        rw [Hom.hopfMap_mk]
+        apply (Submodule.Quotient.eq _).2
+        change
+          ((quotientProjectionHom P I).numeratorMap r :
+              (P.quotient I).Free) - (x : (P.quotient I).Free) ∈
+            (P.quotient I).hopfDenominator
+        have hdifference :
+            ((quotientProjectionHom P I).numeratorMap r :
+                (P.quotient I).Free) - (x : (P.quotient I).Free) =
+              -yTarget := by
+          have hr : ((quotientProjectionHom P I).numeratorMap r :
+              (P.quotient I).Free) = xTarget - yTarget := by
+            rfl
+          rw [hr]
+          change (xTarget - yTarget) - xTarget = -yTarget
+          abel
+        rw [hdifference]
+        exact (P.quotient I).hopfDenominator.neg_mem hyDenominator
+
 /-- The Hopf transgression is onto when `I/J` lies in the derived ideal of `L/J`. -/
 theorem hopfTransgression_surjective
     (P : FreePresentation L) (hJI : J ≤ I)
@@ -591,6 +708,25 @@ def quotientPresentationCokernelEquiv
     ((hopfTransgression P hcentral).quotKerEquivOfSurjective
       (hopfTransgression_surjective P hJI hcentral hstem))
 
+/-- The Hopf five-term cokernel calculation for an ideal contained in the derived ideal, at the
+level of one chosen free presentation. -/
+def quotientProjectionCokernelEquiv
+    (P : FreePresentation L) (I : LieIdeal ℤ L)
+    (hstem : I ≤ ⁅(⊤ : LieIdeal ℤ L), (⊤ : LieIdeal ℤ L)⁆) :
+    LinearCokernel (quotientProjectionHom P I).hopfMap ≃ₗ[ℤ]
+      IdealQuotient I ⁅(⊤ : LieIdeal ℤ L), I⁆ := by
+  have hcommutator_le : ⁅(⊤ : LieIdeal ℤ L), I⁆ ≤ I :=
+    LieSubmodule.lie_le_right I (⊤ : LieIdeal ℤ L)
+  have hsurjective : Function.Surjective (hopfQuotientTransgression P I) := by
+    exact hopfTransgression_surjective P hcommutator_le
+      (le_refl ⁅(⊤ : LieIdeal ℤ L), I⁆) (hstem.trans le_sup_left)
+  exact
+    (Submodule.quotEquivOfEq
+      (LinearMap.range (quotientProjectionHom P I).hopfMap)
+      (LinearMap.ker (hopfQuotientTransgression P I))
+      (range_quotientProjectionHom_hopfMap_eq_ker_hopfQuotientTransgression P I)).trans
+      ((hopfQuotientTransgression P I).quotKerEquivOfSurjective hsurjective)
+
 /-- A commutative square with vertical equivalences induces an equivalence on cokernels. -/
 def linearCokernelEquivOfCommute
     {A B C D : Type*}
@@ -633,6 +769,26 @@ theorem hopfSecondHomologyEquiv_naturality (f : Hom P Q) :
   apply LieHom.ext
   intro x
   rfl
+
+/-- If `I` lies in the derived ideal of `L`, then the Hopf five-term sequence gives
+`Coker(H₂(L) → H₂(L/I)) ≃ I/[L,I]`. -/
+def stemIdealCokernelEquiv
+    (I : LieIdeal ℤ L)
+    (hstem : I ≤ ⁅(⊤ : LieIdeal ℤ L), (⊤ : LieIdeal ℤ L)⁆) :
+    LinearCokernel (secondHomologyMap (quotientMk I)) ≃ₗ[ℤ]
+      IdealQuotient I ⁅(⊤ : LieIdeal ℤ L), I⁆ := by
+  let P := canonicalPresentation L
+  let PI := P.quotient I
+  let qHom : Hom P PI := quotientProjectionHom P I
+  let eL := hopfSecondHomologyEquiv (canonicalPresentation L) P
+  let eI := hopfSecondHomologyEquiv (canonicalPresentation (L ⧸ I)) PI
+  have hcomm : eI.toLinearMap.comp
+        (secondHomologyMap (quotientMk I)) =
+      qHom.hopfMap.comp eL.toLinearMap := by
+    simpa [qHom, eL, eI] using hopfSecondHomologyEquiv_naturality qHom
+  exact (linearCokernelEquivOfCommute
+    (secondHomologyMap (quotientMk I)) qHom.hopfMap eL eI hcomm).trans
+      (quotientProjectionCokernelEquiv P I hstem)
 
 /-- For a central stem extension `I/J → L/J → L/I`, the kernel is the cokernel of the
 induced map on the concrete integral second-homology objects. -/

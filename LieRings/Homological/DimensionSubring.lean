@@ -95,6 +95,82 @@ def dimensionFactorEquivSecondHomologyCokernel
     IdealQuotient I J
   exact centralStemCokernelEquiv hJI hcentral hstem
 
+/--
+For every Lie ring and every `n ≥ 2`, the quotient `δₙ(L)/γₙ₊₁(L)` is
+isomorphic to
+
+`Coker (H₂(L; ℤ) → H₂(L/δₙ(L); ℤ))`.
+-/
+def dimensionSubringModNextLowerCentralEquivSecondHomologyCokernel
+    {n : ℕ} (hn : 2 ≤ n) :
+    LinearCokernel (secondHomologyMap
+      (quotientMk (dimensionSubring ℤ L n))) ≃ₗ[ℤ]
+      IdealQuotient (dimensionSubring ℤ L n)
+        (conventionalLowerCentralSeries L (n + 1)) := by
+  let I := dimensionSubring ℤ L n
+  have hnpos : 1 ≤ n := by omega
+  have hstem : I ≤
+      ⁅(⊤ : LieIdeal ℤ L), (⊤ : LieIdeal ℤ L)⁆ := by
+    calc
+      I ≤ dimensionSubring ℤ L 2 := dimensionSubring_antitone ℤ L hn
+      _ = lowerCentralSeries ℤ L 1 :=
+        dimensionSubring_two_eq_lowerCentralSeries_one ℤ L
+      _ = ⁅(⊤ : LieIdeal ℤ L), (⊤ : LieIdeal ℤ L)⁆ := by
+        change LieModule.lowerCentralSeries ℤ L L (0 + 1) = _
+        rw [LieModule.lowerCentralSeries_succ]
+        simp
+  have hcommutator : ⁅(⊤ : LieIdeal ℤ L), I⁆ =
+      conventionalLowerCentralSeries L (n + 1) := by
+    calc
+      ⁅(⊤ : LieIdeal ℤ L), I⁆ =
+          ⁅I, (⊤ : LieIdeal ℤ L)⁆ := LieSubmodule.lie_comm _ _
+      _ = lowerCentralSeries ℤ L n := by
+        exact dimensionSubring_bracket_eq_lowerCentralSeries_of_pos ℤ L hnpos
+      _ = conventionalLowerCentralSeries L (n + 1) := by
+        simp [conventionalLowerCentralSeries]
+  let e := stemIdealCokernelEquiv I hstem
+  rw [hcommutator] at e
+  exact e
+
+/--
+For every Lie ring and every `n ≥ 2`, the lower-central factor `γₙ(L)/γₙ₊₁(L)` is
+isomorphic to
+
+`Coker (H₂(L; ℤ) → H₂(L/γₙ(L); ℤ))`.
+-/
+def lowerCentralFactorEquivSecondHomologyCokernel
+    {n : ℕ} (hn : 2 ≤ n) :
+    LinearCokernel (secondHomologyMap
+      (quotientMk (conventionalLowerCentralSeries L n))) ≃ₗ[ℤ]
+      IdealQuotient (conventionalLowerCentralSeries L n)
+        (conventionalLowerCentralSeries L (n + 1)) := by
+  let I := conventionalLowerCentralSeries L n
+  have hindex : n.pred + 1 = n := by
+    exact Nat.succ_pred (by omega : n ≠ 0)
+  have hpred : 1 ≤ n.pred := by omega
+  have hstem : I ≤
+      ⁅(⊤ : LieIdeal ℤ L), (⊤ : LieIdeal ℤ L)⁆ := by
+    calc
+      I = lowerCentralSeries ℤ L n.pred := rfl
+      _ ≤ lowerCentralSeries ℤ L 1 :=
+        LieModule.antitone_lowerCentralSeries ℤ L L hpred
+      _ = ⁅(⊤ : LieIdeal ℤ L), (⊤ : LieIdeal ℤ L)⁆ := by
+        change LieModule.lowerCentralSeries ℤ L L (0 + 1) = _
+        rw [LieModule.lowerCentralSeries_succ]
+        simp
+  have hcommutator : ⁅(⊤ : LieIdeal ℤ L), I⁆ =
+      conventionalLowerCentralSeries L (n + 1) := by
+    calc
+      ⁅(⊤ : LieIdeal ℤ L), I⁆ =
+          lowerCentralSeries ℤ L (n.pred + 1) := by
+        exact (LieModule.lowerCentralSeries_succ ℤ L L n.pred).symm
+      _ = lowerCentralSeries ℤ L n := by rw [hindex]
+      _ = conventionalLowerCentralSeries L (n + 1) := by
+        simp [conventionalLowerCentralSeries]
+  let e := stemIdealCokernelEquiv I hstem
+  rw [hcommutator] at e
+  exact e
+
 end
 
 end Homological

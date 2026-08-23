@@ -2,6 +2,7 @@ import LieRings.DimensionSubring.DegreeFour
 import LieRings.DimensionSubring.FreeLie
 import LieRings.DimensionSubring.Graded
 import LieRings.DimensionSubring.MetabelianTwoFactor
+import LieRings.Homological.DimensionSubring
 import LieRings.PBW.Abelian
 import LieRings.PBW.HigginsEmbedding
 import LieRings.PBW.Surjectivity
@@ -111,6 +112,36 @@ example (L : Type v) [LieRing L] (x : L)
     (hx : x ∈ dimensionSubring ℤ L 4) :
     2 • x ∈ lowerCentralSeries ℤ L 3 :=
   DegreeFour.twoDeltaFourProperty L x hx
+
+/-! ## $H_2$-description -/
+
+open Homological Homological.FreePresentation
+
+/-- For every Lie ring and `n ≥ 2`, the dimension factor `δₙ(L)/γₙ(L)` is the
+cokernel of `H₂(L/γₙ(L); ℤ) → H₂(L/δₙ(L); ℤ)`. -/
+example (L : Type v) [LieRing L] {n : ℕ} (hn : 2 ≤ n) :
+    LinearCokernel (secondHomologyMap
+      (dimensionExtensionMap L n (by omega))) ≃ₗ[ℤ]
+      DimensionFactor L n :=
+  dimensionFactorEquivSecondHomologyCokernel L hn
+
+/-- For every Lie ring and `n ≥ 2`, the quotient `δₙ(L)/γₙ₊₁(L)` is the
+cokernel of `H₂(L; ℤ) → H₂(L/δₙ(L); ℤ)`. -/
+example (L : Type v) [LieRing L] {n : ℕ} (hn : 2 ≤ n) :
+    LinearCokernel (secondHomologyMap
+      (quotientMk (dimensionSubring ℤ L n))) ≃ₗ[ℤ]
+      IdealQuotient (dimensionSubring ℤ L n)
+        (conventionalLowerCentralSeries L (n + 1)) :=
+  dimensionSubringModNextLowerCentralEquivSecondHomologyCokernel L hn
+
+/-- For every Lie ring and `n ≥ 2`, the lower-central factor `γₙ(L)/γₙ₊₁(L)` is the
+cokernel of `H₂(L; ℤ) → H₂(L/γₙ(L); ℤ)`. -/
+example (L : Type v) [LieRing L] {n : ℕ} (hn : 2 ≤ n) :
+    LinearCokernel (secondHomologyMap
+      (quotientMk (conventionalLowerCentralSeries L n))) ≃ₗ[ℤ]
+      IdealQuotient (conventionalLowerCentralSeries L n)
+        (conventionalLowerCentralSeries L (n + 1)) :=
+  lowerCentralFactorEquivSecondHomologyCokernel L hn
 
 /-! ## Odd-dimensional theorem for metabelian Lie rings -/
 

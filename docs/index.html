@@ -251,9 +251,46 @@
             </div>
           </section>
 
-          <section class="result-group result-group--known">
+          <section class="result-group">
             <header class="result-group__header reveal">
               <span class="result-group__index">02</span>
+              <div>
+                <p>Homological consequences</p>
+                <h3>H<sub>2</sub>-description</h3>
+              </div>
+              <p>Dimension and lower-central factors as explicit cokernels on integral second homology.</p>
+            </header>
+
+            <div class="result-grid">
+              <article class="result-card result-card--wide result-card--quotient reveal">
+                <div class="result-card__top"><span>Central stem extension</span><span class="result-badges"><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+                <h4>The dimension factor</h4>
+                <div class="result-formula result-formula--compact">δ<sub>n</sub>(L)/γ<sub>n</sub>(L) ≃ Coker(H<sub>2</sub>(L/γ<sub>n</sub>(L); ℤ) → H<sub>2</sub>(L/δ<sub>n</sub>(L); ℤ))</div>
+                <p>For every Lie ring and n ≥ 2, using the central stem extension L/γ<sub>n</sub>(L) → L/δ<sub>n</sub>(L).</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Homological/DimensionSubring.lean#L63" target="_blank" rel="noreferrer"><code>dimensionFactorEquivSecondHomologyCokernel</code><span>↗</span></a>
+              </article>
+
+              <article class="result-card result-card--quotient reveal">
+                <div class="result-card__top"><span>Dimension quotient</span><span class="result-badges"><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+                <h4>One lower-central step deeper</h4>
+                <div class="result-formula result-formula--compact">δ<sub>n</sub>(L)/γ<sub>n+1</sub>(L) ≃ Coker(H<sub>2</sub>(L; ℤ) → H<sub>2</sub>(L/δ<sub>n</sub>(L); ℤ))</div>
+                <p>For n ≥ 2; exact dimension centrality identifies [L,δ<sub>n</sub>(L)] with γ<sub>n+1</sub>(L).</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Homological/DimensionSubring.lean#L104" target="_blank" rel="noreferrer"><code>dimensionSubringModNextLowerCentralEquivSecondHomologyCokernel</code><span>↗</span></a>
+              </article>
+
+              <article class="result-card result-card--quotient reveal" data-delay="1">
+                <div class="result-card__top"><span>Lower-central quotient</span><span class="result-badges"><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+                <h4>A lower-central factor</h4>
+                <div class="result-formula result-formula--compact">γ<sub>n</sub>(L)/γ<sub>n+1</sub>(L) ≃ Coker(H<sub>2</sub>(L; ℤ) → H<sub>2</sub>(L/γ<sub>n</sub>(L); ℤ))</div>
+                <p>For n ≥ 2, directly from the Hopf five-term calculation and the lower-central recursion.</p>
+                <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Homological/DimensionSubring.lean#L141" target="_blank" rel="noreferrer"><code>lowerCentralFactorEquivSecondHomologyCokernel</code><span>↗</span></a>
+              </article>
+            </div>
+          </section>
+
+          <section class="result-group result-group--known">
+            <header class="result-group__header reveal">
+              <span class="result-group__index">03</span>
               <div>
                 <p>Known results</p>
                 <h3>Dimension subrings</h3>
@@ -298,7 +335,7 @@
 
           <section class="result-group result-group--foundations">
             <header class="result-group__header reveal">
-              <span class="result-group__index">03</span>
+              <span class="result-group__index">04</span>
               <div>
                 <p>Formalized foundations</p>
                 <h3>UEA, PBW, and utilities</h3>
