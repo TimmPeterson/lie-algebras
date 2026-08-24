@@ -63,13 +63,31 @@ body::before {
 a { color: inherit; text-decoration: none; }
 button, input { font: inherit; }
 img, svg { display: block; }
-sub, sup { line-height: 0; }
 
 code {
   font-family: var(--mono);
   font-size: 0.84em;
   letter-spacing: -0.025em;
 }
+
+.katex { font-size: 1em; }
+.display-formula .katex-display,
+.node-formula .katex-display,
+.result-formula .katex-display {
+  max-width: 100%;
+  margin: 0;
+  padding: 0.12em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  text-align: inherit;
+}
+.display-formula .katex-display::-webkit-scrollbar,
+.node-formula .katex-display::-webkit-scrollbar,
+.result-formula .katex-display::-webkit-scrollbar { display: none; }
+.display-formula .katex-display > .katex,
+.node-formula .katex-display > .katex,
+.result-formula .katex-display > .katex { text-align: inherit; }
 
 .sr-only {
   position: absolute;
@@ -363,9 +381,8 @@ body.nav-open .site-header {
   letter-spacing: -0.055em;
   line-height: 1.1;
 }
-.display-formula sub { font-size: 0.48em; }
 .assumptions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 26px; }
-.assumptions span { padding: 5px 9px; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; color: #c4ccc6; background: rgba(255,255,255,0.035); font-size: 0.68rem; }
+.assumptions > span { padding: 5px 9px; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; color: #c4ccc6; background: rgba(255,255,255,0.035); font-size: 0.68rem; }
 
 .source-line {
   min-height: 56px;
@@ -435,7 +452,6 @@ body.nav-open .site-header {
 .node-kind--green { color: var(--green); background: var(--green-soft); }
 .theorem-node h3 { margin: 0; font-size: 1.05rem; letter-spacing: -0.02em; }
 .node-formula { margin: 18px 0 13px; font-family: "Cambria Math", var(--serif); font-size: clamp(1.75rem, 3vw, 2.45rem); letter-spacing: -0.04em; line-height: 1.2; }
-.node-formula sub { font-size: 0.55em; }
 .theorem-node p { margin: 0; color: var(--muted); font-size: 0.85rem; }
 .theorem-node--root p { color: var(--dark-muted); }
 .theorem-node > a { display: inline-block; max-width: 100%; margin-top: 22px; color: var(--muted); }
@@ -590,6 +606,9 @@ body.nav-open .site-header {
 }
 .result-formula--display { font-size: clamp(2.45rem, 5vw, 4rem); }
 .result-formula--compact { font-size: clamp(1.65rem, 2.7vw, 2.25rem); }
+.result-formula--homology { font-size: clamp(1.35rem, 2.2vw, 1.8rem); }
+.homology-statement { display: block; }
+.homology-statement--vertical { display: none; }
 .result-card p { margin: 0; color: var(--muted); font-size: 0.88rem; }
 .result-card--pbw-suite p { color: #b6c0b8; }
 .result-card__split { display: grid; grid-template-columns: 0.82fr 1.18fr; align-items: center; gap: 64px; }
@@ -869,9 +888,12 @@ body.nav-open .site-header {
   .result-grid { grid-template-columns: 1fr; }
   .result-card, .result-card--wide { grid-column: auto; min-height: 0; padding: 24px; }
   .result-card__top { margin-bottom: 27px; }
-  .result-formula { font-size: clamp(1.72rem, 8.4vw, 2.3rem); }
-  .result-formula--display { font-size: clamp(2.25rem, 12vw, 3.3rem); }
-  .result-formula--compact { font-size: clamp(1.55rem, 7.6vw, 2.05rem); }
+  .result-formula { font-size: clamp(1.4rem, 6.2vw, 2.1rem); }
+  .result-formula--display { font-size: clamp(1.65rem, 7vw, 2.7rem); }
+  .result-formula--compact { font-size: clamp(1.25rem, 5.7vw, 1.9rem); }
+  .result-formula--homology { font-size: clamp(1.2rem, 5.7vw, 1.5rem); }
+  .homology-statement--horizontal { display: none; }
+  .homology-statement--vertical { display: block; }
   .result-source { margin-top: 34px; }
   .pbw-statements { margin: 25px 0; }
   .architecture-output { padding: 20px; }

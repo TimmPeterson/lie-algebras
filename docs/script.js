@@ -1,5 +1,18 @@
 (() => {
   const body = document.body;
+
+  if (typeof window.renderMathInElement === 'function') {
+    window.renderMathInElement(body, {
+      delimiters: [
+        { left: '\\(', right: '\\)', display: false },
+        { left: '\\[', right: '\\]', display: true },
+      ],
+      ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+      throwOnError: false,
+      trust: false,
+    });
+  }
+
   const header = document.querySelector('[data-header]');
   const navToggle = document.querySelector('[data-nav-toggle]');
   const nav = document.querySelector('[data-nav]');

@@ -10,8 +10,11 @@
   <meta property="og:type" content="website">
   <title>Lie rings in Lean 4</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css" integrity="sha384-1vdNCNel6Tx/NQa8IR1mGOGKsbGreCkOPfbtPPnUURJ5Tu2PRVfQ/7KLZC+Pi1p1" crossorigin="anonymous">
   <link rel="stylesheet" href="styles.css">
   <script>document.documentElement.classList.add('js');</script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.js" integrity="sha384-ycJ6GAwiS15LoUPipwJOrWTvkUHl/YqELValBwI5I4awP1EeEQJYarj+w85ntcz7" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -88,12 +91,12 @@
             <div class="focus-card__body">
               <p class="focus-label">Nilpotent metabelian theorem</p>
               <div class="display-formula" aria-label="delta sub two c minus one of L equals zero">
-                δ<sub>2c−1</sub>(L) = 0
+                \[\delta_{2c-1}(L)=0\]
               </div>
               <div class="assumptions">
-                <span>L metabelian</span>
-                <span>c ≥ 2</span>
-                <span>γ<sub>c+1</sub>(L) = 0</span>
+                <span>\(L\) metabelian</span>
+                <span>\(c\geq 2\)</span>
+                <span>\(\gamma_{c+1}(L)=0\)</span>
               </div>
             </div>
             <a class="source-line" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/MetabelianTwoFactor.lean#L2636" target="_blank" rel="noreferrer">
@@ -120,8 +123,8 @@
               <span class="node-kind node-kind--accent">Main theorem</span>
             </div>
             <h3>Nilpotent metabelian vanishing</h3>
-            <div class="node-formula">γ<sub>c+1</sub>(K)=0 &nbsp;⟹&nbsp; δ<sub>2c−1</sub>(K)=0</div>
-            <p>For every metabelian Lie ring K and every c ≥ 2.</p>
+            <div class="node-formula">\[\gamma_{c+1}(K)=0\implies\delta_{2c-1}(K)=0\]</div>
+            <p>For every metabelian Lie ring \(K\) and every \(c\geq 2\).</p>
             <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/MetabelianTwoFactor.lean#L2636" target="_blank" rel="noreferrer"><code>nilpotent_dimensionSubring_eq_bot</code></a>
           </article>
 
@@ -132,11 +135,11 @@
               <article class="theorem-node">
                 <div class="node-heading">
                   <span class="node-index">02</span>
-                  <span class="node-kind">Quotient by γ<sub>n+2</sub></span>
+                  <span class="node-kind">Quotient by \(\gamma_{n+2}\)</span>
                 </div>
                 <h3>Metabelian inclusion</h3>
-                <div class="node-formula">δ<sub>2n+1</sub>(L) ⊆ γ<sub>n+2</sub>(L)</div>
-                <p>For every metabelian L and n ≥ 1.</p>
+                <div class="node-formula">\[\delta_{2n+1}(L)\subseteq\gamma_{n+2}(L)\]</div>
+                <p>For every metabelian \(L\) and \(n\geq 1\).</p>
                 <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/MetabelianTwoFactor.lean#L2912" target="_blank" rel="noreferrer"><code>odd_dimensionSubring_le_lowerCentralSeries</code></a>
               </article>
 
@@ -148,7 +151,7 @@
                   <span class="node-kind node-kind--green">Limit consequence</span>
                 </div>
                 <h3>Equality at omega</h3>
-                <div class="node-formula">δ<sub>ω</sub>(L) = γ<sub>ω</sub>(L)</div>
+                <div class="node-formula">\[\delta_{\omega}(L)=\gamma_{\omega}(L)\]</div>
                 <p>The two residual intersections agree for every metabelian Lie ring.</p>
                 <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/MetabelianTwoFactor.lean#L2934" target="_blank" rel="noreferrer"><code>dimensionSubringOmega_eq_lowerCentralSeriesOmega</code></a>
               </article>
@@ -158,17 +161,17 @@
               <article class="theorem-node theorem-node--special">
                 <div class="node-heading">
                   <span class="node-index">04</span>
-                  <span class="node-kind">c = 3 · quotient by γ<sub>4</sub></span>
+                  <span class="node-kind">\(c=3\) · quotient by \(\gamma_4\)</span>
                 </div>
                 <h3>Unconditional degree five</h3>
-                <div class="node-formula">δ<sub>5</sub>(L) ⊆ γ<sub>4</sub>(L)</div>
+                <div class="node-formula">\[\delta_5(L)\subseteq\gamma_4(L)\]</div>
                 <p>For every Lie ring—no metabelian, finiteness, or torsion assumption.</p>
                 <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/MetabelianTwoFactor.lean#L3019" target="_blank" rel="noreferrer"><code>dimensionSubring_five_le_lowerCentralSeries_three</code></a>
               </article>
 
               <aside class="not-base-case">
                 <span aria-hidden="true">↳</span>
-                <p><strong>Not a base case.</strong> The degree-five statement is derived from the main theorem by passing to L/γ<sub>4</sub>(L).</p>
+                <p><strong>Not a base case.</strong> The degree-five statement is derived from the main theorem by passing to \(L/\gamma_4(L)\).</p>
               </aside>
             </div>
           </div>
@@ -189,8 +192,8 @@
         <div class="result-legend reveal" aria-label="Result status legend">
           <span><b class="result-status result-status--new">NEW</b> Previously unknown</span>
           <span><b class="result-status result-status--reference">Reference</b> Known theorem, now formalized</span>
-          <span><b class="result-scope"><i>R</i></b> Commutative base ring</span>
-          <span><b class="result-scope">ℤ</b> Integer base ring</span>
+          <span><b class="result-scope">\(R\)</b> Commutative base ring</span>
+          <span><b class="result-scope">\(\mathbb Z\)</b> Integer base ring</span>
         </div>
 
         <div class="result-groups">
@@ -206,45 +209,45 @@
 
             <div class="result-grid">
               <article class="result-card reveal">
-                <div class="result-card__top"><span>Exact identity</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
+                <div class="result-card__top"><span>Exact identity</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring">\(R\)</span></span></div>
                 <h4>Exact centrality</h4>
-                <div class="result-formula">[δ<sub>n</sub>(L), L] = γ<sub>n+1</sub>(L)</div>
-                <p>For every positive n over every commutative base ring.</p>
+                <div class="result-formula">\[\left[\delta_n(L),L\right]=\gamma_{n+1}(L)\]</div>
+                <p>For every positive \(n\) over every commutative base ring.</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Centrality.lean#L99" target="_blank" rel="noreferrer"><code>dimensionSubring_bracket_eq_lowerCentralSeries_of_pos</code><span>↗</span></a>
               </article>
 
               <article class="result-card reveal" data-delay="1">
-                <div class="result-card__top"><span>Bracket inclusion</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
+                <div class="result-card__top"><span>Bracket inclusion</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring">\(R\)</span></span></div>
                 <h4>Strong centrality</h4>
-                <div class="result-formula">[δ<sub>m</sub>(L), δ<sub>n</sub>(L)] ⊆ γ<sub>m+n</sub>(L)</div>
-                <p>For all positive m and n, without supplementary hypotheses.</p>
+                <div class="result-formula">\[\left[\delta_m(L),\delta_n(L)\right]\subseteq\gamma_{m+n}(L)\]</div>
+                <p>For all positive \(m\) and \(n\), without supplementary hypotheses.</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Centrality.lean#L138" target="_blank" rel="noreferrer"><code>bracket_dimensionSubring_le_lowerCentralSeries_of_pos</code><span>↗</span></a>
               </article>
 
               <article class="result-card result-card--wide result-card--action reveal">
-                <div class="result-card__top"><span>Enveloping action</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
+                <div class="result-card__top"><span>Enveloping action</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring">\(R\)</span></span></div>
                 <div class="result-card__split">
                   <div>
                     <h4>Augmentation action realizes the full tail</h4>
-                    <p>For every Lie submodule A in a Lie module and every n.</p>
+                    <p>For every Lie submodule \(A\) in a Lie module and every \(n\).</p>
                   </div>
-                  <div class="result-formula result-formula--display">A · ω(L)<sup>n</sup> = [A,<sub>n</sub>L]</div>
+                  <div class="result-formula result-formula--display">\[A\cdot\omega(L)^n=[A,{}_nL]\]</div>
                 </div>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Adjoint.lean#L132" target="_blank" rel="noreferrer"><code>UEA.actionSubmodule_augmentationIdeal_pow_eq_lcs</code><span>↗</span></a>
               </article>
 
               <article class="result-card result-card--consequence reveal">
-                <div class="result-card__top"><span>Graded consequence</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
+                <div class="result-card__top"><span>Graded consequence</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring">\(R\)</span></span></div>
                 <h4>A homogeneous Lie ideal</h4>
-                <div class="result-formula result-formula--compact">im(gr<sub>γ</sub> → gr<sub>δ</sub>) ◁<sub>gr</sub> gr<sub>δ</sub>(L)</div>
+                <div class="result-formula result-formula--compact">\[\operatorname{im}\!\left(\operatorname{gr}_{\gamma}\to\operatorname{gr}_{\delta}\right)\triangleleft_{\mathrm{gr}}\operatorname{gr}_{\delta}(L)\]</div>
                 <p>The image of the canonical comparison map is both a Lie ideal and graded.</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L174" target="_blank" rel="noreferrer"><code>dimensionGradedImage_isGraded</code><span>↗</span></a>
               </article>
 
               <article class="result-card result-card--consequence reveal" data-delay="1">
-                <div class="result-card__top"><span>Graded consequence</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span></div>
+                <div class="result-card__top"><span>Graded consequence</span><span class="result-badges"><span class="result-status result-status--new">NEW</span><span class="result-scope" title="Formalized over a commutative ring">\(R\)</span></span></div>
                 <h4>An Abelian cokernel</h4>
-                <div class="result-formula result-formula--compact">gr<sub>δ</sub>(L) / im(gr<sub>γ</sub>) &nbsp;is Abelian</div>
+                <div class="result-formula result-formula--compact">\[\frac{\operatorname{gr}_{\delta}(L)}{\operatorname{im}\!\left(\operatorname{gr}_{\gamma}\right)}\quad\text{is Abelian}\]</div>
                 <p>The quotient by the canonical graded image is well-defined and has zero bracket.</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L248" target="_blank" rel="noreferrer"><code>dimensionGradedCokernel_isLieAbelian</code><span>↗</span></a>
               </article>
@@ -256,33 +259,108 @@
               <span class="result-group__index">02</span>
               <div>
                 <p>Homological consequences</p>
-                <h3>H<sub>2</sub>-description</h3>
+                <h3>\(H_2\)-description</h3>
               </div>
               <p>Dimension and lower-central factors as explicit cokernels on integral second homology.</p>
             </header>
 
             <div class="result-grid">
               <article class="result-card result-card--wide result-card--quotient reveal">
-                <div class="result-card__top"><span>Central stem extension</span><span class="result-badges"><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+                <div class="result-card__top"><span>Central stem extension</span><span class="result-badges"><span class="result-scope" title="Formalized over the integers">\(\mathbb Z\)</span></span></div>
                 <h4>The dimension factor</h4>
-                <div class="result-formula result-formula--compact">δ<sub>n</sub>(L)/γ<sub>n</sub>(L) ≃ Coker(H<sub>2</sub>(L/γ<sub>n</sub>(L); ℤ) → H<sub>2</sub>(L/δ<sub>n</sub>(L); ℤ))</div>
-                <p>For every Lie ring and n ≥ 2, using the central stem extension L/γ<sub>n</sub>(L) → L/δ<sub>n</sub>(L).</p>
+                <div class="result-formula result-formula--compact result-formula--homology">
+                  <span class="homology-statement homology-statement--horizontal">
+                    \[
+                    \frac{\delta_n(L)}{\gamma_n(L)}
+                    \cong
+                    \operatorname{Coker}\!\left(
+                      H_2\!\left(L/\gamma_n(L);\mathbb Z\right)
+                      \longrightarrow
+                      H_2\!\left(L/\delta_n(L);\mathbb Z\right)
+                    \right)
+                    \]
+                  </span>
+                  <span class="homology-statement homology-statement--vertical">
+                    \[
+                    \frac{\delta_n(L)}{\gamma_n(L)}
+                    \cong
+                    \operatorname{Coker}\!\left(
+                      \begin{gathered}
+                      H_2\!\left(L/\gamma_n(L);\mathbb Z\right)\\[-0.2em]
+                      \downarrow\\[-0.2em]
+                      H_2\!\left(L/\delta_n(L);\mathbb Z\right)
+                      \end{gathered}
+                    \right)
+                    \]
+                  </span>
+                </div>
+                <p>For every Lie ring and \(n\geq 2\), using the central stem extension \(L/\gamma_n(L)\to L/\delta_n(L)\).</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Homological/DimensionSubring.lean#L63" target="_blank" rel="noreferrer"><code>dimensionFactorEquivSecondHomologyCokernel</code><span>↗</span></a>
               </article>
 
-              <article class="result-card result-card--quotient reveal">
-                <div class="result-card__top"><span>Dimension quotient</span><span class="result-badges"><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+              <article class="result-card result-card--wide result-card--quotient reveal">
+                <div class="result-card__top"><span>Dimension quotient</span><span class="result-badges"><span class="result-scope" title="Formalized over the integers">\(\mathbb Z\)</span></span></div>
                 <h4>One lower-central step deeper</h4>
-                <div class="result-formula result-formula--compact">δ<sub>n</sub>(L)/γ<sub>n+1</sub>(L) ≃ Coker(H<sub>2</sub>(L; ℤ) → H<sub>2</sub>(L/δ<sub>n</sub>(L); ℤ))</div>
-                <p>For n ≥ 2; exact dimension centrality identifies [L,δ<sub>n</sub>(L)] with γ<sub>n+1</sub>(L).</p>
+                <div class="result-formula result-formula--compact result-formula--homology">
+                  <span class="homology-statement homology-statement--horizontal">
+                    \[
+                    \frac{\delta_n(L)}{\gamma_{n+1}(L)}
+                    \cong
+                    \operatorname{Coker}\!\left(
+                      H_2(L;\mathbb Z)
+                      \longrightarrow
+                      H_2\!\left(L/\delta_n(L);\mathbb Z\right)
+                    \right)
+                    \]
+                  </span>
+                  <span class="homology-statement homology-statement--vertical">
+                    \[
+                    \frac{\delta_n(L)}{\gamma_{n+1}(L)}
+                    \cong
+                    \operatorname{Coker}\!\left(
+                      \begin{gathered}
+                      H_2(L;\mathbb Z)\\[-0.2em]
+                      \downarrow\\[-0.2em]
+                      H_2\!\left(L/\delta_n(L);\mathbb Z\right)
+                      \end{gathered}
+                    \right)
+                    \]
+                  </span>
+                </div>
+                <p>For \(n\geq 2\); exact dimension centrality identifies \([L,\delta_n(L)]\) with \(\gamma_{n+1}(L)\).</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Homological/DimensionSubring.lean#L104" target="_blank" rel="noreferrer"><code>dimensionSubringModNextLowerCentralEquivSecondHomologyCokernel</code><span>↗</span></a>
               </article>
 
-              <article class="result-card result-card--quotient reveal" data-delay="1">
-                <div class="result-card__top"><span>Lower-central quotient</span><span class="result-badges"><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+              <article class="result-card result-card--wide result-card--quotient reveal" data-delay="1">
+                <div class="result-card__top"><span>Lower-central quotient</span><span class="result-badges"><span class="result-scope" title="Formalized over the integers">\(\mathbb Z\)</span></span></div>
                 <h4>A lower-central factor</h4>
-                <div class="result-formula result-formula--compact">γ<sub>n</sub>(L)/γ<sub>n+1</sub>(L) ≃ Coker(H<sub>2</sub>(L; ℤ) → H<sub>2</sub>(L/γ<sub>n</sub>(L); ℤ))</div>
-                <p>For n ≥ 2, directly from the Hopf five-term calculation and the lower-central recursion.</p>
+                <div class="result-formula result-formula--compact result-formula--homology">
+                  <span class="homology-statement homology-statement--horizontal">
+                    \[
+                    \frac{\gamma_n(L)}{\gamma_{n+1}(L)}
+                    \cong
+                    \operatorname{Coker}\!\left(
+                      H_2(L;\mathbb Z)
+                      \longrightarrow
+                      H_2\!\left(L/\gamma_n(L);\mathbb Z\right)
+                    \right)
+                    \]
+                  </span>
+                  <span class="homology-statement homology-statement--vertical">
+                    \[
+                    \frac{\gamma_n(L)}{\gamma_{n+1}(L)}
+                    \cong
+                    \operatorname{Coker}\!\left(
+                      \begin{gathered}
+                      H_2(L;\mathbb Z)\\[-0.2em]
+                      \downarrow\\[-0.2em]
+                      H_2\!\left(L/\gamma_n(L);\mathbb Z\right)
+                      \end{gathered}
+                    \right)
+                    \]
+                  </span>
+                </div>
+                <p>For \(n\geq 2\), directly from the Hopf five-term calculation and the lower-central recursion.</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Homological/DimensionSubring.lean#L141" target="_blank" rel="noreferrer"><code>lowerCentralFactorEquivSecondHomologyCokernel</code><span>↗</span></a>
               </article>
             </div>
@@ -300,34 +378,34 @@
 
             <div class="result-grid">
               <article class="result-card reveal">
-                <div class="result-card__top"><span>Degree two</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+                <div class="result-card__top"><span>Degree two</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">\(\mathbb Z\)</span></span></div>
                 <h4>Dimension two</h4>
-                <div class="result-formula">δ<sub>2</sub>(L) = γ<sub>2</sub>(L)</div>
+                <div class="result-formula">\[\delta_2(L)=\gamma_2(L)\]</div>
                 <p>Over every commutative base ring.</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/DegreeTwo.lean#L124" target="_blank" rel="noreferrer"><code>dimensionSubring_two_eq_lowerCentralSeries_one</code><span>↗</span></a>
               </article>
 
               <article class="result-card reveal" data-delay="1">
-                <div class="result-card__top"><span>Degree three</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+                <div class="result-card__top"><span>Degree three</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">\(\mathbb Z\)</span></span></div>
                 <h4>Dimension three</h4>
-                <div class="result-formula">δ<sub>3</sub>(L) = γ<sub>3</sub>(L)</div>
+                <div class="result-formula">\[\delta_3(L)=\gamma_3(L)\]</div>
                 <p>For every Lie ring.</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/DegreeThree.lean#L704" target="_blank" rel="noreferrer"><code>dimensionSubring_three_eq_lowerCentralSeries_two</code><span>↗</span></a>
               </article>
 
               <article class="result-card reveal">
-                <div class="result-card__top"><span>Degree four</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+                <div class="result-card__top"><span>Degree four</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">\(\mathbb Z\)</span></span></div>
                 <h4>Dimension four</h4>
-                <div class="result-formula">2δ<sub>4</sub>(L) ⊆ γ<sub>4</sub>(L)</div>
+                <div class="result-formula">\[2\delta_4(L)\subseteq\gamma_4(L)\]</div>
                 <p>For every Lie ring.</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/DegreeFour.lean#L4766" target="_blank" rel="noreferrer"><code>DegreeFour.twoDeltaFourProperty</code><span>↗</span></a>
               </article>
 
               <article class="result-card reveal" data-delay="1">
-                <div class="result-card__top"><span>Free Lie rings</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">ℤ</span></span></div>
+                <div class="result-card__top"><span>Free Lie rings</span><span class="result-badges"><a class="result-citation" href="#ref-bartholdi-passi">Bartholdi–Passi</a><span class="result-scope" title="Formalized over the integers">\(\mathbb Z\)</span></span></div>
                 <h4>Equality in every degree</h4>
-                <div class="result-formula">δ<sub>n</sub>(F) = γ<sub>n</sub>(F)</div>
-                <p>For a free Lie ring F and every positive n.</p>
+                <div class="result-formula">\[\delta_n(F)=\gamma_n(F)\]</div>
+                <p>For a free Lie ring \(F\) and every positive \(n\).</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/FreeLie.lean#L663" target="_blank" rel="noreferrer"><code>FreeLieDimension.dimensionSubring_succ_eq_lowerCentralSeries</code><span>↗</span></a>
               </article>
             </div>
@@ -347,13 +425,13 @@
               <article class="result-card result-card--wide result-card--pbw-suite reveal">
                 <div class="result-card__top">
                   <span>PBW formulations</span>
-                  <span class="result-badges"><span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span>
+                  <span class="result-badges"><span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span><span class="result-scope" title="Formalized over a commutative ring">\(R\)</span></span>
                 </div>
                 <h4>PBW in three useful forms</h4>
                 <div class="pbw-statements">
-                  <span>U<sub>R</sub>(A) ≃ Sym<sub>R</sub>(A)<small>A Abelian</small></span>
-                  <span>ordered monomials span U<sub>R</sub>(L)<small>ordered basis</small></span>
-                  <span>triangular action ⟹ full PBW<small>bijective PBW map</small></span>
+                  <span>\(U_R(A)\cong\operatorname{Sym}_R(A)\)<small>\(A\) Abelian</small></span>
+                  <span>ordered monomials span \(U_R(L)\)<small>ordered basis</small></span>
+                  <span>triangular action \(\Longrightarrow\) full PBW<small>bijective PBW map</small></span>
                 </div>
                 <div class="result-sources">
                   <a href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/Abelian.lean#L62" target="_blank" rel="noreferrer"><code>PBW.abelianEquivSymmetric</code><span>↗</span></a>
@@ -365,10 +443,10 @@
               <article class="result-card reveal">
                 <div class="result-card__top">
                   <span>Integral embedding</span>
-                  <span class="result-badges"><span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span><span class="result-scope" title="Formalized over the integers">ℤ</span></span>
+                  <span class="result-badges"><span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span><span class="result-scope" title="Formalized over the integers">\(\mathbb Z\)</span></span>
                 </div>
                 <h4>Canonical embedding</h4>
-                <div class="result-formula result-formula--display">L ↪ U<sub>ℤ</sub>(L)</div>
+                <div class="result-formula result-formula--display">\[L\hookrightarrow U_{\mathbb Z}(L)\]</div>
                 <p>Every Lie ring embeds canonically, without a basis or auxiliary parameter.</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/HigginsEmbedding.lean#L906" target="_blank" rel="noreferrer"><code>PBW.canonicalMap_injective_int</code><span>↗</span></a>
               </article>
@@ -376,11 +454,11 @@
               <article class="result-card result-card--quotient reveal" data-delay="1">
                 <div class="result-card__top">
                   <span>Universal enveloping</span>
-                  <span class="result-badges"><span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span><span class="result-scope" title="Formalized over a commutative ring"><i>R</i></span></span>
+                  <span class="result-badges"><span class="result-citations"><a class="result-citation" href="#ref-bourbaki">Bourbaki</a><a class="result-citation" href="#ref-higgins">Higgins</a></span><span class="result-scope" title="Formalized over a commutative ring">\(R\)</span></span>
                 </div>
                 <h4>Quotients commute with U</h4>
-                <div class="result-formula result-formula--compact">U<sub>R</sub>(L/I) ≃ U<sub>R</sub>(L)/⟨I⟩</div>
-                <p>The expected associative quotient, for every Lie ideal I.</p>
+                <div class="result-formula result-formula--compact">\[U_R(L/I)\cong U_R(L)/\langle I\rangle\]</div>
+                <p>The expected associative quotient, for every Lie ideal \(I\).</p>
                 <a class="result-source" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Quotient.lean#L169" target="_blank" rel="noreferrer"><code>UEA.quotientEquivLieIdeal</code><span>↗</span></a>
               </article>
             </div>
@@ -402,13 +480,13 @@
             <span class="architecture-number">01</span>
             <div class="architecture-icon" aria-hidden="true">PBW</div>
             <h3>Integral PBW detection</h3>
-            <p>Ordered monomials, weighted filtrations, and functionals that detect the relevant low-factor terms in U(L).</p>
+            <p>Ordered monomials, weighted filtrations, and functionals that detect the relevant low-factor terms in \(U(L)\).</p>
             <div class="architecture-files"><code>PBW/</code><code>UniversalEnveloping/</code></div>
           </article>
 
           <article class="architecture-card reveal" data-delay="1">
             <span class="architecture-number">02</span>
-            <div class="architecture-icon" aria-hidden="true">[x,y]</div>
+            <div class="architecture-icon" aria-hidden="true">\([x,y]\)</div>
             <h3>Free metabelian model</h3>
             <p>Hall coordinates, commuting derived actions, and integral polarization organize the free metabelian Lie ring.</p>
             <div class="architecture-files"><code>Metabelian/</code><code>Homological/</code></div>
@@ -416,7 +494,7 @@
 
           <article class="architecture-card reveal" data-delay="2">
             <span class="architecture-number">03</span>
-            <div class="architecture-icon" aria-hidden="true">L/I</div>
+            <div class="architecture-icon" aria-hidden="true">\(L/I\)</div>
             <h3>Finite and quotient reduction</h3>
             <p>Functoriality passes from finite presentations to arbitrary Lie rings, then from nilpotent quotients back to inclusions.</p>
             <div class="architecture-files"><code>DimensionSubring/</code><code>Functoriality.lean</code></div>
@@ -425,8 +503,8 @@
 
         <div class="architecture-output reveal">
           <span>combined output</span>
-          <strong>δ<sub>2c−1</sub>(K) = 0</strong>
-          <p>for metabelian K of class at most c ≥ 2</p>
+          <strong>\(\delta_{2c-1}(K)=0\)</strong>
+          <p>for metabelian \(K\) of class at most \(c\geq 2\)</p>
         </div>
       </div>
     </section>
@@ -495,54 +573,54 @@
             <tbody>
               <tr class="definition-group"><th scope="rowgroup" colspan="3">Core algebraic objects</th></tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">U<sub>R</sub>(L)</span><small>universal enveloping algebra</small></th>
+                <th scope="row"><span class="definition-symbol">\(U_R(L)\)</span><small>universal enveloping algebra</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Basic.lean#L40" target="_blank" rel="noreferrer"><code>UEA R L</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span><small>alias of mathlib’s construction</small></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">ι : L → U<sub>R</sub>(L)</span><small>canonical Lie map</small></th>
+                <th scope="row"><span class="definition-symbol">\(\iota:L\to U_R(L)\)</span><small>canonical Lie map</small></th>
                 <td><a class="definition-link" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Lie/UniversalEnveloping.html#UniversalEnvelopingAlgebra.ι" target="_blank" rel="noreferrer"><code>UniversalEnvelopingAlgebra.ι R</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--mathlib"><i></i>mathlib</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">Sym<sub>R</sub>(L)</span><small>symmetric algebra</small></th>
+                <th scope="row"><span class="definition-symbol">\(\operatorname{Sym}_R(L)\)</span><small>symmetric algebra</small></th>
                 <td><a class="definition-link" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/LinearAlgebra/SymmetricAlgebra/Basic.html#SymmetricAlgebra" target="_blank" rel="noreferrer"><code>SymmetricAlgebra R L</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--mathlib"><i></i>mathlib</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">FreeLie<sub>R</sub>(X)</span><small>free Lie algebra</small></th>
+                <th scope="row"><span class="definition-symbol">\(\operatorname{FreeLie}_R(X)\)</span><small>free Lie algebra</small></th>
                 <td><a class="definition-link" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Lie/Free.html#FreeLieAlgebra" target="_blank" rel="noreferrer"><code>FreeLieAlgebra R X</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--mathlib"><i></i>mathlib</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">I ◁ L, &nbsp;L/I</span><small>Lie ideal and Lie quotient</small></th>
+                <th scope="row"><span class="definition-symbol">\(I\triangleleft L,\quad L/I\)</span><small>Lie ideal and Lie quotient</small></th>
                 <td><a class="definition-link" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Lie/Ideal.html#LieIdeal" target="_blank" rel="noreferrer"><code>LieIdeal R L</code><span class="definition-separator">·</span><code>L ⧸ I</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--mathlib"><i></i>mathlib</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">L abelian</span><small>vanishing Lie bracket</small></th>
+                <th scope="row"><span class="definition-symbol">\(L\text{ Abelian}\)</span><small>vanishing Lie bracket</small></th>
                 <td><a class="definition-link" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Lie/Abelian.html#IsLieAbelian" target="_blank" rel="noreferrer"><code>IsLieAbelian L</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--mathlib"><i></i>mathlib</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">L metabelian</span><small>second derived ideal vanishes</small></th>
+                <th scope="row"><span class="definition-symbol">\(L\text{ metabelian}\)</span><small>second derived ideal vanishes</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Metabelian/Basic.lean#L17" target="_blank" rel="noreferrer"><code>IsMetabelian L</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
 
               <tr class="definition-group"><th scope="rowgroup" colspan="3">PBW data and statements</th></tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">(b<sub>i</sub>)<sub>i∈ι</sub></span><small>ordered module basis</small></th>
+                <th scope="row"><span class="definition-symbol">\(\left(b_i\right)_{i\in\iota}\)</span><small>ordered module basis</small></th>
                 <td><a class="definition-link" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/LinearAlgebra/Basis/Defs.html#Module.Basis" target="_blank" rel="noreferrer"><code>Module.Basis ι R L</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--mathlib"><i></i>mathlib</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">U<sub>R</sub>(A) ≃ Sym<sub>R</sub>(A)</span><small>Abelian PBW equivalence</small></th>
+                <th scope="row"><span class="definition-symbol">\(U_R(A)\cong\operatorname{Sym}_R(A)\)</span><small>Abelian PBW equivalence</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/Abelian.lean#L62" target="_blank" rel="noreferrer"><code>PBW.abelianEquivSymmetric R A</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">R[X<sub>i</sub>] → U<sub>R</sub>(L)</span><small>ordered-monomial map</small></th>
+                <th scope="row"><span class="definition-symbol">\(R[X_i]\longrightarrow U_R(L)\)</span><small>ordered-monomial map</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/FreeModuleStatement.lean#L46" target="_blank" rel="noreferrer"><code>PBW.orderedPBWMap R L ι b</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
@@ -552,91 +630,91 @@
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">PBW<sub>b</sub>(L)</span><small>bijectivity of the ordered PBW map</small></th>
+                <th scope="row"><span class="definition-symbol">\(\operatorname{PBW}_b(L)\)</span><small>bijectivity of the ordered PBW map</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/PBW/FreeModuleStatement.lean#L70" target="_blank" rel="noreferrer"><code>PBW.FreeModulePBW R L ι b</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
 
               <tr class="definition-group"><th scope="rowgroup" colspan="3">Enveloping, dimension, and central series</th></tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">ε, &nbsp;ω(L)</span><small>augmentation and augmentation ideal</small></th>
+                <th scope="row"><span class="definition-symbol">\(\varepsilon,\quad\omega(L)\)</span><small>augmentation and augmentation ideal</small></th>
                 <td><div class="definition-links"><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Basic.lean#L65" target="_blank" rel="noreferrer"><code>UEA.augmentation R L</code><span aria-hidden="true">↗</span></a><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Basic.lean#L79" target="_blank" rel="noreferrer"><code>UEA.augmentationIdeal R L</code><span aria-hidden="true">↗</span></a></div></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">⟨I⟩ ◁ U<sub>R</sub>(L)</span><small>two-sided ideal generated by a Lie ideal</small></th>
+                <th scope="row"><span class="definition-symbol">\(\langle I\rangle\triangleleft U_R(L)\)</span><small>two-sided ideal generated by a Lie ideal</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Quotient.lean#L27" target="_blank" rel="noreferrer"><code>UEA.idealOfLieIdeal R L I</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">U<sub>R</sub>(L/I) ≃ U<sub>R</sub>(L)/⟨I⟩</span><small>enveloping quotient equivalence</small></th>
+                <th scope="row"><span class="definition-symbol">\(U_R(L/I)\cong U_R(L)/\langle I\rangle\)</span><small>enveloping quotient equivalence</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Quotient.lean#L169" target="_blank" rel="noreferrer"><code>UEA.quotientEquivLieIdeal R L I</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">A · J</span><small>enveloping action and generated submodule</small></th>
+                <th scope="row"><span class="definition-symbol">\(A\cdot J\)</span><small>enveloping action and generated submodule</small></th>
                 <td><div class="definition-links"><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Adjoint.lean#L23" target="_blank" rel="noreferrer"><code>UEA.representation R L M</code><span aria-hidden="true">↗</span></a><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/UniversalEnveloping/Adjoint.lean#L115" target="_blank" rel="noreferrer"><code>UEA.actionSubmodule R L M J A</code><span aria-hidden="true">↗</span></a></div></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">δ<sub>n</sub>(L)</span><small>dimension subring</small></th>
+                <th scope="row"><span class="definition-symbol">\(\delta_n(L)\)</span><small>dimension subring</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Basic.lean#L24" target="_blank" rel="noreferrer"><code>dimensionSubring R L n</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">γ<sub>n+1</sub>(L)</span><small>zero-based lower central term</small></th>
+                <th scope="row"><span class="definition-symbol">\(\gamma_{n+1}(L)\)</span><small>zero-based lower central term</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Basic.lean#L29" target="_blank" rel="noreferrer"><code>lowerCentralSeries R L n</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span><small>alias of mathlib’s series</small></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">[A, <sub>n</sub>L]</span><small>relative lower-central tail</small></th>
+                <th scope="row"><span class="definition-symbol">\([A,{}_nL]\)</span><small>relative lower-central tail</small></th>
                 <td><a class="definition-link" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Lie/Nilpotent.html#LieSubmodule.lcs" target="_blank" rel="noreferrer"><code>LieSubmodule.lcs</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--mathlib"><i></i>mathlib</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">δ<sub>ω</sub>(L), &nbsp;γ<sub>ω</sub>(L)</span><small>intersections of all finite terms</small></th>
+                <th scope="row"><span class="definition-symbol">\(\delta_{\omega}(L),\quad\gamma_{\omega}(L)\)</span><small>intersections of all finite terms</small></th>
                 <td><div class="definition-links"><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Basic.lean#L33" target="_blank" rel="noreferrer"><code>dimensionSubringOmega R L</code><span aria-hidden="true">↗</span></a><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Basic.lean#L37" target="_blank" rel="noreferrer"><code>lowerCentralSeriesOmega R L</code><span aria-hidden="true">↗</span></a></div></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
 
               <tr class="definition-group"><th scope="rowgroup" colspan="3">Associated graded Lie algebras</th></tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">F<sub>•</sub>L</span><small>positive descending Lie filtration</small></th>
+                <th scope="row"><span class="definition-symbol">\(F_{\bullet}L\)</span><small>positive descending Lie filtration</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Graded/Associated.lean#L18" target="_blank" rel="noreferrer"><code>LieFiltration R L</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">F<sub>n</sub>/F<sub>n+1</sub></span><small>graded piece</small></th>
+                <th scope="row"><span class="definition-symbol">\(F_n/F_{n+1}\)</span><small>graded piece</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Graded/Associated.lean#L46" target="_blank" rel="noreferrer"><code>LieFiltration.GradedPiece F n</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">gr<sub>F</sub>(L)</span><small>associated graded Lie algebra</small></th>
+                <th scope="row"><span class="definition-symbol">\(\operatorname{gr}_F(L)\)</span><small>associated graded Lie algebra</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Graded/Associated.lean#L169" target="_blank" rel="noreferrer"><code>LieFiltration.AssociatedGraded F</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">γ<sub>•</sub>, &nbsp;δ<sub>•</sub></span><small>the two canonical filtrations</small></th>
+                <th scope="row"><span class="definition-symbol">\(\gamma_{\bullet},\quad\delta_{\bullet}\)</span><small>the two canonical filtrations</small></th>
                 <td><div class="definition-links"><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L19" target="_blank" rel="noreferrer"><code>lowerCentralFiltration R L</code><span aria-hidden="true">↗</span></a><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L36" target="_blank" rel="noreferrer"><code>dimensionFiltration R L</code><span aria-hidden="true">↗</span></a></div></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">gr<sub>γ</sub>(L), &nbsp;gr<sub>δ</sub>(L)</span><small>lower-central and dimension gradeds</small></th>
+                <th scope="row"><span class="definition-symbol">\(\operatorname{gr}_{\gamma}(L),\quad\operatorname{gr}_{\delta}(L)\)</span><small>lower-central and dimension gradeds</small></th>
                 <td><div class="definition-links"><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L51" target="_blank" rel="noreferrer"><code>LowerCentralGraded R L</code><span aria-hidden="true">↗</span></a><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L54" target="_blank" rel="noreferrer"><code>DimensionGraded R L</code><span aria-hidden="true">↗</span></a></div></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">gr<sub>γ</sub>(L) → gr<sub>δ</sub>(L)</span><small>canonical graded comparison</small></th>
+                <th scope="row"><span class="definition-symbol">\(\operatorname{gr}_{\gamma}(L)\longrightarrow\operatorname{gr}_{\delta}(L)\)</span><small>canonical graded comparison</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L57" target="_blank" rel="noreferrer"><code>lowerCentralToDimensionGraded R L</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">im(gr<sub>γ</sub> → gr<sub>δ</sub>)</span><small>homogeneous comparison image</small></th>
+                <th scope="row"><span class="definition-symbol">\(\operatorname{im}\!\left(\operatorname{gr}_{\gamma}\to\operatorname{gr}_{\delta}\right)\)</span><small>homogeneous comparison image</small></th>
                 <td><div class="definition-links"><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L162" target="_blank" rel="noreferrer"><code>dimensionGradedImage R L</code><span aria-hidden="true">↗</span></a><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/Graded/Associated.lean#L353" target="_blank" rel="noreferrer"><code>LieFiltration.IsGradedIdeal F I</code><span aria-hidden="true">↗</span></a></div></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
               <tr class="definition-row">
-                <th scope="row"><span class="definition-symbol">gr<sub>δ</sub>(L)/im(gr<sub>γ</sub>)</span><small>graded dimension cokernel</small></th>
+                <th scope="row"><span class="definition-symbol">\(\operatorname{gr}_{\delta}(L)\big/\operatorname{im}\!\left(\operatorname{gr}_{\gamma}\right)\)</span><small>graded dimension cokernel</small></th>
                 <td><a class="definition-link" href="https://github.com/TimmPeterson/lie-algebras/blob/final/LieRings/DimensionSubring/Graded.lean#L245" target="_blank" rel="noreferrer"><code>DimensionGradedCokernel R L</code><span aria-hidden="true">↗</span></a></td>
                 <td class="definition-origin-cell"><span class="definition-origin definition-origin--project"><i></i>This project</span></td>
               </tr>
