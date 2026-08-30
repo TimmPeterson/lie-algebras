@@ -67,7 +67,7 @@ descriptions are proved:
 - `dimensionFactorEquivSecondHomologyCokernel`:
   ```math
   \frac{\delta_n(L)}{\gamma_n(L)}\simeq
-  \operatorname{Coker}\!\left(
+  \mathrm{Coker}\!\left(
     H_2(L/\gamma_n(L);\mathbb Z)\longrightarrow
     H_2(L/\delta_n(L);\mathbb Z)
   \right).
@@ -75,14 +75,14 @@ descriptions are proved:
 - `dimensionSubringModNextLowerCentralEquivSecondHomologyCokernel`:
   ```math
   \frac{\delta_n(L)}{\gamma_{n+1}(L)}\simeq
-  \operatorname{Coker}\!\left(
+  \mathrm{Coker}\!\left(
     H_2(L;\mathbb Z)\longrightarrow H_2(L/\delta_n(L);\mathbb Z)
   \right).
   ```
 - `lowerCentralFactorEquivSecondHomologyCokernel`:
   ```math
   \frac{\gamma_n(L)}{\gamma_{n+1}(L)}\simeq
-  \operatorname{Coker}\!\left(
+  \mathrm{Coker}\!\left(
     H_2(L;\mathbb Z)\longrightarrow H_2(L/\gamma_n(L);\mathbb Z)
   \right).
   ```
