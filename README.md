@@ -65,27 +65,27 @@ For every Lie ring $L$ and every $n\geq 2$, the following integral second-homolo
 descriptions are proved:
 
 - `dimensionFactorEquivSecondHomologyCokernel`:
-  $$
+  ```math
   \frac{\delta_n(L)}{\gamma_n(L)}\simeq
   \operatorname{Coker}\!\left(
     H_2(L/\gamma_n(L);\mathbb Z)\longrightarrow
     H_2(L/\delta_n(L);\mathbb Z)
   \right).
-  $$
+  ```
 - `dimensionSubringModNextLowerCentralEquivSecondHomologyCokernel`:
-  $$
+  ```math
   \frac{\delta_n(L)}{\gamma_{n+1}(L)}\simeq
   \operatorname{Coker}\!\left(
     H_2(L;\mathbb Z)\longrightarrow H_2(L/\delta_n(L);\mathbb Z)
   \right).
-  $$
+  ```
 - `lowerCentralFactorEquivSecondHomologyCokernel`:
-  $$
+  ```math
   \frac{\gamma_n(L)}{\gamma_{n+1}(L)}\simeq
   \operatorname{Coker}\!\left(
     H_2(L;\mathbb Z)\longrightarrow H_2(L/\gamma_n(L);\mathbb Z)
   \right).
-  $$
+  ```
 
 Here $H_2(-;\mathbb Z)$ is the concrete degree-two integral object defined directly by the
 Hopf formula in `Homological/SecondHomology.lean`.
