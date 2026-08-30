@@ -6,16 +6,15 @@ import Mathlib.Tactic
 /-!
 # Second integral homology via the Hopf formula
 
-This file deliberately implements only the degree-two, integral object needed in this project.
+This file implements the original degree-two, integral object used by this project.
 For a free presentation `F → L` with relation ideal `R`, its presentation-level Hopf multiplier is
 
 `(R ∩ [F,F]) / [F,R]`.
 
 The public object `secondHomology` uses the canonical free presentation on the underlying set of
-the Lie ring.  This is not a construction of Lie homology in arbitrary degrees or with arbitrary
-coefficients.  In particular, this file does not yet compare the Hopf-formula model with a
-Chevalley--Eilenberg complex or with a derived-functor definition.  Such a comparison can be added
-later without changing the concrete degree-two interface developed here.
+the Lie ring.  This file by itself is not a construction of Lie homology in arbitrary degrees.
+The standard all-degree Chevalley--Eilenberg construction and the proved comparison with this
+model are in `LieRings.Homological.LieHomology`.
 -/
 
 namespace LieRings
@@ -306,9 +305,9 @@ def canonicalHom (f : LieHom ℤ L M) :
 The concrete Hopf-formula model for `H₂(L; ℤ)`, formed from the canonical free presentation:
 `(R ∩ [F,F]) / [F,R]`.
 
-This definition is intentionally not a general definition of Lie homology.  It provides only
-degree two with trivial integral coefficients, and currently makes no assertion identifying this
-model with Chevalley--Eilenberg or derived-functor homology.
+This definition is intentionally not the general definition of Lie homology.  It provides only
+degree two with trivial integral coefficients.  Its canonical equivalence with standard
+Chevalley--Eilenberg `H₂` is proved in `LieRings.Homological.LieHomology.HopfFormula`.
 -/
 abbrev secondHomology (L : Type u) [LieRing L] :=
   (canonicalPresentation L).hopfSecondHomology

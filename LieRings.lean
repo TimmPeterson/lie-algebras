@@ -8,6 +8,7 @@ import LieRings.DimensionSubring.FreeLie
 import LieRings.DimensionSubring.DegreeFour
 import LieRings.DimensionSubring.MetabelianTwoFactor
 import LieRings.Homological.DimensionSubring
+import LieRings.Homological.LieHomology
 import LieRings.PBW.Abelian
 import LieRings.PBW.Surjectivity
 import LieRings.PBW.TriangularRepresentation
