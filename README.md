@@ -235,11 +235,15 @@ PBW, quotients, dimension centrality, and free Lie rings.
 ## Project layout
 
 ```text
-LieRings/UniversalEnveloping/   augmentation, actions, and quotients
-LieRings/DimensionSubring/      dimension-subring and lower-central results
-LieRings/Graded/                associated graded Lie algebras of filtrations
-LieRings/Metabelian/            the finite free-metabelian model
-LieRings/PBW/                   PBW statements, Higgins embedding, and conditions
-LieRings/Examples/              copyable examples
-lit/obstacle/short_natural_proof.tex  proof manuscript for the main theorem
+LieRings/MainResults.lean        compiled summary of the principal results
+LieRings/UniversalEnveloping/    augmentation, actions, relations, and quotients
+LieRings/PBW/                    PBW theorems, embeddings, and supporting constructions
+LieRings/DimensionSubring/       dimension-subring results, including degrees four and five
+LieRings/Metabelian/             free metabelian and nilpotent Lie-ring models
+LieRings/Homological/            Lie homology, Hopf formulas, and dimension-factor descriptions
+LieRings/Graded/                 associated graded Lie algebras of filtrations
+LieRings/LinearAlgebra/          supporting integral linear algebra
+LieRings/Examples/               short, copyable compiled examples
+lit/{cnt,met,lie,hml}/           mathematical manuscripts organized by topic
+lit/pbw/                         supporting PBW reference material
 ```
