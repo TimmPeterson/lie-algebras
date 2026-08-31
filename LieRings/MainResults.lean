@@ -7,6 +7,7 @@ import LieRings.PBW.Abelian
 import LieRings.PBW.HigginsEmbedding
 import LieRings.PBW.Surjectivity
 import LieRings.PBW.TriangularRepresentation
+import LieRings.Plotkin
 import LieRings.UniversalEnveloping.Adjoint
 import LieRings.UniversalEnveloping.Quotient
 
@@ -190,6 +191,14 @@ used in its proof. -/
 example (L : Type v) [LieRing L] :
     dimensionSubring ℤ L 5 ≤ lowerCentralSeries ℤ L 3 :=
   MetabelianTwoFactor.dimensionSubring_five_le_lowerCentralSeries_three L
+
+/-! ## Plotkin theorem for finitely generated Lie rings -/
+
+/-- For every finitely generated Lie ring, the intersections of all dimension and
+lower-central terms agree: `δ_ω(L) = γ_ω(L)`. -/
+example (L : Type v) [LieRing L] (hL : LieRings.IsFinitelyGenerated L) :
+    dimensionSubringOmega ℤ L = lowerCentralSeriesOmega ℤ L :=
+  Plotkin.finitelyGenerated_dimensionSubringOmega_eq_lowerCentralSeriesOmega L hL
 
 /-! ## Associated graded Lie algebras -/
 

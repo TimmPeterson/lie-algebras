@@ -1,0 +1,35 @@
+import LieRings.Plotkin.Final
+import Mathlib.Util.AssertNoSorry
+
+/-!
+# Axiom audit for the Plotkin formalization
+
+The assertions below guard the principal mathematical checkpoints and the
+two final public theorems against accidental placeholders.  The printed
+axiom reports are expected to contain only Lean's standard quotient and
+classical-foundational axioms.
+-/
+
+assert_no_sorry
+  LieRings.Plotkin.DistinguishedPBW.exists_derivative_retraction_of_aligned_split
+assert_no_sorry
+  LieRings.Plotkin.isFinitelyGenerated_iff_hasFiniteFreePresentation
+assert_no_sorry
+  LieRings.Plotkin.isNoetherianRing_augmentationRees_of_finitelyGenerated_of_lowerCentralSeries_eq_bot
+assert_no_sorry
+  LieRings.Plotkin.hasCentralPrimeSeparation_of_finitelyGenerated_of_lowerCentralSeries_eq_bot
+assert_no_sorry
+  LieRings.Plotkin.dimensionSubring_eventually_eq_bot_of_finitelyGenerated_of_lowerCentralSeries_eq_bot
+assert_no_sorry
+  LieRings.Plotkin.finitelyGenerated_dimensionSubring_eventually_le_lowerCentralSeries_oneIndexed
+assert_no_sorry
+  LieRings.Plotkin.finitelyGenerated_dimensionSubringOmega_eq_lowerCentralSeriesOmega
+
+#print axioms
+  LieRings.Plotkin.DistinguishedPBW.exists_derivative_retraction_of_aligned_split
+#print axioms
+  LieRings.Plotkin.hasCentralPrimeSeparation_of_finitelyGenerated_of_lowerCentralSeries_eq_bot
+#print axioms
+  LieRings.Plotkin.finitelyGenerated_dimensionSubring_eventually_le_lowerCentralSeries_oneIndexed
+#print axioms
+  LieRings.Plotkin.finitelyGenerated_dimensionSubringOmega_eq_lowerCentralSeriesOmega
