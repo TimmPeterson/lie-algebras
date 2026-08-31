@@ -161,6 +161,23 @@ example (n : ℕ) (L : Type v) [LieRing L]
       lowerCentralSeries ℤ L (n + 1) :=
   MetabelianTwoFactor.odd_dimensionSubring_le_lowerCentralSeries n L hn hmeta
 
+/-- For every Lie ring and `c ≥ 2`,
+`δ₂c₋₁(L) ⊆ γ_c₊₁(L) + L''`. -/
+example (c : ℕ) (L : Type v) [LieRing L] (hc : 2 ≤ c) :
+    dimensionSubring ℤ L (2 * c - 1) ≤
+      lowerCentralSeries ℤ L c ⊔ LieAlgebra.derivedSeries ℤ L 2 :=
+  MetabelianTwoFactor.odd_dimensionSubring_le_lowerCentralSeries_sup_secondDerived
+    c L hc
+
+/-- If a Lie ring has nilpotency class at most `c ≥ 2`, then
+`δ₂c₋₁(L) ⊆ L'' ∩ Z(L)`. -/
+example (c : ℕ) (L : Type v) [LieRing L] (hc : 2 ≤ c)
+    (hclass : lowerCentralSeries ℤ L c = ⊥) :
+    dimensionSubring ℤ L (2 * c - 1) ≤
+      LieAlgebra.derivedSeries ℤ L 2 ⊓ LieAlgebra.center ℤ L :=
+  MetabelianTwoFactor.nilpotent_odd_dimensionSubring_le_secondDerived_inf_center
+    c L hc hclass
+
 /-- Consequently, the intersections of all dimension and lower-central terms agree for every
 metabelian Lie ring: `δ_ω(L) = γ_ω(L)`. -/
 example (L : Type v) [LieRing L] (hmeta : IsMetabelian L) :

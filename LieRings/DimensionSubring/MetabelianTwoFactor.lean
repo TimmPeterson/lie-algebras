@@ -2926,6 +2926,66 @@ theorem odd_dimensionSubring_le_lowerCentralSeries
   exact dimensionSubring_le_of_quotient_eq_bot ℤ L I
     (2 * n + 1) hquotVanish
 
+/-- **Odd-dimensional inclusion for an arbitrary Lie ring.**  In the
+manuscript's positive indexing this is
+`δ_(2c-1)(L) ⊆ γ_(c+1)(L) + L''` for `c ≥ 2`. -/
+theorem odd_dimensionSubring_le_lowerCentralSeries_sup_secondDerived
+    (c : ℕ) (L : Type u) [LieRing L] (hc : 2 ≤ c) :
+    dimensionSubring ℤ L (2 * c - 1) ≤
+      lowerCentralSeries ℤ L c ⊔ LieAlgebra.derivedSeries ℤ L 2 := by
+  let I : LieIdeal ℤ L :=
+    lowerCentralSeries ℤ L c ⊔ LieAlgebra.derivedSeries ℤ L 2
+  let q : L →ₗ⁅ℤ⁆ L ⧸ I := UEA.lieIdealQuotientMk ℤ L I
+  have hq : Function.Surjective q :=
+    LieSubmodule.Quotient.surjective_mk' I
+  have hquotMeta : IsMetabelian (L ⧸ I) := by
+    change LieAlgebra.derivedSeries ℤ (L ⧸ I) 2 = ⊥
+    rw [← LieIdeal.derivedSeries_map_eq (f := q) 2 hq,
+      LieIdeal.map_eq_bot_iff]
+    intro x hx
+    change (LieSubmodule.Quotient.mk x : L ⧸ I) = 0
+    exact (LieSubmodule.Quotient.mk_eq_zero' (N := I)).mpr
+      ((le_sup_right : LieAlgebra.derivedSeries ℤ L 2 ≤ I) hx)
+  have hquotClass : lowerCentralSeries ℤ (L ⧸ I) c = ⊥ := by
+    change LieModule.lowerCentralSeries ℤ (L ⧸ I) (L ⧸ I) c = ⊥
+    rw [← LieIdeal.lowerCentralSeries_map_eq c hq,
+      LieIdeal.map_eq_bot_iff]
+    intro x hx
+    change (LieSubmodule.Quotient.mk x : L ⧸ I) = 0
+    exact (LieSubmodule.Quotient.mk_eq_zero' (N := I)).mpr
+      ((le_sup_left : lowerCentralSeries ℤ L c ≤ I) hx)
+  have hquotVanish := nilpotent_dimensionSubring_eq_bot
+    c (L ⧸ I) hc hquotMeta hquotClass
+  exact dimensionSubring_le_of_quotient_eq_bot ℤ L I
+    (2 * c - 1) hquotVanish
+
+/-- **Nilpotent central-derived form of the odd-dimensional inclusion.**
+In the manuscript's notation, if `L` has class at most `c ≥ 2`, then
+`δ_(2c-1)(L) ⊆ L'' ∩ Z(L)`. -/
+theorem nilpotent_odd_dimensionSubring_le_secondDerived_inf_center
+    (c : ℕ) (L : Type u) [LieRing L] (hc : 2 ≤ c)
+    (hclass : lowerCentralSeries ℤ L c = ⊥) :
+    dimensionSubring ℤ L (2 * c - 1) ≤
+      LieAlgebra.derivedSeries ℤ L 2 ⊓ LieAlgebra.center ℤ L := by
+  rw [le_inf_iff]
+  constructor
+  · intro x hx
+    have hx' :=
+      odd_dimensionSubring_le_lowerCentralSeries_sup_secondDerived c L hc hx
+    simpa [hclass] using hx'
+  · intro x hx
+    rw [LieModule.mem_maxTrivSubmodule]
+    intro y
+    have hxy : ⁅x, y⁆ ∈ lowerCentralSeries ℤ L (2 * c - 1) := by
+      rw [← dimensionSubring_bracket_eq_lowerCentralSeries_of_pos ℤ L
+        (n := 2 * c - 1) (by omega)]
+      exact LieSubmodule.lie_mem_lie hx (LieSubmodule.mem_top y)
+    have hxy' : ⁅x, y⁆ ∈ lowerCentralSeries ℤ L c :=
+      LieModule.antitone_lowerCentralSeries ℤ L L (by omega) hxy
+    rw [hclass] at hxy'
+    have hxyZero : ⁅x, y⁆ = 0 := by simpa using hxy'
+    rw [← lie_skew y x, hxyZero, neg_zero]
+
 /-! ## Equality at omega -/
 
 /-- **Dimension-subring equality at omega for metabelian Lie rings.**
@@ -3033,6 +3093,8 @@ theorem dimensionSubring_five_le_lowerCentralSeries_three
 assert_no_sorry Presentation.dimensionSubring_quotient_eq_bot
 assert_no_sorry nilpotent_dimensionSubring_eq_bot
 assert_no_sorry odd_dimensionSubring_le_lowerCentralSeries
+assert_no_sorry odd_dimensionSubring_le_lowerCentralSeries_sup_secondDerived
+assert_no_sorry nilpotent_odd_dimensionSubring_le_secondDerived_inf_center
 assert_no_sorry dimensionSubringOmega_eq_lowerCentralSeriesOmega
 assert_no_sorry dimensionSubring_five_le_lowerCentralSeries_three
 
