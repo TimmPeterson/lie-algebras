@@ -2,6 +2,7 @@ import LieRings.DimensionSubring.DegreeFour
 import LieRings.DimensionSubring.FreeLie
 import LieRings.DimensionSubring.Graded
 import LieRings.DimensionSubring.MetabelianTwoFactor
+import LieRings.FinitePlateau
 import LieRings.Homological.DimensionSubring
 import LieRings.PBW.Abelian
 import LieRings.PBW.HigginsEmbedding
@@ -273,6 +274,20 @@ example : IsLieAbelian (DimensionGradedCokernel R L) :=
   dimensionGradedCokernel_isLieAbelian R L
 
 end AssociatedGraded
+
+/-! ## Arbitrarily long finite plateaux -/
+
+/-- **Theorem A.** For every prescribed length `N ≥ 1`, the explicitly presented
+metabelian nilpotent Lie ring `FinitePlateau.L N` has a plateau of `N + 1`
+consecutive equal dimension subrings, followed by a strict drop. -/
+example (N : ℕ) (hN : 1 ≤ N) :
+    ∃ m : ℕ, 1 ≤ m ∧
+      (∀ q : ℕ, m ≤ q → q ≤ m + N →
+        dimensionSubring ℤ (FinitePlateau.L N) q =
+          dimensionSubring ℤ (FinitePlateau.L N) m) ∧
+      dimensionSubring ℤ (FinitePlateau.L N) (m + N) ≠
+        dimensionSubring ℤ (FinitePlateau.L N) (m + N + 1) :=
+  FinitePlateau.finite_plateau_publication N hN
 
 end
 

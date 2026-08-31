@@ -768,6 +768,15 @@ def HallIndex.predecessor {q : ℕ} (h : HallIndex ι (q + 1)) :
   pivot_le_teeth := fun i hi ↦ h.pivot_le_teeth i
     (mem_eraseLeast h.teeth hi)
 
+/-- Reattaching the deleted least tooth recovers the original symmetric
+multiset.  This occurrence-ledger identity is useful when Hall words are
+read by commutative Magnus monomials. -/
+theorem HallIndex.nextTooth_cons_predecessor_teeth {q : ℕ}
+    (h : HallIndex ι (q + 1)) :
+    h.nextTooth ::ₛ h.predecessor.teeth = h.teeth := by
+  change leastTooth h.teeth ::ₛ eraseLeast h.teeth = h.teeth
+  exact cons_eraseLeast h.teeth
+
 /-- Removing the least symmetric tooth turns a Hall comb of weight `q+3`
 into one of weight `q+2`; reattaching that tooth is exactly the homogeneous
 right action.  This is the recursive bracket formula used in the universal

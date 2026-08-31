@@ -784,6 +784,43 @@ theorem omega_self
       change ell ⁅x, x⁆ = 0
       rw [lie_self, map_zero]
 
+/-- The descended bracket character is skew-symmetric. -/
+theorem omega_skew
+    (Z : LieIdeal ℤ (Quotient c R))
+    (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
+    (ell : CharacterModule (Quotient c R))
+    (x y : CentralQuotient c R Z) :
+    omega c R Z hZ ell y x = -omega c R Z hZ ell x y := by
+  have h := omega_self c R Z hZ ell (x + y)
+  simp only [map_add, LinearMap.add_apply, omega_self, zero_add, add_zero] at h
+  simpa only [neg_one_smul] using eq_neg_of_add_eq_zero_left h
+
+/-- Scaling the character scales the descended bracket form. -/
+theorem omega_zsmul_character
+    (Z : LieIdeal ℤ (Quotient c R))
+    (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
+    (ell : CharacterModule (Quotient c R)) (n : ℤ)
+    (x y : CentralQuotient c R Z) :
+    omega c R Z hZ (n • ell) x y =
+      n • omega c R Z hZ ell x y := by
+  induction x using Submodule.Quotient.induction_on with
+  | _ x =>
+      induction y using Submodule.Quotient.induction_on with
+      | _ y =>
+          calc
+            omega c R Z hZ (n • ell) (Submodule.Quotient.mk x)
+                (Submodule.Quotient.mk y) = (n • ell) ⁅x, y⁆ := by
+              simpa only [centralQuotientMap,
+                UEA.lieIdealQuotientMk_apply] using
+                  omega_mk c R Z hZ (n • ell) x y
+            _ = n • ell ⁅x, y⁆ := rfl
+            _ = n • omega c R Z hZ ell (Submodule.Quotient.mk x)
+                (Submodule.Quotient.mk y) := by
+              exact congrArg (fun t ↦ n • t) (by
+                simpa only [centralQuotientMap,
+                  UEA.lieIdealQuotientMk_apply] using
+                    (omega_mk c R Z hZ ell x y).symm)
+
 private def omegaAlternating
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
@@ -1069,12 +1106,56 @@ def basisImage
     centralImage c R Z (pbwBasis c hc R i) = basisImage c hc R Z i := by
   rfl
 
+/-- The only input about the quadratic read used by the ordered insertion
+calculation: its skew part is the bracket character. -/
+class FunctionalPolarization
+    (Z : LieIdeal ℤ (Quotient c R))
+    (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
+    (ell : CharacterModule (Quotient c R)) where
+  form : CentralQuotient c R Z →ₗ[ℤ]
+    CentralQuotient c R Z →ₗ[ℤ] RatCircle
+  skew : ∀ x y, form x y - form y x = omega c R Z hZ ell x y
+
+/-- The original noncanonical integral polarization, bundled for the generic
+functional interface. -/
+@[reducible] def standardFunctionalPolarization
+    (Z : LieIdeal ℤ (Quotient c R))
+    (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
+    (ell : CharacterModule (Quotient c R)) :
+    FunctionalPolarization c R Z hZ ell where
+  form := polarization c R Z hZ ell
+  skew := polarization_sub_swap c R Z hZ ell
+
+/- The standard polarization remains the default at all existing call sites.
+Later arguments may override it locally by installing another
+`FunctionalPolarization` instance with the same skew part. -/
+noncomputable instance (priority := 100) standardFunctionalPolarizationInstance
+    (Z : LieIdeal ℤ (Quotient c R))
+    (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
+    (ell : CharacterModule (Quotient c R)) :
+    FunctionalPolarization c R Z hZ ell :=
+  standardFunctionalPolarization c R Z hZ ell
+
+/-- The polarization used in the factor-two argument.  Its linear read is
+`2ℓ`, while its ordered quadratic read is the bracket character itself. -/
+@[reducible] def bracketFunctionalPolarization
+    (Z : LieIdeal ℤ (Quotient c R))
+    (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
+    (ell : CharacterModule (Quotient c R)) :
+    FunctionalPolarization c R Z hZ ((2 : ℤ) • ell) where
+  form := omega c R Z hZ ell
+  skew := by
+    intro x y
+    rw [omega_skew c R Z hZ ell x y, sub_neg_eq_add,
+      ← two_zsmul, ← omega_zsmul_character]
+
 private def quadraticBasisValue
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
-    (s : Sym (PBWIndex c hc R) 2) : RatCircle :=
-  polarization c R Z hZ ell
+    (s : Sym (PBWIndex c hc R) 2)
+    [P : FunctionalPolarization c R Z hZ ell] : RatCircle :=
+  P.form
     (basisImage c hc R Z (symTwoFirst c hc R s))
     (basisImage c hc R Z (symTwoSecond c hc R s))
 
@@ -1090,28 +1171,31 @@ def linearRead (ell : CharacterModule (Quotient c R)) :
 def quadraticRead
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
-    (ell : CharacterModule (Quotient c R)) :
+    (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell] :
     SymmetricPower ℤ (Fin 2) (FreeRing (X := X) c) →ₗ[ℤ] RatCircle :=
   (SymmetricPower.monomialBasis (pbwBasis c hc R) 2).constr ℤ
-    (quadraticBasisValue c hc R Z hZ ell)
+    (fun s ↦ quadraticBasisValue c hc R Z hZ ell s (P := P))
 
 /-- The functional (4): retain exactly one and two Lie factors. -/
 def functional
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
-    (ell : CharacterModule (Quotient c R)) :
+    (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell] :
     UEA ℤ (FreeRing (X := X) c) →ₗ[ℤ] RatCircle :=
   (linearRead c hc R ell).comp
       (factorSymbol (pbwBasis c hc R) 1) +
-    (quadraticRead c hc R Z hZ ell).comp
+    (quadraticRead c hc R Z hZ ell (P := P)).comp
       (factorSymbol (pbwBasis c hc R) 2)
 
 theorem functional_iota
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
-    (x : FreeRing (X := X) c) :
-    functional c hc R Z hZ ell (UniversalEnvelopingAlgebra.ι ℤ x) =
+    (x : FreeRing (X := X) c)
+    [P : FunctionalPolarization c R Z hZ ell] :
+    functional c hc R Z hZ ell (P := P) (UniversalEnvelopingAlgebra.ι ℤ x) =
       ell (quotientMap c R x) := by
   rw [functional, LinearMap.add_apply, LinearMap.comp_apply,
     LinearMap.comp_apply, factorSymbol_one_iota,
@@ -1126,11 +1210,12 @@ theorem functional_basisWord_two
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
-    (i j : PBWIndex c hc R) (hij : i ≤ j) :
-    functional c hc R Z hZ ell
+    (i j : PBWIndex c hc R) (hij : i ≤ j)
+    [P : FunctionalPolarization c R Z hZ ell] :
+    functional c hc R Z hZ ell (P := P)
       (UniversalEnvelopingAlgebra.ι ℤ (pbwBasis c hc R i) *
         UniversalEnvelopingAlgebra.ι ℤ (pbwBasis c hc R j)) =
-      polarization c R Z hZ ell
+      P.form
         (basisImage c hc R Z i) (basisImage c hc R Z j) := by
   have hordered : ([i, j] : List (PBWIndex c hc R)).Pairwise (· ≤ ·) := by
     simp [hij]
@@ -1158,7 +1243,7 @@ theorem functional_basisWord_two
       (pbwBasis c hc R) 1 [i, j] hordered (by simp),
     htwo,
     map_zero, zero_add, quadraticRead, Module.Basis.constr_basis]
-  change polarization c R Z hZ ell
+  change P.form
       (basisImage c hc R Z (symTwoFirst c hc R (listSym [i, j])))
       (basisImage c hc R Z (symTwoSecond c hc R (listSym [i, j]))) = _
   rw [hfirst, hsecond]
@@ -1168,8 +1253,9 @@ theorem functional_basisWord_eq_zero
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
     (is : List (PBWIndex c hc R)) (his : is.Pairwise (· ≤ ·))
-    (h1 : is.length ≠ 1) (h2 : is.length ≠ 2) :
-    functional c hc R Z hZ ell
+    (h1 : is.length ≠ 1) (h2 : is.length ≠ 2)
+    [P : FunctionalPolarization c R Z hZ ell] :
+    functional c hc R Z hZ ell (P := P)
       (basisWord ℤ (FreeRing (X := X) c) (PBWIndex c hc R)
         (pbwBasis c hc R) is) = 0 := by
   rw [functional, LinearMap.add_apply,
@@ -1186,16 +1272,17 @@ theorem functional_iota_mul_iota
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
-    (x y : FreeRing (X := X) c) :
-    functional c hc R Z hZ ell
+    (x y : FreeRing (X := X) c)
+    [P : FunctionalPolarization c R Z hZ ell] :
+    functional c hc R Z hZ ell (P := P)
         (UniversalEnvelopingAlgebra.ι ℤ x *
           UniversalEnvelopingAlgebra.ι ℤ y) =
-      polarization c R Z hZ ell
+      P.form
         (centralImage c R Z x) (centralImage c R Z y) := by
   let lhs : FreeRing (X := X) c →ₗ[ℤ]
       FreeRing (X := X) c →ₗ[ℤ] RatCircle :=
     { toFun := fun x ↦
-        { toFun := fun y ↦ functional c hc R Z hZ ell
+        { toFun := fun y ↦ functional c hc R Z hZ ell (P := P)
               (UniversalEnvelopingAlgebra.ι ℤ x *
                 UniversalEnvelopingAlgebra.ι ℤ y)
           map_add' := by
@@ -1209,7 +1296,7 @@ theorem functional_iota_mul_iota
         intro x z
         apply LinearMap.ext
         intro y
-        change functional c hc R Z hZ ell
+        change functional c hc R Z hZ ell (P := P)
             (UniversalEnvelopingAlgebra.ι ℤ (x + z) *
               UniversalEnvelopingAlgebra.ι ℤ y) = _
         rw [map_add, add_mul, map_add]
@@ -1218,7 +1305,7 @@ theorem functional_iota_mul_iota
         intro a x
         apply LinearMap.ext
         intro y
-        change functional c hc R Z hZ ell
+        change functional c hc R Z hZ ell (P := P)
             (UniversalEnvelopingAlgebra.ι ℤ (a • x) *
               UniversalEnvelopingAlgebra.ι ℤ y) = _
         rw [map_zsmul, smul_mul_assoc, map_zsmul]
@@ -1226,7 +1313,7 @@ theorem functional_iota_mul_iota
   let rhs : FreeRing (X := X) c →ₗ[ℤ]
       FreeRing (X := X) c →ₗ[ℤ] RatCircle :=
     { toFun := fun x ↦
-        (polarization c R Z hZ ell (centralImage c R Z x)).comp
+        (P.form (centralImage c R Z x)).comp
           (centralImage c R Z)
       map_add' := by
         intro x z
@@ -1243,13 +1330,13 @@ theorem functional_iota_mul_iota
     intro i
     apply (pbwBasis c hc R).ext
     intro j
-    change functional c hc R Z hZ ell
+    change functional c hc R Z hZ ell (P := P)
         (UniversalEnvelopingAlgebra.ι ℤ (pbwBasis c hc R i) *
           UniversalEnvelopingAlgebra.ι ℤ (pbwBasis c hc R j)) =
-      polarization c R Z hZ ell
+      P.form
         (basisImage c hc R Z i) (basisImage c hc R Z j)
     by_cases hij : i ≤ j
-    · exact functional_basisWord_two c hc R Z hZ ell i j hij
+    · exact functional_basisWord_two c hc R Z hZ ell i j hij (P := P)
     · have hji : j ≤ i := le_of_not_ge hij
       have hswap :
           UniversalEnvelopingAlgebra.ι ℤ (pbwBasis c hc R i) *
@@ -1268,7 +1355,7 @@ theorem functional_iota_mul_iota
               UniversalEnvelopingAlgebra.ι ℤ (pbwBasis c hc R i) at hbr
         rw [hbr]
         noncomm_ring
-      have hpol := polarization_sub_swap c R Z hZ ell
+      have hpol := P.skew
         (basisImage c hc R Z i) (basisImage c hc R Z j)
       have homega : omega c R Z hZ ell
           (basisImage c hc R Z i) (basisImage c hc R Z j) =
@@ -1277,8 +1364,8 @@ theorem functional_iota_mul_iota
         rw [basisImage, basisImage, omega_mk, LieHom.map_lie]
       rw [homega] at hpol
       rw [hswap, map_add,
-        functional_basisWord_two c hc R Z hZ ell j i hji,
-        functional_iota]
+        functional_basisWord_two c hc R Z hZ ell j i hji (P := P),
+        functional_iota (P := P)]
       rw [← hpol]
       abel
   change lhs x y = rhs x y
@@ -1397,6 +1484,7 @@ theorem functional_degreeZero_mul_pbwWord_of_two_le
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (p : FreeRing (X := X) c)
     (hp : FreeMetabelian.Free.degreeOneLinear hc p = 0)
     (is : List (PBWIndex c hc R)) (his : is.Pairwise (· ≤ ·))
@@ -1439,6 +1527,7 @@ theorem functional_derivedRelation_mul_pbwWord
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (n : derivedRelations c hc R)
     (is : List (PBWIndex c hc R)) (his : is.Pairwise (· ≤ ·)) :
     functional c hc R Z hZ ell
@@ -1477,6 +1566,7 @@ theorem functional_pbwWord_mul_derivedRelation_mul_pbwWord
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (left right : List (PBWIndex c hc R))
     (n : derivedRelations c hc R)
     (hordered : (left ++ right).Pairwise (· ≤ ·)) :
@@ -1547,6 +1637,7 @@ theorem functional_degreeZero_mul_pbwWord_of_ne_nil
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (p : FreeRing (X := X) c)
     (hp : FreeMetabelian.Free.degreeOneLinear hc p = 0)
     (hpW : centralImage c R Z p = 0)
@@ -1574,6 +1665,7 @@ theorem functional_pbwWord_mul_centralFactor_mul_pbwWord
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (p : FreeRing (X := X) c)
     (hp : FreeMetabelian.Free.degreeOneLinear hc p = 0)
     (hpW : centralImage c R Z p = 0)
@@ -1675,6 +1767,7 @@ theorem functional_pbwWord_mul_correction_mul_pbwWord
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (hcorrection : ∀ (j i : Fin (relationRank c hc R)), j < i →
       quotientMap c R (correction c hc R i j) ∈ Z)
     (j i : Fin (relationRank c hc R)) (hji : j < i)
@@ -1809,6 +1902,7 @@ theorem functional_ordered_smithHead_branch
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (i : Fin (relationRank c hc R))
     (left right : List (PBWIndex c hc R))
     (hordered : (left ++ smithHeadIndex c hc R i :: right).Pairwise (· ≤ ·))
@@ -1856,6 +1950,7 @@ theorem functional_smithHead_branch
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (hcorrection : ∀ (j i : Fin (relationRank c hc R)), j < i →
       quotientMap c R (correction c hc R i j) ∈ Z)
     (i : Fin (relationRank c hc R))
@@ -2004,6 +2099,7 @@ theorem functional_smithHead_mul_pbwWord
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (hcorrection : ∀ (j i : Fin (relationRank c hc R)), j < i →
       quotientMap c R (correction c hc R i j) ∈ Z)
     (i : Fin (relationRank c hc R))
@@ -2025,6 +2121,7 @@ theorem functional_row_mul_pbwWord
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (hcorrection : ∀ (j i : Fin (relationRank c hc R)), j < i →
       quotientMap c R (correction c hc R i j) ∈ Z)
     (i : Fin (relationRank c hc R))
@@ -2056,6 +2153,7 @@ theorem functional_relation_mul_pbwWord
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (hcorrection : ∀ (j i : Fin (relationRank c hc R)), j < i →
       quotientMap c R (correction c hc R i j) ∈ Z)
     (rho : R)
@@ -2079,6 +2177,7 @@ theorem functional_relation_mul
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (hcorrection : ∀ (j i : Fin (relationRank c hc R)), j < i →
       quotientMap c R (correction c hc R i j) ∈ Z)
     (rho : R) (u : UEA ℤ (FreeRing (X := X) c)) :
@@ -2115,6 +2214,7 @@ theorem functional_mem_idealOfLieIdeal
     (Z : LieIdeal ℤ (Quotient c R))
     (hZ : Z ≤ LieAlgebra.center ℤ (Quotient c R))
     (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R Z hZ ell]
     (hcorrection : ∀ (j i : Fin (relationRank c hc R)), j < i →
       quotientMap c R (correction c hc R i j) ∈ Z)
     {u : UEA ℤ (FreeRing (X := X) c)}
@@ -2230,10 +2330,169 @@ private theorem pbwWeight_le_cutoff (i : PBWIndex c hc R) :
   change (pbwIndexEquiv c hc R i).1.val + 1 ≤ c
   omega
 
+/-- Two homogeneous basis factors whose bracket weights exceed the
+nilpotence cutoff have zero bracket already in the free nilpotent source. -/
+private theorem bracket_pbwBasis_eq_zero_of_weight_ge_succ_cutoff
+    (i j : PBWIndex c hc R)
+    (hweight : c + 1 ≤ pbwWeight c hc R i + pbwWeight c hc R j) :
+    ⁅pbwBasis c hc R i, pbwBasis c hc R j⁆ = 0 := by
+  apply (pbwBasis c hc R).repr.injective
+  ext k
+  simp only [map_zero, Finsupp.zero_apply]
+  by_contra hk
+  have hhomogeneous := pbw_bracket_homogeneous c hc R i j k hk
+  have hkBound := pbwWeight_le_cutoff c hc R k
+  omega
+
+/-- The factor-two functional: its linear part reads `2ℓ`, and its ordered
+quadratic part reads `ℓ([x,y])`. -/
+def factorTwoFunctional
+    (ell : CharacterModule (Quotient c R)) :
+    UEA ℤ (FreeRing (X := X) c) →ₗ[ℤ] RatCircle :=
+  functional c hc R (LieAlgebra.center ℤ (Quotient c R)) le_rfl
+    ((2 : ℤ) • ell)
+    (P := bracketFunctionalPolarization c R
+      (LieAlgebra.center ℤ (Quotient c R)) le_rfl ell)
+
+@[simp] theorem factorTwoFunctional_iota
+    (ell : CharacterModule (Quotient c R))
+    (x : FreeRing (X := X) c) :
+    factorTwoFunctional c hc R ell (UniversalEnvelopingAlgebra.ι ℤ x) =
+      ((2 : ℤ) • ell) (quotientMap c R x) := by
+  exact functional_iota c hc R
+    (LieAlgebra.center ℤ (Quotient c R)) le_rfl ((2 : ℤ) • ell) x
+    (P := bracketFunctionalPolarization c R
+      (LieAlgebra.center ℤ (Quotient c R)) le_rfl ell)
+
+/-- The generic ordered-row calculation, instantiated with the factor-two
+polarization, annihilates the full enveloping ideal generated by the
+presentation relations. -/
+theorem factorTwoFunctional_mem_idealOfLieIdeal
+    (ell : CharacterModule (Quotient c R))
+    {u : UEA ℤ (FreeRing (X := X) c)}
+    (hu : u ∈ UEA.idealOfLieIdeal ℤ (FreeRing (X := X) c) R) :
+    factorTwoFunctional c hc R ell u = 0 := by
+  have hcorrection : ∀ (j i : Fin (relationRank c hc R)), j < i →
+      quotientMap c R (correction c hc R i j) ∈
+        LieAlgebra.center ℤ (Quotient c R) := by
+    intro j i hji
+    exact correction_mem_center c hc R j i hji
+  exact functional_mem_idealOfLieIdeal c hc R
+    (LieAlgebra.center ℤ (Quotient c R)) le_rfl ((2 : ℤ) • ell)
+    hcorrection hu
+    (P := bracketFunctionalPolarization c R
+      (LieAlgebra.center ℤ (Quotient c R)) le_rfl ell)
+
+/-- At the first weight beyond the nilpotence class, the factor-two
+functional vanishes on every weighted ordered PBW monomial.  For a
+two-factor word this is exactly the vanishing of its Lie bracket in the
+class-`c` free source. -/
+theorem factorTwoFunctional_orderedMonomial_eq_zero_of_weight_ge_succ_cutoff
+    (ell : CharacterModule (Quotient c R))
+    (e : PBWIndex c hc R →₀ ℕ)
+    (he : c + 1 ≤ (weightedPBWBasis c hc R).bracketWeight e) :
+    factorTwoFunctional c hc R ell
+      (orderedMonomial ℤ (FreeRing (X := X) c) (PBWIndex c hc R)
+        (pbwBasis c hc R) e) = 0 := by
+  let is := (Finsupp.toMultiset e).sort (· ≤ ·)
+  have his : is.Pairwise (· ≤ ·) := Multiset.pairwise_sort _ _
+  have hweight : (is.map (pbwWeight c hc R)).sum =
+      (weightedPBWBasis c hc R).bracketWeight e := by
+    exact sorted_pbwWeight c hc R e
+  have hword : orderedMonomial ℤ (FreeRing (X := X) c)
+      (PBWIndex c hc R) (pbwBasis c hc R) e = pbwWord c hc R is := by
+    have h := orderedMonomial_multiset_toFinsupp
+      ℤ (FreeRing (X := X) c) (PBWIndex c hc R)
+        (pbwBasis c hc R) is his
+    simpa [is, pbwWord] using h
+  rw [hword]
+  generalize hshape : is = xs at his hweight ⊢
+  cases xs with
+  | nil =>
+      simpa [factorTwoFunctional, pbwWord] using
+        (functional_basisWord_eq_zero c hc R
+          (LieAlgebra.center ℤ (Quotient c R)) le_rfl
+          ((2 : ℤ) • ell) [] (by simp) (by simp) (by simp)
+          (P := bracketFunctionalPolarization c R
+            (LieAlgebra.center ℤ (Quotient c R)) le_rfl ell))
+  | cons i is =>
+      cases is with
+      | nil =>
+          have hiBound := pbwWeight_le_cutoff c hc R i
+          simp only [List.map_cons, List.map_nil, List.sum_cons,
+            List.sum_nil, add_zero] at hweight
+          exfalso
+          omega
+      | cons j is =>
+          cases is with
+          | nil =>
+              have hij : i ≤ j := by simpa using his
+              simp only [List.map_cons, List.map_nil, List.sum_cons,
+                List.sum_nil, add_zero] at hweight
+              have hbracket :
+                  ⁅pbwBasis c hc R i, pbwBasis c hc R j⁆ = 0 :=
+                bracket_pbwBasis_eq_zero_of_weight_ge_succ_cutoff
+                  c hc R i j (by omega)
+              have hquotientBracket :
+                  ⁅quotientMap c R (pbwBasis c hc R i),
+                    quotientMap c R (pbwBasis c hc R j)⁆ = 0 := by
+                rw [← LieHom.map_lie, hbracket, map_zero]
+              simp only [pbwWord_cons, pbwWord_nil, mul_one]
+              rw [factorTwoFunctional, functional_basisWord_two
+                c hc R (LieAlgebra.center ℤ (Quotient c R)) le_rfl
+                ((2 : ℤ) • ell) i j hij
+                (P := bracketFunctionalPolarization c R
+                  (LieAlgebra.center ℤ (Quotient c R)) le_rfl ell)]
+              change omega c R (LieAlgebra.center ℤ (Quotient c R))
+                le_rfl ell (basisImage c hc R
+                  (LieAlgebra.center ℤ (Quotient c R)) i)
+                  (basisImage c hc R
+                    (LieAlgebra.center ℤ (Quotient c R)) j) = 0
+              rw [basisImage, basisImage, omega_mk, hquotientBracket,
+                map_zero]
+          | cons k ks =>
+              simpa [factorTwoFunctional, pbwWord] using
+                (functional_basisWord_eq_zero c hc R
+                  (LieAlgebra.center ℤ (Quotient c R)) le_rfl
+                  ((2 : ℤ) • ell) (i :: j :: k :: ks) his
+                  (by simp) (by simp)
+                  (P := bracketFunctionalPolarization c R
+                    (LieAlgebra.center ℤ (Quotient c R)) le_rfl ell))
+
+/-- The factor-two functional kills the `(c+1)`st augmentation power. -/
+theorem factorTwoFunctional_mem_augmentationIdeal_pow_succ_cutoff
+    (ell : CharacterModule (Quotient c R))
+    {u : UEA ℤ (FreeRing (X := X) c)}
+    (hu : u ∈ UEA.augmentationIdeal ℤ (FreeRing (X := X) c) ^ (c + 1)) :
+    factorTwoFunctional c hc R ell u = 0 := by
+  let B := weightedPBWBasis c hc R
+  have huWeight : u ∈ B.weightGE (c + 1) := by
+    rw [← B.augmentationIdeal_pow_eq_weightGE]
+    exact hu
+  let f : MvPolynomial (PBWIndex c hc R) ℤ := B.pbwEquiv.symm u
+  have huf : B.pbwEquiv f = u := B.pbwEquiv.apply_symm_apply u
+  rw [← huf, f.as_sum, map_sum, map_sum]
+  apply Finset.sum_eq_zero
+  intro e heSupport
+  have heWeight : c + 1 ≤ B.bracketWeight e := by
+    by_contra h
+    have hz := (B.mem_weightGE_iff (c + 1) u).mp huWeight e
+      (Nat.lt_of_not_ge h)
+    exact Finsupp.mem_support_iff.mp heSupport hz
+  rw [B.pbwEquiv_monomial, map_zsmul]
+  change MvPolynomial.coeff e f •
+      factorTwoFunctional c hc R ell
+        (orderedMonomial ℤ (FreeRing (X := X) c) (PBWIndex c hc R)
+          (pbwBasis c hc R) e) = 0
+  rw [factorTwoFunctional_orderedMonomial_eq_zero_of_weight_ge_succ_cutoff
+    c hc R ell e heWeight, smul_zero]
+
 /-- The literal weight-counting argument following (11): every ordered PBW
 monomial of weight at least `2c-1` is invisible to `Λ`. -/
 theorem functional_orderedMonomial_eq_zero_of_weight_ge_cutoff
     (hc2 : 2 ≤ c) (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R
+      (LieAlgebra.center ℤ (Quotient c R)) le_rfl ell]
     (e : PBWIndex c hc R →₀ ℕ)
     (he : 2 * c - 1 ≤ (weightedPBWBasis c hc R).bracketWeight e) :
     functional c hc R (LieAlgebra.center ℤ (Quotient c R)) le_rfl ell
@@ -2297,6 +2556,8 @@ theorem functional_orderedMonomial_eq_zero_of_weight_ge_cutoff
 `(2c-1)`st augmentation power. -/
 theorem functional_mem_augmentationIdeal_pow_cutoff
     (hc2 : 2 ≤ c) (ell : CharacterModule (Quotient c R))
+    [P : FunctionalPolarization c R
+      (LieAlgebra.center ℤ (Quotient c R)) le_rfl ell]
     {u : UEA ℤ (FreeRing (X := X) c)}
     (hu : u ∈ UEA.augmentationIdeal ℤ (FreeRing (X := X) c) ^
       (2 * c - 1)) :
@@ -2333,6 +2594,56 @@ private theorem ker_quotientMap : LieHom.ker (quotientMap c R) = R := by
   intro x
   change quotientMap c R x = 0 ↔ x ∈ R
   exact LieSubmodule.Quotient.mk_eq_zero' (N := R)
+
+/-- The factor-two consequence at the first weight beyond the nilpotence
+class.  This is the Passi--Sicking argument specialized to the present
+finite relatively-free metabelian presentation, proved by the same ordered
+row insertion ledger as the main vanishing theorem. -/
+theorem dimensionSubring_succ_two_smul_eq_zero
+    (hc : 0 < c)
+    {a : Quotient c R}
+    (ha : a ∈ dimensionSubring ℤ (Quotient c R) (c + 1)) :
+    (2 : ℤ) • a = 0 := by
+  apply CharacterModule.eq_zero_of_character_apply
+  intro ell
+  obtain ⟨atilde, rfl⟩ := quotientMap_surjective c R a
+  have haAug : UniversalEnvelopingAlgebra.ι ℤ (quotientMap c R atilde) ∈
+      UEA.augmentationIdeal ℤ (Quotient c R) ^ (c + 1) :=
+    (mem_dimensionSubring ℤ (Quotient c R)).mp ha
+  obtain ⟨v, hv, hvMap⟩ :=
+    UEA.exists_mem_augmentationIdeal_pow_succ_of_surjective ℤ
+      (FreeRing (X := X) c) (Quotient c R) (quotientMap c R)
+      (quotientMap_surjective c R) c haAug
+  let relationPart : UEA ℤ (FreeRing (X := X) c) :=
+    UniversalEnvelopingAlgebra.ι ℤ atilde - v
+  have hrelationMap : UEA.map ℤ (FreeRing (X := X) c) (Quotient c R)
+      (quotientMap c R) relationPart = 0 := by
+    dsimp only [relationPart]
+    rw [map_sub, UEA.map_ι, hvMap, sub_self]
+  have hrelation : relationPart ∈
+      UEA.idealOfLieIdeal ℤ (FreeRing (X := X) c) R := by
+    have h := (LieRings.PBW.WeightedBasis.mem_ker_map_iff_mem_idealOfLieIdeal
+      (quotientMap c R) (quotientMap_surjective c R) relationPart).mp
+        hrelationMap
+    rwa [ker_quotientMap c R] at h
+  have hrelationZero := factorTwoFunctional_mem_idealOfLieIdeal
+    c hc R ell hrelation
+  have hvZero := factorTwoFunctional_mem_augmentationIdeal_pow_succ_cutoff
+    c hc R ell hv
+  have htotal : factorTwoFunctional c hc R ell
+      (UniversalEnvelopingAlgebra.ι ℤ atilde) = 0 := by
+    have hdecomp : UniversalEnvelopingAlgebra.ι ℤ atilde =
+        relationPart + v := by
+      dsimp only [relationPart]
+      abel
+    rw [hdecomp, map_add, hrelationZero, hvZero, add_zero]
+  rw [factorTwoFunctional_iota] at htotal
+  calc
+    ell ((2 : ℤ) • quotientMap c R atilde) =
+        (2 : ℤ) • ell (quotientMap c R atilde) :=
+      map_zsmul ell 2 (quotientMap c R atilde)
+    _ = ((2 : ℤ) • ell) (quotientMap c R atilde) := rfl
+    _ = 0 := htotal
 
 /-- Theorem 2 for a finite relatively-free presentation `K=F/R`.  This is
 the contradiction after (11), expressed directly by character separation. -/
@@ -3091,6 +3402,7 @@ theorem dimensionSubring_five_le_lowerCentralSeries_three
   exact dimensionSubring_le_of_quotient_eq_bot ℤ L I 5 hquotVanish
 
 assert_no_sorry Presentation.dimensionSubring_quotient_eq_bot
+assert_no_sorry Presentation.dimensionSubring_succ_two_smul_eq_zero
 assert_no_sorry nilpotent_dimensionSubring_eq_bot
 assert_no_sorry odd_dimensionSubring_le_lowerCentralSeries
 assert_no_sorry odd_dimensionSubring_le_lowerCentralSeries_sup_secondDerived
