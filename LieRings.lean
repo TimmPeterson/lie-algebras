@@ -15,6 +15,7 @@ import LieRings.PBW.Surjectivity
 import LieRings.PBW.TriangularRepresentation
 import LieRings.PBW.HigginsEmbedding
 import LieRings.MainResults
+import LieRings.Publication
 import LieRings.Examples.DimensionCentrality
 import LieRings.Examples.QuotientAndDegreeTwo
 import LieRings.Examples.DegreeThree

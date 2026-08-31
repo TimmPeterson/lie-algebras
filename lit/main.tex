@@ -67,11 +67,11 @@
 \tcolorboxenvironment{theorem}{paper theorem}
 \tcolorboxenvironment{corollary}{paper corollary}
 
-% A stable permalink to the revision against which the displayed statements
-% were checked.  Place \leanproof immediately after a theorem's \label.
+% The proof links below target the append-only publication ledger on the
+% repository's main branch.  Place \leanproof immediately after a theorem's
+% \label.
 \newcommand{\leanrepository}{%
-  https://github.com/TimmPeterson/lie-algebras/blob/%
-  ae1b03c6d078a866b10bf2cffc191f2d7d79984f}
+  https://github.com/TimmPeterson/lie-algebras/blob/main}
 \newcommand{\leanproof}[1]{%
   \leavevmode\unskip\nobreak\hfill
   \mbox{\href{#1}{\normalfont\sffamily\bfseries\footnotesize
@@ -176,6 +176,7 @@ stabilization.
 
 \Needspace{9\baselineskip}
 \begin{maintheorem}\label{thm:A}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L32-L42}
 For every integer $N\geq1$, there exist an integer $m=m(N)\geq1$ and a Lie
 ring $L_N$ such that
 \[
@@ -215,7 +216,7 @@ $L\to\U_k(L)$.  The following theorem shows that the metabelian hypothesis
 is unnecessary.
 
 \begin{maintheorem}\label{thm:B}
-\leanproof{\leanrepository/LieRings/DimensionSubring/Centrality.lean\#L99-L145}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L44-L55}
 Let $L$ be a Lie algebra over a commutative ring with identity.  For all
 $m,n\geq1$,
 \[
@@ -232,7 +233,7 @@ In particular,
 We prove a uniform vanishing bound for metabelian nilpotent Lie rings.
 
 \begin{maintheorem}\label{thm:C}
-\leanproof{\leanrepository/LieRings/DimensionSubring/MetabelianTwoFactor.lean\#L2636-L2641}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L57-L65}
 Let $c\geq2$.  If $L$ is a metabelian Lie ring of nilpotency class at most
 $c$, then
 \[
@@ -249,6 +250,7 @@ $L$ of nilpotency class at most $N+3$ satisfies
 \]
 
 \begin{maincorollary}\label{cor:D}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L67-L77}
 For every Lie ring $L$ and every $c\geq2$,
 \[
               \delta_{2c-1}(L)\subseteq\gamma_{c+1}(L)+L''.
@@ -277,7 +279,7 @@ Lie ring $L$, define analogously
 \]
 
 \begin{maincorollary}\label{cor:E}
-\leanproof{\leanrepository/LieRings/DimensionSubring/MetabelianTwoFactor.lean\#L2912-L2945}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L79-L94}
 If $L$ is a metabelian Lie ring, then
 \[
               \delta_{2c-1}(L)\subseteq\gamma_{c+1}(L),
@@ -552,6 +554,7 @@ x_1,x_2,x_3,x_4,x_5
 \end{example}
 
 \begin{lemma}\label{lem:top-layer}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L98-L134}
 The Lie ring $L_N$ is metabelian and nilpotent of class $N+3$, and
 \[
              \gamma_{N+3}(L_N)=\langle u_3\rangle\cong\Z/64.
@@ -598,8 +601,10 @@ using $[F',F']=0$ together with relation~\textup{(iii)} gives
  -64b_{13}-2u_1&=&0,&-64b_{23}-4u_2&=&0.
  \end{array}
 \end{equation}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L136-L154}
 
 \begin{lemma}\label{lem:a-order}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L156-L165}
 In $L_N$ one has $a=32u_3$.  In particular,
 \[
                          \langle a\rangle\cong\Z/2.
@@ -624,6 +629,7 @@ $32u_3$ has order $2$.
 \end{proof}
 
 \begin{lemma}\label{lem:a-height}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L177-L182}
 The element $a$ belongs to $\delta_{2N+4}(L_N)$.
 \end{lemma}
 
@@ -674,12 +680,14 @@ commute in $\U(L_N)$.  Substituting the preceding identities gives
    ={}&c_1c_3-c_2^2.
  \end{aligned}
 \end{equation}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L167-L175}
 Since $c_i\in\gamma_{N+2}(L_N)\subseteq\varpi(L_N)^{N+2}$,
 equation~\eqref{eq:a-factorization} implies
 $a\in\varpi(L_N)^{2N+4}$.
 \end{proof}
 
 \begin{lemma}\label{lem:critical-normal-form}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L184-L191}
 \[
                          L_N\cap\varpi(L_N)^{N+4}=\langle a\rangle.
 \]
@@ -739,6 +747,7 @@ Lemma~\ref{lem:a-order}.
 \end{proof}
 
 \begin{lemma}\label{lem:last-initial-form}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L193-L203}
 The element $a$ does not belong to $\varpi(L_N)^{2N+5}$.
 \end{lemma}
 
@@ -1288,6 +1297,7 @@ $0=\Lambda(z)=\ell(z)$, a contradiction.
 \end{proof}
 
 \begin{corollary}\label{cor:general-odd}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L207-L215}
 For every Lie ring $L$ and every $c\geq2$,
 \[
               \delta_{2c-1}(L)\subseteq\gamma_{c+1}(L)+L''.
@@ -1311,7 +1321,7 @@ relation $L''\subseteq\gamma_4(L)$ gives
 \end{proof}
 
 \begin{corollary}\label{cor:odd-metabelian}
-\leanproof{\leanrepository/LieRings/DimensionSubring/MetabelianTwoFactor.lean\#L2912-L2927}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L217-L227}
 If $L$ is metabelian, then
 \[
                     \delta_{2c-1}(L)\subseteq\gamma_{c+1}(L),
@@ -1324,6 +1334,7 @@ This follows from Corollary~\ref{cor:general-odd}, since $L''=0$.
 \end{proof}
 
 \begin{corollary}\label{cor:nilpotent-central-derived}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L229-L237}
 Let $c\geq2$.  If $L$ is nilpotent of class at most $c$, then
 \[
                          \delta_{2c-1}(L)\subseteq L''\cap Z(L).
@@ -1341,7 +1352,7 @@ so $\delta_{2c-1}(L)$ is central.
 \end{proof}
 
 \begin{corollary}\label{cor:omega}
-\leanproof{\leanrepository/LieRings/DimensionSubring/MetabelianTwoFactor.lean\#L2934-L2945}
+\leanproof{\leanrepository/LieRings/Publication/Results.lean\#L239-L245}
 For every metabelian Lie ring $L$,
 \[
  \bigcap_{n\geq1}\delta_n(L)=\bigcap_{n\geq1}\gamma_n(L).
